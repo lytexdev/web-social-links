@@ -8,7 +8,11 @@ defineProps<{ model: PageModel }>()
   <p v-if="model.preview" class="p-preview-banner">{{ model.text.preview }}</p>
   <div class="p-shell">
     <header class="p-aside">
-      <div class="p-profile" :data-align="model.profileAlign">
+      <div
+        class="p-profile"
+        :data-align="model.profileAlign"
+        :data-avatar="model.profile.avatar ? '' : undefined"
+      >
         <div v-if="model.profile.avatar" class="p-avatar">
           <PublicPicture :image="model.profile.avatar" alt="" eager />
         </div>

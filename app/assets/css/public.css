@@ -41,6 +41,10 @@
   align-items: center;
 }
 
+.p-profile:not([data-avatar]) {
+  grid-template-columns: 1fr;
+}
+
 .p-profile[data-align='center'] {
   grid-template-columns: 1fr;
   justify-items: center;
@@ -81,7 +85,7 @@
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .p-handle {

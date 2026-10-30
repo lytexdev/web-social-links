@@ -135,9 +135,9 @@ export function themeCss(theme: Theme): string {
   ].join(';')
   const primary = theme.scheme === 'light' ? theme.light : theme.dark
   const scheme = theme.scheme === 'light' ? 'light' : 'dark'
-  let css = `:root{${paletteVariables(primary)};${shared};color-scheme:${scheme}}`
+  let css = `:root:root{${paletteVariables(primary)};${shared};color-scheme:${scheme}}`
   if (theme.scheme === 'auto') {
-    css += `@media (prefers-color-scheme: light){:root{${paletteVariables(theme.light)};color-scheme:light}}`
+    css += `@media (prefers-color-scheme: light){:root:root{${paletteVariables(theme.light)};color-scheme:light}}`
   }
   return css
 }

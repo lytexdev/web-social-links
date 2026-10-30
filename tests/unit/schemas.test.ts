@@ -75,3 +75,14 @@ describe('theme presets', () => {
     )
   })
 })
+
+describe('themeCss', () => {
+  it('outranks the static token defaults and switches palettes', async () => {
+    const { themeCss } = await import('../../shared/schemas/theme')
+    const light = themeCss(themeSchema.parse({ scheme: 'light', light: PRESETS.paper.light }))
+    expect(light.startsWith(':root:root{--wsl-bg:#f4f2ee')).toBe(true)
+    expect(light).toContain('color-scheme:light')
+    const auto = themeCss(themeSchema.parse({ scheme: 'auto' }))
+    expect(auto).toContain('@media (prefers-color-scheme: light){:root:root{--wsl-bg:#f4f2ee')
+  })
+})
