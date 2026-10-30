@@ -1,0 +1,18 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: gitleaks
+      run: scripts/gitleaks.sh staged
+    - name: eslint
+      glob: '*.{ts,mjs,vue}'
+      run: pnpm exec eslint --max-warnings 0 {staged_files}
+    - name: prettier
+      glob: '*.{ts,mjs,vue,css,json,yaml,yml,md}'
+      run: pnpm exec prettier --check {staged_files}
+    - name: text
+      run: node scripts/check-text.mjs
+
+commit-msg:
+  jobs:
+    - name: conventional
+      run: node scripts/check-commit-msg.mjs {1}
