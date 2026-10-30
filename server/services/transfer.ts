@@ -141,6 +141,13 @@ export function previewImport(parsed: ParsedImport): {
       })
     }
   }
+  const profile = data.settings.profile as
+    { social?: Array<{ label?: unknown; url?: unknown }> } | undefined
+  for (const social of profile?.social ?? []) {
+    if (typeof social.url === 'string' && PLACEHOLDER.test(social.url)) {
+      warnings.push({ code: 'placeholder_url', target: String(social.label ?? social.url) })
+    }
+  }
   for (const key of Object.keys(data.settings)) {
     if (!SETTING_KEYS.includes(key as never))
       warnings.push({ code: 'setting_unknown', target: key })
@@ -201,10 +208,15 @@ export async function applyImport(parsed: ParsedImport, userId: string): Promise
   db.transaction(() => {
     replaceAllBlocks(validBlocks)
     if (parsed.data.pages.length > 0) replaceAllPages(parsed.data.pages)
+    const current = getAllSettings()
     for (const key of SETTING_KEYS) {
       if (!(key in settings)) continue
       const result = settingsSchemas[key].safeParse(settings[key])
-      if (result.success) writeSetting(key, result.data as never)
+      if (!result.success) continue
+      if (key === 'profile') {
+        const profile = result.data as typeof current.profile
+        writeSetting('profile', { ...profile, avatar: profile.avatar ?? current.profile.avatar })
+      } else writeSetting(key, result.data as never)
     }
     if (parsed.data.sources.length > 0) {
       const now = Date.now()

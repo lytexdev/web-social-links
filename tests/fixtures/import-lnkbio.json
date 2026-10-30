@@ -1,0 +1,135 @@
+{
+  "format": "web-social-links",
+  "version": 1,
+  "settings": {
+    "profile": {
+      "displayName": "Beispielkanal",
+      "handle": "@beispiel",
+      "bio": "",
+      "avatar": null,
+      "social": [
+        {
+          "id": "tWXbB-4UoAr5",
+          "label": "YouTube",
+          "url": "https://example.com/replace",
+          "icon": "tabler:brand-youtube"
+        },
+        {
+          "id": "1J6VwIurjbc2",
+          "label": "Instagram",
+          "url": "https://example.com/replace",
+          "icon": "tabler:brand-instagram"
+        },
+        {
+          "id": "ENt41-4OQOkJ",
+          "label": "TikTok",
+          "url": "https://example.com/replace",
+          "icon": "tabler:brand-tiktok"
+        }
+      ]
+    }
+  },
+  "blocks": [
+    {
+      "id": "HEpoh2hy-gaq",
+      "parentId": null,
+      "type": "group",
+      "position": 0,
+      "data": {
+        "title": "Supplements",
+        "layout": "list",
+        "collapsible": false,
+        "open": true
+      }
+    },
+    {
+      "id": "eQp1OSyT2fmi",
+      "parentId": "HEpoh2hy-gaq",
+      "type": "link",
+      "position": 0,
+      "data": {
+        "title": "Nigela: Schwarzkümmelöl",
+        "subtitle": "Mit Code LYTEX",
+        "url": "https://example.com/replace",
+        "variant": "icon",
+        "icon": "tabler:droplet",
+        "affiliate": true
+      }
+    },
+    {
+      "id": "IJdCgt9-491v",
+      "parentId": "HEpoh2hy-gaq",
+      "type": "link",
+      "position": 1,
+      "data": {
+        "title": "L-Theanin Kapseln",
+        "url": "https://example.com/replace",
+        "variant": "icon",
+        "icon": "tabler:pill",
+        "affiliate": true
+      }
+    },
+    {
+      "id": "1THp-g5XmB2u",
+      "parentId": "HEpoh2hy-gaq",
+      "type": "link",
+      "position": 2,
+      "data": {
+        "title": "CDP Cholin / Citicoline",
+        "url": "https://example.com/replace",
+        "variant": "icon",
+        "icon": "tabler:pill",
+        "affiliate": true
+      }
+    },
+    {
+      "id": "PRUYGzJpTBrN",
+      "parentId": "HEpoh2hy-gaq",
+      "type": "link",
+      "position": 3,
+      "data": {
+        "title": "Omega 3, 300 Kapseln, hochdosiert",
+        "url": "https://example.com/replace",
+        "variant": "icon",
+        "icon": "tabler:fish",
+        "affiliate": true
+      }
+    },
+    {
+      "id": "-Qw_E1YEGfaO",
+      "parentId": null,
+      "type": "link",
+      "position": 1,
+      "data": {
+        "title": "Quellenangaben zu meinen Videos",
+        "url": "https://example.com/replace",
+        "variant": "icon",
+        "icon": "tabler:brand-github"
+      }
+    },
+    {
+      "id": "V7o4-QZ4qpTa",
+      "parentId": null,
+      "type": "code",
+      "position": 2,
+      "data": {
+        "label": "Rabattcode bei Partnern",
+        "code": "lytex",
+        "partner": "",
+        "url": "",
+        "affiliate": true
+      }
+    },
+    {
+      "id": "I3cSzDTs2zIR",
+      "parentId": null,
+      "type": "notice",
+      "position": 3,
+      "data": {
+        "title": "",
+        "markdown": "Inhalte dienen ausschließlich Bildungs- und Informationszwecken. Keine medizinische Beratung.",
+        "tone": "info"
+      }
+    }
+  ]
+}
