@@ -9,10 +9,11 @@ defineProps<{ link: LinkView; text: PublicText; arrow: string }>()
     :href="link.href"
     class="p-row"
     :data-variant="link.variant"
+    :data-glyph="link.thumbnail || link.icon ? '' : undefined"
     :target="link.newTab ? '_blank' : undefined"
     :rel="link.newTab ? 'noopener' : undefined"
   >
-    <span v-if="link.variant !== 'plain'" class="p-glyph" aria-hidden="true">
+    <span v-if="link.thumbnail || link.icon" class="p-glyph" aria-hidden="true">
       <PublicPicture
         v-if="link.variant === 'thumbnail' && link.thumbnail"
         :image="link.thumbnail"

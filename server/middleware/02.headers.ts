@@ -4,7 +4,6 @@ import { isAdminKind, routeKind } from '../utils/route-kind'
 const PERMISSIONS_POLICY = [
   'accelerometer',
   'autoplay',
-  'bluetooth',
   'browsing-topics',
   'camera',
   'display-capture',

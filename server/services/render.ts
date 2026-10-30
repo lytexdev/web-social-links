@@ -150,17 +150,24 @@ export function buildPageModel(
     const data = node.data
     if (data.affiliate) affiliate = true
     const thumbnailId = typeof data.thumbnail === 'string' ? data.thumbnail : null
+    const icon = data.variant === 'plain' ? null : iconFor(snapshot, data.icon)
+    const thumbnail = thumbnailId
+      ? imageView(snapshot.media[thumbnailId], thumbnailId, '', SIZES.thumbnail, 40)
+      : null
+    const requested = (data.variant as LinkView['variant']) ?? 'icon'
+    const variant =
+      (requested === 'icon' && !icon) || (requested === 'thumbnail' && !thumbnail)
+        ? 'plain'
+        : requested
     return {
       kind: 'link',
       id: node.id,
       href: goHref(node.id, options.source),
       title: String(data.title ?? ''),
       subtitle: String(data.subtitle ?? ''),
-      variant: (data.variant as LinkView['variant']) ?? 'icon',
-      icon: data.variant === 'plain' ? null : iconFor(snapshot, data.icon),
-      thumbnail: thumbnailId
-        ? imageView(snapshot.media[thumbnailId], thumbnailId, '', SIZES.thumbnail, 40)
-        : null,
+      variant,
+      icon,
+      thumbnail: variant === 'thumbnail' ? thumbnail : null,
       affiliate: Boolean(data.affiliate),
       badge: String(data.badge ?? ''),
       newTab: Boolean(data.newTab),
