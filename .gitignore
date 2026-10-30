@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+.vscode
+.idea
+.env
+data/*
+data/
+!.env.example
+AGENTS.md
+.cursor
+.claude
