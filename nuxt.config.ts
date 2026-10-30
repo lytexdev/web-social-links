@@ -27,7 +27,14 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    '/**': { noScripts: true },
+    '/**': {
+      noScripts: true,
+      headers: {
+        'x-robots-tag': 'noindex, nofollow, noarchive, nosnippet, noimageindex',
+        'x-content-type-options': 'nosniff',
+        'cross-origin-resource-policy': 'same-origin',
+      },
+    },
     '/admin/**': { ssr: false, noScripts: false },
     '/admin': { ssr: false, noScripts: false },
     '/admin/preview': { ssr: true, noScripts: true },

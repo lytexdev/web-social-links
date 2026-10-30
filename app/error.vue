@@ -8,6 +8,7 @@ const status = computed(() => props.error.statusCode || 500)
 const copy = computed(() => {
   if (status.value === 404) return { title: t.notFoundTitle, body: t.notFoundBody }
   if (status.value === 429) return { title: t.tooManyTitle, body: t.tooManyBody }
+  if (status.value === 403) return { title: t.forbiddenTitle, body: t.forbiddenBody }
   return { title: t.genericTitle, body: t.genericBody }
 })
 

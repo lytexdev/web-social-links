@@ -38,7 +38,12 @@ export default defineEventHandler(async (event) => {
   const path = event.path.split('?')[0] ?? '/'
   if (path === '/admin/preview') return preview(event)
   if (routeKind(path) !== 'public-page') return
+  await resolvePublic(event, path)
+  if (event.handled || event.context.publicModel) return
+  throw createError({ statusCode: 404, statusMessage: 'Not Found' })
+})
 
+async function resolvePublic(event: H3Event, path: string): Promise<unknown> {
   const origin = useEnv().publicOrigin
   if (path === '/') {
     event.context.publicModel = cachedPageModel(DIRECT_SOURCE, origin, path) ?? undefined
@@ -88,4 +93,4 @@ export default defineEventHandler(async (event) => {
     setResponseHeader(event, 'Cache-Control', 'no-store')
     return sendRedirect(event, url, 302)
   }
-})
+}

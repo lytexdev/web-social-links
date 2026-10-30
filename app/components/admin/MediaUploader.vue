@@ -4,6 +4,10 @@ import { IconUpload } from '@tabler/icons-vue'
 defineProps<{ compact?: boolean }>()
 const emit = defineEmits<{ uploaded: [id: string] }>()
 const { t, f } = useAdminI18n()
+const session = useAdminSession()
+const uploadMb = computed(() =>
+  session.me.value?.authenticated ? session.me.value.uploadMaxMb : 10,
+)
 const upload = useUpload()
 const toasts = useToasts()
 const input = ref<HTMLInputElement | null>(null)
@@ -68,7 +72,7 @@ onBeforeUnmount(() => window.removeEventListener('paste', onPaste))
         {{ t.media.choose }}
       </button>
     </p>
-    <p class="a-hint">{{ f(t.media.formats, { mb: 10 }) }}</p>
+    <p class="a-hint">{{ f(t.media.formats, { mb: uploadMb }) }}</p>
     <input
       ref="input"
       type="file"

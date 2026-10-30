@@ -58,6 +58,7 @@ export type MeResponse =
       authenticated: true
       csrfToken: string
       reauthUntil: number | null
+      uploadMaxMb: number
       user: {
         username: string
         locale: 'de' | 'en'
