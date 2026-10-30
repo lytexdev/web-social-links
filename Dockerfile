@@ -22,6 +22,8 @@ ENV NODE_ENV=production \
     TZ=Europe/Berlin
 WORKDIR /app
 COPY --from=build /app/.output ./.output
+COPY --from=build /app/server/db/migrations ./server/db/migrations
+COPY --from=build /app/scripts/*.mjs ./scripts/
 USER 1000:1000
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
