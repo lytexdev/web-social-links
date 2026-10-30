@@ -354,3 +354,9 @@
     opacity: 1;
   }
 }
+
+.a-viz {
+  --viz-views: #7a9a14;
+  --viz-clicks: #3987e5;
+  --viz-grid: #1f2226;
+}
