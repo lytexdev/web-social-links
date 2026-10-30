@@ -1,0 +1,74 @@
+[
+  {
+    "referrer": "https://l.instagram.com/?u=https%3A%2F%2Flinks.example.com%2F&e=AT0",
+    "source": "instagram",
+    "evidence": "Instagram link shim, https://help.instagram.com/"
+  },
+  {
+    "referrer": "https://l.facebook.com/l.php?u=https%3A%2F%2Flinks.example.com%2F",
+    "source": "facebook",
+    "evidence": "Facebook Link Shim, https://www.facebook.com/notes/facebook-security/link-shim-protecting-the-people-who-use-facebook-from-malicious-urls/10150492832835766/"
+  },
+  {
+    "referrer": "https://lm.facebook.com/l.php?u=https%3A%2F%2Flinks.example.com%2F",
+    "source": "facebook",
+    "evidence": "Facebook mobile link shim, same mechanism as l.facebook.com"
+  },
+  {
+    "referrer": "https://t.co/AbCdEf1234",
+    "source": "x",
+    "evidence": "X wraps every link with t.co, https://help.x.com/en/using-x/url-shortener"
+  },
+  {
+    "referrer": "https://www.youtube.com/",
+    "source": "youtube",
+    "evidence": "Links in YouTube descriptions pass through youtube.com/redirect and send youtube.com as referrer"
+  },
+  {
+    "referrer": "https://m.youtube.com/watch?v=abc",
+    "source": "youtube",
+    "evidence": "Mobile web YouTube"
+  },
+  {
+    "referrer": "https://out.reddit.com/t3_abc?url=https%3A%2F%2Flinks.example.com",
+    "source": "reddit",
+    "evidence": "Reddit outbound redirector out.reddit.com"
+  },
+  { "referrer": "https://www.linkedin.com/", "source": "linkedin", "evidence": "LinkedIn web" },
+  {
+    "referrer": "https://lnkd.in/abc",
+    "source": "linkedin",
+    "evidence": "LinkedIn shortener lnkd.in"
+  },
+  {
+    "referrer": "https://l.threads.com/?u=https%3A%2F%2Flinks.example.com",
+    "source": "threads",
+    "evidence": "Threads uses the same Meta link shim pattern as Instagram"
+  },
+  { "referrer": "https://www.tiktok.com/", "source": "tiktok", "evidence": "TikTok web" },
+  {
+    "referrer": "https://bsky.app/profile/example.bsky.social",
+    "source": "bluesky",
+    "evidence": "Bluesky web client"
+  },
+  {
+    "referrer": "https://www.pinterest.com/pin/123/",
+    "source": "pinterest",
+    "evidence": "Pinterest web"
+  },
+  {
+    "referrer": "https://github.com/example/sources",
+    "source": "github",
+    "evidence": "GitHub web"
+  },
+  {
+    "referrer": "https://www.google.com/",
+    "source": null,
+    "evidence": "Search engines are kept as referrer host without a platform source"
+  },
+  {
+    "referrer": "https://links.example.com/impressum",
+    "source": null,
+    "evidence": "Own host is ignored"
+  }
+]

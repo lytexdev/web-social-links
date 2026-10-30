@@ -224,6 +224,7 @@ function buildSchema(production: boolean) {
       SESSION_IDLE_MINUTES: text(intSchema(60, 5, 1440)),
       SESSION_MAX_HOURS: text(intSchema(24, 1, 720)),
       UPLOAD_MAX_MB: text(intSchema(10, 1, 50)),
+      ANALYTICS_FLUSH_SECONDS: text(intSchema(5, 1, 60)),
       DATA_DIR: text(z.string().default(production ? '/data' : './data')),
       LOG_LEVEL: text(z.enum(['debug', 'info', 'warn', 'error']).default('info')),
       TZ: text(timeZoneSchema()),
@@ -268,6 +269,7 @@ export interface Env {
   sessionIdleMs: number
   sessionMaxMs: number
   uploadMaxBytes: number
+  analyticsFlushMs: number
   dataDir: string
   logLevel: 'debug' | 'info' | 'warn' | 'error'
   timeZone: string
@@ -316,6 +318,7 @@ export function parseEnv(source: Record<string, string | undefined>): EnvResult 
       sessionIdleMs: data.SESSION_IDLE_MINUTES * 60_000,
       sessionMaxMs: data.SESSION_MAX_HOURS * 3_600_000,
       uploadMaxBytes: data.UPLOAD_MAX_MB * 1_048_576,
+      analyticsFlushMs: data.ANALYTICS_FLUSH_SECONDS * 1000,
       dataDir: data.DATA_DIR,
       logLevel: data.LOG_LEVEL,
       timeZone: data.TZ,

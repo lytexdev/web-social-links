@@ -44,6 +44,9 @@ importers:
       file-type:
         specifier: 22.3.0
         version: 22.3.0(supports-color@10.2.2)
+      h3:
+        specifier: 1.15.11
+        version: 1.15.11
       isbot:
         specifier: 5.2.2
         version: 5.2.2

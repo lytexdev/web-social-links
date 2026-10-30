@@ -1,5 +1,6 @@
 import { join, resolve } from 'node:path'
 import { closeDatabase, openDatabase, setDb } from '../db/client'
+import { stopAnalytics } from '../services/analytics'
 import { loadBans } from '../services/bans'
 import { seedContent } from '../services/seed'
 import { seedOwner, warnAboutInitialCredentials } from '../services/users'
@@ -51,6 +52,7 @@ export default defineNitroPlugin((nitroApp) => {
   }
 
   nitroApp.hooks.hookOnce('close', () => {
+    stopAnalytics()
     closeDatabase()
     logger.info('shutdown')
   })

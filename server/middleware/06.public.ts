@@ -69,6 +69,8 @@ export default defineEventHandler(async (event) => {
   const entry = findSlug(slug)
   if (!entry) return
   if (entry.kind === 'source' && entry.sourceKey) {
+    event.context.viewSource = entry.sourceKey
+    event.context.viewSlug = slug
     event.context.publicModel = cachedPageModel(entry.sourceKey, origin, path) ?? undefined
     return
   }

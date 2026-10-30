@@ -142,3 +142,28 @@ export async function setupOwner(
   await admin.refreshCsrf()
   return admin
 }
+
+const LEGAL_TEXT =
+  '## Angaben\n\nErika Musterfrau\nMusterweg 1\n12345 Musterstadt\nkontakt@example.com'
+
+export async function publishBasicPage(
+  admin: AdminClient,
+  links: Array<{ title: string; url: string }>,
+): Promise<string[]> {
+  const pages = (await admin.send('/api/admin/pages')).json<Array<{ id: string }>>()
+  for (const page of pages)
+    await admin.send(`/api/admin/pages/${page.id}`, {
+      method: 'PATCH',
+      body: { markdown: LEGAL_TEXT },
+    })
+  const ids: string[] = []
+  for (const link of links) {
+    const created = await admin.send('/api/admin/blocks', {
+      body: { type: 'link', parentId: null, data: link },
+    })
+    ids.push(created.json<{ id: string }>().id)
+  }
+  const published = await admin.send('/api/admin/publish', { body: { note: '' } })
+  if (published.status !== 200) throw new Error(`publish failed: ${published.text}`)
+  return ids
+}

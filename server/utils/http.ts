@@ -1,4 +1,4 @@
-import type { H3Event } from 'h3'
+import { createError, getQuery, readBody, setResponseHeader, type H3Event } from 'h3'
 import type { z } from 'zod'
 import type { SessionRow } from '../services/sessions'
 import type { UserRow } from '../services/users'
@@ -10,6 +10,8 @@ declare module 'h3' {
     session?: SessionRow
     sessionToken?: string
     user?: UserRow
+    viewSource?: string
+    viewSlug?: string
     redirectClick?: { linkId: string; blockId?: string; slug: string | null; source: string }
   }
 }
