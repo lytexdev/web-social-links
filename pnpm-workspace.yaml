@@ -1,0 +1,13 @@
+savePrefix: ''
+engineStrict: true
+minimumReleaseAge: 1440
+strictDepBuilds: true
+blockExoticSubdeps: true
+trustPolicy: no-downgrade
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  lefthook: true
+  unrs-resolver: false
+trustPolicyExclude:
+  - semver@6.3.1
