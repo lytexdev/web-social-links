@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 10
+    groups:
+      nuxt:
+        patterns: ['nuxt', '@nuxt/*', 'vue', 'vue-router', 'vue-tsc']
+      lint:
+        patterns: ['eslint', 'prettier']
+    ignore:
+      - dependency-name: typescript
+        versions: ['>=7']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
