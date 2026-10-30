@@ -1,6 +1,7 @@
 import { join, resolve } from 'node:path'
 import { closeDatabase, openDatabase, setDb } from '../db/client'
 import { loadBans } from '../services/bans'
+import { seedContent } from '../services/seed'
 import { seedOwner, warnAboutInitialCredentials } from '../services/users'
 import { prepareDataDir } from '../utils/data-dir'
 import { initEnv } from '../utils/env'
@@ -39,6 +40,7 @@ export default defineNitroPlugin((nitroApp) => {
   }
 
   if (seedOwner() === 'created') logger.info('owner_seeded', { user: env.initialAdminUsername })
+  seedContent()
   warnAboutInitialCredentials()
   loadBans()
 

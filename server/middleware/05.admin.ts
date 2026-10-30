@@ -14,7 +14,7 @@ const ANONYMOUS = new Set([
   'POST /api/admin/auth/totp',
 ])
 const OPTIONAL_SESSION = new Set(['GET /api/admin/auth/me', 'POST /api/admin/auth/logout'])
-const LARGE_BODY_PREFIXES = ['/api/admin/media', '/api/admin/import']
+const LARGE_BODY_PREFIXES = ['/api/admin/media']
 const apiLimiter = new SlidingWindowLimiter(300, 60_000)
 const rejectedIpLog = new SlidingWindowLimiter(1, 60_000)
 
@@ -55,9 +55,11 @@ export default defineEventHandler((event) => {
       throw apiError(403, 'origin_rejected', 'Request origin is not allowed')
     }
     const length = Number(getRequestHeader(event, 'content-length') ?? 'NaN')
-    const limit = LARGE_BODY_PREFIXES.some((prefix) => pathname.startsWith(prefix))
-      ? env.uploadMaxBytes + 64 * 1024
-      : API_BODY_LIMIT
+    const limit = pathname.startsWith('/api/admin/tools/import')
+      ? 64 * 1024 * 1024
+      : LARGE_BODY_PREFIXES.some((prefix) => pathname.startsWith(prefix))
+        ? env.uploadMaxBytes + 64 * 1024
+        : API_BODY_LIMIT
     if (getRequestHeader(event, 'transfer-encoding') && Number.isNaN(length)) {
       throw apiError(411, 'length_required', 'Content-Length is required')
     }

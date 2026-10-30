@@ -10,6 +10,7 @@ declare module 'h3' {
     session?: SessionRow
     sessionToken?: string
     user?: UserRow
+    redirectClick?: { linkId: string; blockId?: string; slug: string | null; source: string }
   }
 }
 
@@ -18,6 +19,7 @@ export interface ApiErrorBody {
   message: string
   fields?: Record<string, string>
   retryAfter?: number
+  issues?: unknown[]
 }
 
 export function apiError(
