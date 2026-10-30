@@ -25,6 +25,11 @@ export default defineNuxtConfig({
       ],
     },
   },
+  routeRules: {
+    '/admin/**': { ssr: false },
+    '/admin': { ssr: false },
+    '/admin/preview': { ssr: true },
+  },
   vite: {
     plugins: [tailwindcss()],
   },
