@@ -33,7 +33,7 @@ export async function startServer(env: Record<string, string> = {}): Promise<Tes
   if (!existsSync(ENTRY)) throw new Error('Run pnpm build before the integration tests')
   const port = await freePort()
   const origin = `http://127.0.0.1:${port}`
-  const dataDir = mkdtempSync(join(tmpdir(), 'wsl-it-'))
+  const dataDir = env.DATA_DIR ?? mkdtempSync(join(tmpdir(), 'wsl-it-'))
   const logs: string[] = []
   const child: ChildProcess = spawn(process.execPath, [ENTRY], {
     env: {
@@ -88,7 +88,7 @@ export async function startServer(env: Record<string, string> = {}): Promise<Tes
         child.kill('SIGTERM')
         await exited
       }
-      rmSync(dataDir, { recursive: true, force: true })
+      if (!env.DATA_DIR) rmSync(dataDir, { recursive: true, force: true })
     },
   }
 }
