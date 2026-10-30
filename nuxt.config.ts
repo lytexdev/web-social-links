@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   pages: true,
   modules: ['@nuxt/eslint'],
   css: ['~/assets/css/main.css'],
+  components: [{ path: '~/components', pathPrefix: false }],
   typescript: {
     strict: true,
     typeCheck: false,
@@ -26,9 +27,11 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    '/admin/**': { ssr: false },
-    '/admin': { ssr: false },
-    '/admin/preview': { ssr: true },
+    '/**': { noScripts: true },
+    '/admin/**': { ssr: false, noScripts: false },
+    '/admin': { ssr: false, noScripts: false },
+    '/admin/preview': { ssr: true, noScripts: true },
+    '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
   },
   vite: {
     plugins: [tailwindcss()],

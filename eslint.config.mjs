@@ -19,15 +19,21 @@ const noComments = {
   },
 }
 
-export default withNuxt({
-  plugins: {
-    local: { rules: { 'no-comments': noComments } },
+export default withNuxt(
+  {
+    plugins: {
+      local: { rules: { 'no-comments': noComments } },
+    },
+    rules: {
+      'local/no-comments': 'error',
+      'no-console': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/ban-ts-comment': 'error',
+      'vue/html-self-closing': 'off',
+    },
   },
-  rules: {
-    'local/no-comments': 'error',
-    'no-console': 'error',
-    '@typescript-eslint/no-explicit-any': 'error',
-    '@typescript-eslint/ban-ts-comment': 'error',
-    'vue/html-self-closing': 'off',
+  {
+    files: ['app/components/site/**/*.vue'],
+    rules: { 'vue/no-v-html': 'off' },
   },
-})
+)

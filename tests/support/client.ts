@@ -108,3 +108,37 @@ export class AdminClient {
     return response
   }
 }
+
+export function multipart(
+  fields: Array<{ name: string; filename: string; type: string; data: Buffer }>,
+): {
+  body: Buffer
+  contentType: string
+} {
+  const boundary = `----wsl${Math.random().toString(16).slice(2)}`
+  const chunks: Buffer[] = []
+  for (const field of fields) {
+    chunks.push(
+      Buffer.from(
+        `--${boundary}\r\nContent-Disposition: form-data; name="${field.name}"; filename="${field.filename}"\r\nContent-Type: ${field.type}\r\n\r\n`,
+      ),
+      field.data,
+      Buffer.from('\r\n'),
+    )
+  }
+  chunks.push(Buffer.from(`--${boundary}--\r\n`))
+  return { body: Buffer.concat(chunks), contentType: `multipart/form-data; boundary=${boundary}` }
+}
+
+export async function setupOwner(
+  server: TestServer,
+  password = 'grüner tee am frühen morgen',
+): Promise<AdminClient> {
+  const admin = new AdminClient(server, '198.51.100.5')
+  await admin.login('admin', 'admin123')
+  await admin.send('/api/admin/setup/password', { body: { password } })
+  await admin.refreshCsrf()
+  await admin.send('/api/admin/setup/finish', { body: {} })
+  await admin.refreshCsrf()
+  return admin
+}
