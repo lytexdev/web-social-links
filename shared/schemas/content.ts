@@ -24,7 +24,8 @@ export const iconField = z.string().regex(ICON_REF_PATTERN, { error: 'invalid' }
 
 function text(max: number, strict: boolean, required = false) {
   const base = z.string().trim().max(max, { error: 'too_long' })
-  return strict && required ? base.min(1, { error: 'required' }) : base
+  if (strict) return required ? base.min(1, { error: 'required' }) : base
+  return base.default('')
 }
 
 function url(strict: boolean) {
@@ -40,6 +41,7 @@ function url(strict: boolean) {
         return result.ok ? 'invalid' : `url_${result.reason}`
       },
     })
+    .default('')
 }
 
 function optionalUrl(strict: boolean) {
@@ -52,7 +54,7 @@ function optionalUrl(strict: boolean) {
 }
 
 function buildBlockSchemas(strict: boolean) {
-  const media = strict ? mediaIdField : mediaIdField.or(z.literal(''))
+  const media = strict ? mediaIdField : mediaIdField.or(z.literal('')).default('')
   return {
     link: z.object({
       title: text(80, strict, true),
