@@ -33,7 +33,12 @@ export default withNuxt(
     },
   },
   {
-    files: ['app/components/site/**/*.vue'],
+    files: [
+      'app/components/site/**/*.vue',
+      'app/components/admin/IconPicker.vue',
+      'app/components/admin/IconPreview.vue',
+      'app/pages/admin/pages/[[]id[]].vue',
+    ],
     rules: { 'vue/no-v-html': 'off' },
   },
 )

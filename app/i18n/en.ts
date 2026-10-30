@@ -1,6 +1,8 @@
 import type { Messages } from './de'
+import { enCms } from './en-cms'
 
 export const en: Messages = {
+  ...enCms,
   error: {
     status: 'Status',
     notFoundTitle: 'Not found',

@@ -1,4 +1,7 @@
+import { deCms } from './de-cms'
+
 export const de = {
+  ...deCms,
   error: {
     status: 'Status',
     notFoundTitle: 'Nicht gefunden',
