@@ -7,7 +7,7 @@ import {
   DialogRoot,
   DialogTitle,
 } from 'reka-ui'
-import type { IconEntry } from '~/composables/use-icons'
+import { searchIcons, type IconEntry } from '#shared/utils/icon-search'
 
 const open = defineModel<boolean>('open', { required: true })
 const props = defineProps<{ current: string | null }>()
