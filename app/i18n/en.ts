@@ -153,6 +153,7 @@ export const en: Messages = {
     regenerate: 'New recovery codes',
     regenerateBody: 'The previous codes stop working.',
     sessions: 'Sessions',
+    showSessions: 'Show sessions',
     sessionsEmpty: 'No other sessions',
     current: 'This session',
     lastSeen: 'Last active',

@@ -1,30 +1,10 @@
 import { and, desc, eq, lt, type SQL } from 'drizzle-orm'
 import { useDb } from '../db/client'
 import { securityEvents } from '../db/schema'
+import { SECURITY_EVENT_LABEL_KEYS } from '../../shared/constants/security'
 import { logger } from '../utils/logger'
 
-export const SECURITY_EVENT_TYPES = [
-  'auth_success',
-  'auth_failed',
-  'auth_locked',
-  'auth_rate_limited',
-  'honeypot',
-  'totp_failed',
-  'recovery_used',
-  'trap_hit',
-  'ban_created',
-  'ban_removed',
-  'password_changed',
-  'username_changed',
-  'totp_enabled',
-  'totp_disabled',
-  'recovery_regenerated',
-  'session_revoked',
-  'csrf_rejected',
-  'admin_ip_rejected',
-  'settings_changed',
-  'admin_reset',
-] as const
+export const SECURITY_EVENT_TYPES = SECURITY_EVENT_LABEL_KEYS
 
 export type SecurityEventType = (typeof SECURITY_EVENT_TYPES)[number]
 

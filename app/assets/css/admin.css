@@ -1,0 +1,242 @@
+:root {
+  --wsl-danger: #ff8a80;
+  --wsl-ok: #9be38f;
+}
+
+:root[data-preset='paper'] {
+  --wsl-danger: #b3261e;
+  --wsl-ok: #2e6b23;
+}
+
+.a-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid var(--wsl-line);
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--wsl-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease-out,
+    background-color 150ms ease-out;
+}
+
+.a-btn:hover {
+  border-color: var(--wsl-muted);
+}
+
+.a-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.a-btn-primary {
+  border-color: var(--wsl-accent);
+  background: var(--wsl-accent);
+  color: var(--wsl-on-accent);
+}
+
+.a-btn-primary:hover {
+  border-color: var(--wsl-text);
+}
+
+.a-btn-danger {
+  border-color: var(--wsl-danger);
+  color: var(--wsl-danger);
+}
+
+.a-btn-quiet {
+  border-color: transparent;
+  color: var(--wsl-muted);
+}
+
+.a-btn-quiet:hover {
+  border-color: var(--wsl-line);
+  color: var(--wsl-text);
+}
+
+.a-btn-icon {
+  width: 2.5rem;
+  padding: 0;
+}
+
+.a-btn-sm {
+  min-height: 2rem;
+  padding: 0 0.625rem;
+  font-size: 0.8125rem;
+}
+
+.a-btn-sm.a-btn-icon {
+  width: 2rem;
+}
+
+.a-input,
+.a-select,
+.a-textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--wsl-line);
+  border-radius: 0.375rem;
+  background: var(--wsl-surface);
+  color: var(--wsl-text);
+  font: inherit;
+  font-size: 0.9375rem;
+}
+
+.a-textarea {
+  min-height: 8rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.a-input:hover,
+.a-select:hover,
+.a-textarea:hover {
+  border-color: var(--wsl-muted);
+}
+
+.a-input[aria-invalid='true'],
+.a-select[aria-invalid='true'],
+.a-textarea[aria-invalid='true'] {
+  border-color: var(--wsl-danger);
+}
+
+.a-input-mono {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.a-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.a-hint {
+  color: var(--wsl-muted);
+  font-size: 0.8125rem;
+}
+
+.a-error {
+  color: var(--wsl-danger);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.a-section {
+  border-top: 1px solid var(--wsl-line);
+  padding-block: 1.5rem;
+}
+
+.a-heading {
+  font-size: 1.5625rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.a-subheading {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.a-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.a-table th {
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  border-bottom: 1px solid var(--wsl-line);
+  color: var(--wsl-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.a-table td {
+  padding: 0.625rem 0.75rem 0.625rem 0;
+  border-bottom: 1px solid var(--wsl-line);
+  vertical-align: top;
+}
+
+.a-check {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--wsl-accent);
+}
+
+.a-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.375rem;
+  padding: 0 0.4375rem;
+  border: 1px solid var(--wsl-line);
+  border-radius: 0.25rem;
+  color: var(--wsl-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.a-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgb(0 0 0 / 0.6);
+}
+
+.a-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+  width: min(30rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
+  padding: 1.5rem;
+  border: 1px solid var(--wsl-line);
+  border-radius: 0.5rem;
+  background: var(--wsl-bg);
+  transform: translate(-50%, -50%);
+}
+
+.a-strength {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.25rem;
+}
+
+.a-strength span {
+  height: 0.25rem;
+  border-radius: 0.125rem;
+  background: var(--wsl-line);
+}
+
+.a-strength[data-score='0'] span:nth-child(-n + 1),
+.a-strength[data-score='1'] span:nth-child(-n + 2) {
+  background: var(--wsl-danger);
+}
+
+.a-strength[data-score='2'] span:nth-child(-n + 3) {
+  background: var(--wsl-muted);
+}
+
+.a-strength[data-score='3'] span:nth-child(-n + 4),
+.a-strength[data-score='4'] span {
+  background: var(--wsl-accent);
+}

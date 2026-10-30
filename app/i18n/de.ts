@@ -153,6 +153,7 @@ export const de = {
     regenerate: 'Neue Wiederherstellungscodes',
     regenerateBody: 'Die bisherigen Codes werden ungültig.',
     sessions: 'Sitzungen',
+    showSessions: 'Sitzungen anzeigen',
     sessionsEmpty: 'Keine weiteren Sitzungen',
     current: 'Diese Sitzung',
     lastSeen: 'Zuletzt aktiv',

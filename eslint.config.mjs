@@ -28,5 +28,6 @@ export default withNuxt({
     'no-console': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/ban-ts-comment': 'error',
+    'vue/html-self-closing': 'off',
   },
 })
