@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+@import './fonts.css';
+@import './tokens.css';
+@import './base.css';
+
+@theme {
+  --color-*: initial;
+  --font-*: initial;
+}
+
+@theme inline {
+  --font-sans: 'Montserrat Variable', sans-serif;
+  --color-bg: var(--wsl-bg);
+  --color-surface: var(--wsl-surface);
+  --color-line: var(--wsl-line);
+  --color-text: var(--wsl-text);
+  --color-muted: var(--wsl-muted);
+  --color-accent: var(--wsl-accent);
+  --color-on-accent: var(--wsl-on-accent);
+  --text-label: 0.75rem;
+  --text-footer: 0.8125rem;
+  --text-display: clamp(2rem, 6vw, 3.5rem);
+  --radius-row: var(--wsl-radius);
+  --radius-avatar: var(--wsl-avatar-radius);
+  --ease-out: var(--wsl-ease-out);
+}
