@@ -1,6 +1,6 @@
 {
   "name": "web-social-links",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -20,7 +20,8 @@
     "db:generate": "drizzle-kit generate",
     "test:integration": "vitest run --project integration",
     "test:e2e": "playwright test",
-    "seed:demo": "node scripts/seed-demo.mjs"
+    "seed:demo": "node scripts/seed-demo.mjs",
+    "notices": "node scripts/notices.mjs && prettier --write THIRD_PARTY_NOTICES.md"
   },
   "dependencies": {
     "@fontsource-variable/montserrat": "5.3.0",

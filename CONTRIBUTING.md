@@ -30,3 +30,13 @@ Conventional Commits in English and in the imperative, subject at most 72 charac
 ## Privacy
 
 Pull requests that add a third party, new collected data, storage on the visitor's device or a change in retention must say so in the pull request description and update the privacy policy template.
+
+## Accessibility checklist
+
+Automated checks cover axe and Lighthouse. Before a release, also check by hand:
+
+- Keyboard only: log in, finish the wizard, add a group and a link, reorder with space and arrows, publish, open every admin view. Focus is always visible and never hidden behind the sticky header
+- Screen reader (NVDA with Firefox or VoiceOver with Safari): the public page reads name, sections with their numbers, link titles with the affiliate label and "opens in a new tab" where set; reordering announces each step
+- 200 % zoom and 320 pixel width: no horizontal scrolling on public pages
+- `prefers-reduced-motion`: no entrance animation
+- Windows high contrast mode: focus rings, tags and the featured row stay visible
