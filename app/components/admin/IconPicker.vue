@@ -60,12 +60,14 @@ watch(open, async (value) => {
   }
 })
 
+function inTab(ref: string, current: Tab): boolean {
+  return ref.startsWith(`${current}:`) || (current === 'tabler' && ref.startsWith('extra:'))
+}
+
 const categories = computed(() =>
   [
     ...new Set(
-      index.value
-        .filter((entry) => entry.ref.startsWith(`${tab.value}:`))
-        .map((entry) => entry.category),
+      index.value.filter((entry) => inTab(entry.ref, tab.value)).map((entry) => entry.category),
     ),
   ]
     .filter(Boolean)
@@ -84,7 +86,7 @@ const results = computed(() => {
       )
       .filter((entry): entry is IconEntry => entry !== undefined)
   } else if (tab.value === 'media') pool = media.value
-  else pool = index.value.filter((entry) => entry.ref.startsWith(`${tab.value}:`))
+  else pool = index.value.filter((entry) => inTab(entry.ref, tab.value))
   if (category.value) pool = pool.filter((entry) => entry.category === category.value)
   return searchIcons(pool, query.value)
 })

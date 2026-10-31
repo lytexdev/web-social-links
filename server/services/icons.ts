@@ -23,7 +23,7 @@ async function svgBodies(): Promise<Record<string, string>> {
 }
 
 export function wrapIcon(ref: string, body: string, size = 24): string {
-  const outline = ref.startsWith('tabler:')
+  const outline = ref.startsWith('tabler:') || ref.startsWith('extra:')
   const paint = outline
     ? 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'
     : 'fill="currentColor"'

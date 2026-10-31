@@ -1,6 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { ICON_ALIASES } from '../shared/constants/icons.ts'
+import { EXTRA_ICONS } from './extra-icons.ts'
 
 interface TablerMeta {
   name: string
@@ -63,6 +64,12 @@ for (const meta of simple) {
       .join(' ')
       .toLowerCase(),
   ])
+}
+
+for (const icon of EXTRA_ICONS) {
+  const ref = `extra:${icon.name}`
+  svgs[ref] = icon.body
+  index.push([ref, icon.name, icon.category, icon.tags.join(' ')])
 }
 
 const versions = {

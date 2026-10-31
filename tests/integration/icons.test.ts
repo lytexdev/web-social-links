@@ -27,11 +27,18 @@ describe('icon picker API', () => {
   })
 
   it('serves SVG bodies for picked icons', async () => {
-    const refs = encodeURIComponent('tabler:brand-youtube,si:youtube,tabler:missing-icon')
+    const refs = encodeURIComponent(
+      'tabler:brand-youtube,si:youtube,extra:nasal-spray,tabler:missing-icon',
+    )
     const response = await admin.send(`/api/admin/icons/svg?refs=${refs}`)
     expect(response.status).toBe(200)
     const svgs = response.json<Record<string, string>>()
-    expect(Object.keys(svgs).sort()).toEqual(['si:youtube', 'tabler:brand-youtube'])
+    expect(Object.keys(svgs).sort()).toEqual([
+      'extra:nasal-spray',
+      'si:youtube',
+      'tabler:brand-youtube',
+    ])
     expect(svgs['si:youtube']).toMatch(/^<svg [^>]*viewBox="0 0 24 24"/)
+    expect(svgs['extra:nasal-spray']).toMatch(/^<svg [^>]*stroke="currentColor"/)
   })
 })

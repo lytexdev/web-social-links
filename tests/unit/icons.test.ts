@@ -40,6 +40,27 @@ describe.skipIf(!existsSync(INDEX))('icon index', () => {
     expect(searchIcons(brands, 'ig')[0]?.ref).toBe('si:instagram')
   })
 
+  it.each([
+    ['youtube', 'si:youtube'],
+    ['shorts', 'si:youtubeshorts'],
+    ['linkedin', 'tabler:brand-linkedin'],
+    ['gitlab', 'tabler:brand-gitlab'],
+    ['onlyfans', 'tabler:brand-onlyfans'],
+    ['sms', 'tabler:message'],
+    ['www', 'tabler:world-www'],
+    ['stern', 'tabler:star'],
+    ['stift', 'tabler:pencil'],
+    ['tablette', 'extra:tablet-round'],
+    ['nasenspray', 'extra:nasal-spray'],
+    ['pulver', 'extra:powder'],
+    ['blatt', 'tabler:leaf'],
+    ['papier', 'tabler:file-text'],
+    ['kaffee', 'tabler:coffee'],
+  ])('finds %s', (query, ref) => {
+    expect(svgs[ref]).toBeTruthy()
+    expect(searchIcons(entries, query).some((entry) => entry.ref === ref)).toBe(true)
+  })
+
   it('stays below the transfer budget for the picker', () => {
     expect(JSON.stringify(index).length).toBeLessThan(1_200_000)
   })

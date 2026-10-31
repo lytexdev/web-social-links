@@ -1,11 +1,41 @@
-export const ICON_SETS = ['tabler', 'tabler-filled', 'si'] as const
+export const ICON_SETS = ['tabler', 'tabler-filled', 'si', 'extra'] as const
 export type IconSet = (typeof ICON_SETS)[number]
 
 export const ICON_REF_PATTERN =
-  /^(?:(tabler|tabler-filled|si):[a-z0-9-]{1,80}|media:[A-Za-z0-9_-]{12})$/
+  /^(?:(tabler|tabler-filled|si|extra):[a-z0-9-]{1,80}|media:[A-Za-z0-9_-]{12})$/
 
 export const ICON_ALIASES: Record<string, string[]> = {
   'brand-instagram': ['ig', 'insta'],
+  'brand-youtube-shorts': ['shorts', 'yt'],
+  'brand-youtubeshorts': ['shorts', 'yt'],
+  'brand-snapchat': ['snap', 'sc'],
+  'brand-discord': ['dc', 'server', 'community'],
+  'brand-gitlab': ['gl', 'code', 'source', 'quellen'],
+  'brand-google': ['g', 'suche', 'search', 'bewertung', 'review'],
+  'brand-pinterest': ['pin', 'pins'],
+  'brand-reddit': ['subreddit', 'forum'],
+  'brand-soundcloud': ['music', 'musik', 'audio'],
+  'brand-twitch': ['stream', 'live'],
+  'brand-kick': ['stream', 'live'],
+  'brand-onlyfans': ['of', 'fans'],
+  message: ['nachricht', 'text', 'chat'],
+  'device-mobile-message': ['sms', 'nachricht', 'handy'],
+  'world-www': ['webseite', 'homepage'],
+  star: ['stern', 'favorit', 'bewertung'],
+  pencil: ['stift', 'schreiben', 'bearbeiten', 'blog'],
+  pills: ['tabletten', 'kapseln', 'supplement', 'nahrungsergaenzung'],
+  capsule: ['kapsel', 'supplement'],
+  spray: ['spruehflasche', 'spruehen'],
+  leaf: ['blatt', 'pflanzlich', 'natur', 'bio'],
+  plant: ['pflanze', 'pflanzlich', 'natur'],
+  seedling: ['keimling', 'pflanze', 'wachstum'],
+  coffee: ['kaffee', 'tasse', 'tee'],
+  cup: ['tasse', 'becher', 'tee'],
+  news: ['zeitung', 'artikel', 'presse', 'paper'],
+  notes: ['notizen', 'papier', 'paper'],
+  book: ['buch', 'ebook', 'lesen'],
+  bottle: ['flasche', 'trinken'],
+  'medicine-syrup': ['sirup', 'medizin', 'tropfen'],
   'brand-youtube': ['yt', 'video'],
   'brand-x': ['twitter', 'tweet'],
   'brand-twitter': ['x'],
@@ -24,7 +54,7 @@ export const ICON_ALIASES: Record<string, string[]> = {
   mail: ['email', 'e-mail', 'kontakt', 'contact'],
   world: ['website', 'web', 'webseite', 'homepage'],
   'shopping-cart': ['shop', 'kaufen', 'buy'],
-  pill: ['supplement', 'nahrungsergaenzung', 'kapsel'],
+  pill: ['supplement', 'nahrungsergaenzung', 'kapsel', 'tablette', 'tab', 'tabs'],
   'discount-2': ['rabatt', 'coupon', 'gutschein'],
-  'file-text': ['quellen', 'sources', 'studie', 'study'],
+  'file-text': ['quellen', 'sources', 'studie', 'study', 'papier', 'dokument'],
 }
