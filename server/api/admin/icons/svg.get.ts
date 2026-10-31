@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { ICON_REF_PATTERN } from '../../../../shared/constants/icons'
-import { iconSvgs } from '../../../services/icons'
+import { cacheIcons, iconSvgs } from '../../../services/icons'
 import { parseQuery } from '../../../utils/http'
 
 export default defineEventHandler(async (event) => {
@@ -9,6 +9,6 @@ export default defineEventHandler(async (event) => {
     .split(',')
     .filter((ref) => ICON_REF_PATTERN.test(ref))
     .slice(0, 200)
-  setResponseHeader(event, 'Cache-Control', 'private, max-age=86400')
+  if (await cacheIcons(event)) return null
   return iconSvgs(list)
 })

@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { ICON_ALIASES } from '../shared/constants/icons.ts'
@@ -72,19 +73,13 @@ for (const icon of EXTRA_ICONS) {
   index.push([ref, icon.name, icon.category, icon.tags.join(' ')])
 }
 
-const versions = {
-  tabler: (
-    JSON.parse(readFileSync(join(tablerRoot, 'package.json'), 'utf8')) as { version: string }
-  ).version,
-  simple: (
-    JSON.parse(readFileSync(join(simpleRoot, 'package.json'), 'utf8')) as { version: string }
-  ).version,
-}
+const version = createHash('sha256')
+  .update(JSON.stringify(index))
+  .update(JSON.stringify(svgs))
+  .digest('hex')
+  .slice(0, 16)
 
 mkdirSync(outDir, { recursive: true })
-writeFileSync(
-  join(outDir, 'index.json'),
-  JSON.stringify({ version: `${versions.tabler}-${versions.simple}`, icons: index }),
-)
+writeFileSync(join(outDir, 'index.json'), JSON.stringify({ version, icons: index }))
 writeFileSync(join(outDir, 'svg.json'), JSON.stringify(svgs))
 process.stdout.write(`icon index: ${index.length} icons\n`)

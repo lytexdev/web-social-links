@@ -24,6 +24,10 @@ describe('icon picker API', () => {
     expect(refs.length).toBeGreaterThan(5000)
     expect(refs).toContain('tabler:brand-youtube')
     expect(refs).toContain('si:youtube')
+    const etag = String(response.headers.etag)
+    expect(response.headers['cache-control']).toBe('private, no-cache')
+    const again = await admin.send('/api/admin/icons', { headers: { 'if-none-match': etag } })
+    expect(again.status).toBe(304)
   })
 
   it('serves SVG bodies for picked icons', async () => {

@@ -1,3 +1,4 @@
+import { getRequestHeader, setResponseHeader, setResponseStatus, type H3Event } from 'h3'
 import { ICON_REF_PATTERN } from '../../shared/constants/icons'
 
 interface IconIndex {
@@ -20,6 +21,15 @@ async function svgBodies(): Promise<Record<string, string>> {
   svgCache ??=
     (await useStorage('assets:server').getItem<Record<string, string>>('icons:svg.json')) ?? {}
   return svgCache
+}
+
+export async function cacheIcons(event: H3Event): Promise<boolean> {
+  const etag = `"${(await iconIndex()).version}"`
+  setResponseHeader(event, 'Cache-Control', 'private, no-cache')
+  setResponseHeader(event, 'ETag', etag)
+  if (getRequestHeader(event, 'if-none-match') !== etag) return false
+  setResponseStatus(event, 304)
+  return true
 }
 
 export function wrapIcon(ref: string, body: string, size = 24): string {
