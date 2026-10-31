@@ -8,7 +8,7 @@ export function useIcons() {
 
   function loadIndex(): Promise<IconEntry[]> {
     indexPromise ??= request<{ version: string; icons: Array<[string, string, string, string]> }>(
-      '/api/admin/icons/index',
+      '/api/admin/icons',
     ).then((index) =>
       index.icons.map(([ref, name, category, tags]) => ({ ref, name, category, tags })),
     )
