@@ -70,13 +70,12 @@ export class SecretDecryptionError extends Error {
   }
 }
 
-export function decryptSecret(token: string, keys: readonly Buffer[]): string {
+export function decryptSecret(token: string, key: Buffer): string {
   const [version, id, ivPart, payloadPart] = token.split('.')
   if (version !== SECRET_VERSION || !id || !ivPart || !payloadPart) {
     throw new SecretDecryptionError('unknown format')
   }
-  const key = keys.find((candidate) => keyId(candidate) === id)
-  if (!key) throw new SecretDecryptionError('no matching key, check APP_ENCRYPTION_KEY_PREVIOUS')
+  if (id !== keyId(key)) throw new SecretDecryptionError('encrypted with another key')
   const payload = Buffer.from(payloadPart, 'base64url')
   if (payload.length < 17) throw new SecretDecryptionError('truncated payload')
   const decipher = createDecipheriv('aes-256-gcm', key, Buffer.from(ivPart, 'base64url'))
@@ -89,8 +88,4 @@ export function decryptSecret(token: string, keys: readonly Buffer[]): string {
   } catch {
     throw new SecretDecryptionError('authentication failed')
   }
-}
-
-export function needsReencryption(token: string, current: Buffer): boolean {
-  return token.split('.')[1] !== keyId(current)
 }

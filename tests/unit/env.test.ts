@@ -51,13 +51,6 @@ describe('parseEnv', () => {
     expect(issues(base({ ANALYTICS_HMAC_KEY: randomBytes(64).toString('base64') }))).toEqual([])
   })
 
-  it('rejects a previous key identical to the current key', () => {
-    const current = key()
-    expect(
-      issues(base({ APP_ENCRYPTION_KEY: current, APP_ENCRYPTION_KEY_PREVIOUS: current })),
-    ).toContain('APP_ENCRYPTION_KEY_PREVIOUS must differ from APP_ENCRYPTION_KEY')
-  })
-
   it('requires https and a bare origin in production', () => {
     expect(issues(base({ PUBLIC_ORIGIN: 'http://links.example.com' }))).toContain(
       'PUBLIC_ORIGIN must use https',

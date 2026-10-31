@@ -180,7 +180,6 @@ function buildSchema(production: boolean) {
       ADMIN_ALLOWED_HOSTS: text(hostListSchema()),
       ADMIN_IP_ALLOWLIST: text(cidrListSchema()),
       APP_ENCRYPTION_KEY: text(keySchema(32, true)),
-      APP_ENCRYPTION_KEY_PREVIOUS: text(keySchema(32, true).optional()),
       ANALYTICS_HMAC_KEY: text(keySchema(32, false)),
       INITIAL_ADMIN_USERNAME: text(
         z
@@ -215,13 +214,6 @@ function buildSchema(production: boolean) {
           message: 'is required in production',
         })
       }
-      if (value.APP_ENCRYPTION_KEY_PREVIOUS?.equals(value.APP_ENCRYPTION_KEY)) {
-        ctx.addIssue({
-          code: 'custom',
-          path: ['APP_ENCRYPTION_KEY_PREVIOUS'],
-          message: 'must differ from APP_ENCRYPTION_KEY',
-        })
-      }
     })
 }
 
@@ -233,7 +225,6 @@ export interface Env {
   adminHosts: ReadonlySet<string>
   adminIpAllowlist: BlockList | null
   encryptionKey: Buffer
-  previousEncryptionKey: Buffer | null
   analyticsKey: Buffer
   initialAdminUsername: string
   initialAdminPassword: string
@@ -276,7 +267,6 @@ export function parseEnv(source: Record<string, string | undefined>): EnvResult 
       adminIpAllowlist:
         data.ADMIN_IP_ALLOWLIST.length > 0 ? buildBlockList(data.ADMIN_IP_ALLOWLIST) : null,
       encryptionKey: data.APP_ENCRYPTION_KEY,
-      previousEncryptionKey: data.APP_ENCRYPTION_KEY_PREVIOUS ?? null,
       analyticsKey: data.ANALYTICS_HMAC_KEY,
       initialAdminUsername: data.INITIAL_ADMIN_USERNAME,
       initialAdminPassword: data.INITIAL_ADMIN_PASSWORD,

@@ -20,11 +20,6 @@ import { createTotpSecret, matchTotp, totpUri } from './totp'
 import { uaFamily } from './user-agent'
 import { findUserByUsername, replaceRecoveryCodes, updateUser, type UserRow } from './users'
 
-function encryptionKeys(): Buffer[] {
-  const env = useEnv()
-  return [env.encryptionKey, ...(env.previousEncryptionKey ? [env.previousEncryptionKey] : [])]
-}
-
 export function setSessionCookie(event: H3Event, token: string): void {
   setCookie(event, SESSION_COOKIE, token, {
     httpOnly: true,
@@ -134,7 +129,7 @@ export function confirmTotpEnrollment(
   code: string,
 ): string[] {
   if (!user.totpPendingEnc) throw apiError(409, 'totp_not_started', 'Start the setup again')
-  const secret = decryptSecret(user.totpPendingEnc, encryptionKeys())
+  const secret = decryptSecret(user.totpPendingEnc, useEnv().encryptionKey)
   const now = Date.now()
   const step = matchTotp(secret, code, now)
   if (step === null)

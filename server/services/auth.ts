@@ -146,11 +146,7 @@ export async function attemptLogin(
 export function consumeTotp(user: UserRow, code: string, now: number): boolean {
   if (!user.totpEnabled || !user.totpSecretEnc) return false
   const env = useEnv()
-  const keys = [
-    env.encryptionKey,
-    ...(env.previousEncryptionKey ? [env.previousEncryptionKey] : []),
-  ]
-  const secret = decryptSecret(user.totpSecretEnc, keys)
+  const secret = decryptSecret(user.totpSecretEnc, env.encryptionKey)
   const step = matchTotp(secret, code, now)
   if (step === null) return false
   const updated = useDb()

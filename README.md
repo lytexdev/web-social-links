@@ -25,28 +25,25 @@ Open `/admin`, log in with `admin` and the initial password (`admin123` if you l
 
 ## Configuration
 
-| Variable                      | Default                 | Purpose                                                                        |
-| ----------------------------- | ----------------------- | ------------------------------------------------------------------------------ |
-| `PUBLIC_ORIGIN`               | required                | Canonical origin, for example `https://links.example.com`                      |
-| `ALIAS_ORIGINS`               | empty                   | Further origins that redirect with 301 to `PUBLIC_ORIGIN`, comma separated     |
-| `ADMIN_ALLOWED_HOSTS`         | host of `PUBLIC_ORIGIN` | Hosts that serve the admin                                                     |
-| `ADMIN_IP_ALLOWLIST`          | empty, any address      | CIDR ranges allowed to reach the admin                                         |
-| `APP_ENCRYPTION_KEY`          | required                | 32 random bytes, base64. Encrypts TOTP secrets                                 |
-| `APP_ENCRYPTION_KEY_PREVIOUS` | empty                   | Previous key during a rotation, only used for decryption                       |
-| `ANALYTICS_HMAC_KEY`          | required                | At least 32 random bytes, base64                                               |
-| `INITIAL_ADMIN_USERNAME`      | `admin`                 | Owner account created on first start                                           |
-| `INITIAL_ADMIN_PASSWORD`      | `admin123`              | Must be changed at first login. Set your own value before the app is reachable |
-| `TOTP_ISSUER`                 | host of `PUBLIC_ORIGIN` | Name shown in authenticator apps                                               |
-| `SESSION_IDLE_MINUTES`        | `60`                    | Admin session idle timeout                                                     |
-| `SESSION_MAX_HOURS`           | `24`                    | Admin session absolute lifetime                                                |
-| `UPLOAD_MAX_MB`               | `10`                    | Upload limit per file                                                          |
-| `ANALYTICS_FLUSH_SECONDS`     | `5`                     | How often buffered analytics events are written                                |
-| `LOG_LEVEL`                   | `info`                  | `debug`, `info`, `warn` or `error`                                             |
-| `APP_PORT`                    | `3000`                  | Host port bound to `127.0.0.1`                                                 |
-| `PROXY_NETWORK`               | `proxy`                 | External Docker network for `compose.proxy-network.example.yaml`               |
-| `TZ`                          | `Europe/Berlin`         | Time zone for days in statistics and schedules                                 |
-| `BAN_SCOPE`                   | `admin`                 | `admin` blocks banned addresses from the admin only, `all` from everything     |
-| `SECURITY_CONTACT`            | required                | `mailto:` or `https:` address for `security.txt`                               |
+| Variable                  | Default                 | Purpose                                                                        |
+| ------------------------- | ----------------------- | ------------------------------------------------------------------------------ |
+| `PUBLIC_ORIGIN`           | required                | Canonical origin, for example `https://links.example.com`                      |
+| `ALIAS_ORIGINS`           | empty                   | Further origins that redirect with 301 to `PUBLIC_ORIGIN`, comma separated     |
+| `ADMIN_ALLOWED_HOSTS`     | host of `PUBLIC_ORIGIN` | Hosts that serve the admin                                                     |
+| `ADMIN_IP_ALLOWLIST`      | empty, any address      | CIDR ranges allowed to reach the admin                                         |
+| `APP_ENCRYPTION_KEY`      | required                | 32 random bytes, base64. Encrypts TOTP secrets                                 |
+| `ANALYTICS_HMAC_KEY`      | required                | At least 32 random bytes, base64                                               |
+| `INITIAL_ADMIN_USERNAME`  | `admin`                 | Owner account created on first start                                           |
+| `INITIAL_ADMIN_PASSWORD`  | `admin123`              | Must be changed at first login. Set your own value before the app is reachable |
+| `TOTP_ISSUER`             | host of `PUBLIC_ORIGIN` | Name shown in authenticator apps                                               |
+| `SESSION_IDLE_MINUTES`    | `60`                    | Admin session idle timeout                                                     |
+| `SESSION_MAX_HOURS`       | `24`                    | Admin session absolute lifetime                                                |
+| `UPLOAD_MAX_MB`           | `10`                    | Upload limit per file                                                          |
+| `ANALYTICS_FLUSH_SECONDS` | `5`                     | How often buffered analytics events are written                                |
+| `LOG_LEVEL`               | `info`                  | `debug`, `info`, `warn` or `error`                                             |
+| `TZ`                      | `Europe/Berlin`         | Time zone for days in statistics and schedules                                 |
+| `BAN_SCOPE`               | `admin`                 | `admin` blocks banned addresses from the admin only, `all` from everything     |
+| `SECURITY_CONTACT`        | required                | `mailto:` or `https:` address for `security.txt`                               |
 
 `generate-secrets.sh` fills empty keys and never overwrites existing values.
 
@@ -54,13 +51,7 @@ Open `/admin`, log in with `admin` and the initial password (`admin123` if you l
 
 ### Nginx Proxy Manager and Cloudflare
 
-If Nginx Proxy Manager runs in Docker, attach the app to its network instead of publishing a port:
-
-```sh
-docker compose -f compose.yaml -f compose.proxy-network.example.yaml up -d
-```
-
-`PROXY_NETWORK` is the name of the network Nginx Proxy Manager is in, for example `npm_default`.
+The app is published on `127.0.0.1:3000`. If Nginx Proxy Manager runs in Docker, add its network to the service in `compose.yaml` and drop the port mapping.
 
 Create one proxy host for the canonical domain and every alias domain, forwarding to `app` port `3000` (or `127.0.0.1:3000` when NPM runs on the host). The app performs the alias redirect itself.
 
