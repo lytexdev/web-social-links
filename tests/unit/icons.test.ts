@@ -35,6 +35,9 @@ describe.skipIf(!existsSync(INDEX))('icon index', () => {
     )
     expect(searchIcons(entries, 'heart').length).toBeGreaterThan(1)
     expect(searchIcons(entries, 'substack').some((entry) => entry.ref === 'si:substack')).toBe(true)
+    const brands = entries.filter((entry) => entry.ref.startsWith('si:'))
+    expect(searchIcons(brands, 'yt')[0]?.ref).toBe('si:youtube')
+    expect(searchIcons(brands, 'ig')[0]?.ref).toBe('si:instagram')
   })
 
   it('stays below the transfer budget for the picker', () => {

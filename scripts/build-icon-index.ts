@@ -59,7 +59,9 @@ for (const meta of simple) {
     ref,
     meta.title,
     'Brand',
-    [meta.slug, ...(meta.aliases?.aka ?? [])].join(' ').toLowerCase(),
+    [meta.slug, ...(meta.aliases?.aka ?? []), ...(ICON_ALIASES[`brand-${meta.slug}`] ?? [])]
+      .join(' ')
+      .toLowerCase(),
   ])
 }
 

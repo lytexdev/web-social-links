@@ -16,8 +16,8 @@ export function searchIcons(index: IconEntry[], query: string): IconEntry[] {
     for (const term of terms) {
       if (name === term || name === `brand-${term}`) score += 100
       else if (name.startsWith(term) || name.startsWith(`brand-${term}`)) score += 50
+      else if (` ${tags} `.includes(` ${term} `)) score += 60
       else if (name.includes(term)) score += 25
-      else if (` ${tags} `.includes(` ${term} `)) score += 20
       else if (tags.includes(term)) score += 8
       else {
         score = 0
