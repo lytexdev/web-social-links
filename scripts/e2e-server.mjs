@@ -18,7 +18,6 @@ const child = spawn(process.execPath, [resolve('.output/server/index.mjs')], {
     APP_ENCRYPTION_KEY: randomBytes(32).toString('base64'),
     ANALYTICS_HMAC_KEY: randomBytes(32).toString('base64'),
     SECURITY_CONTACT: 'mailto:security@example.com',
-    TRUSTED_PROXIES: 'loopback',
     DATA_DIR: dataDir,
     MIGRATIONS_DIR: resolve('server/db/migrations'),
     ANALYTICS_FLUSH_SECONDS: '1',

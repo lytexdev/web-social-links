@@ -45,12 +45,6 @@ export default defineNitroPlugin((nitroApp) => {
   warnAboutInitialCredentials()
   loadBans()
 
-  if (env.production && env.trustsProxies && !env.proxyPeerHeader) {
-    logger.warn('client_ip_unverified', {
-      note: 'PROXY_PEER_HEADER is not set. A proxy that rewrites its peer address from X-Real-IP lets clients forge their address. See README, section Reverse proxy.',
-    })
-  }
-
   nitroApp.hooks.hookOnce('close', () => {
     stopAnalytics()
     closeDatabase()

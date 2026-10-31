@@ -32,7 +32,6 @@ describe('parseEnv', () => {
     expect(result.env.sessionIdleMs).toBe(3_600_000)
     expect(result.env.timeZone).toBe('Europe/Berlin')
     expect(result.env.banScope).toBe('admin')
-    expect(result.env.trustsProxies).toBe(false)
   })
 
   it('names every missing secret', () => {
@@ -87,7 +86,6 @@ describe('parseEnv', () => {
         ALIAS_ORIGINS: 'https://socials.example.com, https://www.example.com',
         ADMIN_ALLOWED_HOSTS: 'Admin.Example.com',
         ADMIN_IP_ALLOWLIST: '10.8.0.0/24,fd00::/8',
-        TRUSTED_PROXIES: 'private,loopback,cloudflare',
       }),
     )
     expect(result.ok).toBe(true)
@@ -96,15 +94,9 @@ describe('parseEnv', () => {
     expect([...result.env.adminHosts]).toEqual(['admin.example.com'])
     expect(result.env.adminIpAllowlist?.check('10.8.0.7', 'ipv4')).toBe(true)
     expect(result.env.adminIpAllowlist?.check('10.9.0.7', 'ipv4')).toBe(false)
-    expect(result.env.trustedProxies.check('172.18.0.2', 'ipv4')).toBe(true)
-    expect(result.env.trustedProxies.check('162.158.1.1', 'ipv4')).toBe(true)
-    expect(result.env.trustsProxies).toBe(true)
   })
 
-  it('rejects unknown proxy presets and broken ranges', () => {
-    expect(issues(base({ TRUSTED_PROXIES: 'cloudfront' })).join()).toMatch(
-      /"cloudfront" is not an IP or CIDR/,
-    )
+  it('rejects broken ranges', () => {
     expect(issues(base({ ADMIN_IP_ALLOWLIST: '10.0.0.0/33' })).join()).toMatch(/"10.0.0.0\/33"/)
     expect(issues(base({ ADMIN_IP_ALLOWLIST: 'private' })).join()).toMatch(/"private" is not an IP/)
   })

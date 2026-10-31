@@ -1,18 +1,10 @@
 import type { BlockList } from 'node:net'
 import { z } from 'zod'
 import { buildBlockList, parseCidr, type Cidr } from './cidr'
-import { CLOUDFLARE_RANGES, LOOPBACK_RANGES, PRIVATE_RANGES } from './proxy-ranges'
-
-const PROXY_PRESETS: Record<string, readonly string[]> = {
-  private: PRIVATE_RANGES,
-  loopback: LOOPBACK_RANGES,
-  cloudflare: CLOUDFLARE_RANGES,
-}
 
 const HOST_PATTERN =
   /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*(?::\d{1,5})?$/
 const USERNAME_PATTERN = /^[a-z0-9](?:[a-z0-9._-]{1,30}[a-z0-9])$/
-const HEADER_PATTERN = /^[a-z0-9-]{1,64}$/
 
 function trimmed(value: unknown): unknown {
   if (typeof value !== 'string') return value
@@ -87,27 +79,19 @@ function keySchema(minBytes: number, exactBytes: boolean) {
   })
 }
 
-function cidrListSchema(allowPresets: boolean) {
+function cidrListSchema() {
   return z
     .string()
     .optional()
     .transform((value, ctx) => {
       const cidrs: Cidr[] = []
       for (const entry of list(value)) {
-        const preset = allowPresets ? PROXY_PRESETS[entry.toLowerCase()] : undefined
-        const sources = preset ?? [entry]
-        for (const source of sources) {
-          const cidr = parseCidr(source)
-          if (!cidr) {
-            const hint = allowPresets ? ', or one of private, loopback, cloudflare' : ''
-            ctx.addIssue({
-              code: 'custom',
-              message: `"${entry}" is not an IP or CIDR range${hint}`,
-            })
-            return z.NEVER
-          }
-          cidrs.push(cidr)
+        const cidr = parseCidr(entry)
+        if (!cidr) {
+          ctx.addIssue({ code: 'custom', message: `"${entry}" is not an IP or CIDR range` })
+          return z.NEVER
         }
+        cidrs.push(cidr)
       }
       return cidrs
     })
@@ -194,15 +178,7 @@ function buildSchema(production: boolean) {
       PUBLIC_ORIGIN: text(originSchema(!production)),
       ALIAS_ORIGINS: text(originListSchema(!production)),
       ADMIN_ALLOWED_HOSTS: text(hostListSchema()),
-      ADMIN_IP_ALLOWLIST: text(cidrListSchema(false)),
-      TRUSTED_PROXIES: text(cidrListSchema(true)),
-      PROXY_PEER_HEADER: text(
-        z
-          .string()
-          .transform((value) => value.toLowerCase())
-          .refine((value) => HEADER_PATTERN.test(value), { error: 'must be a header name' })
-          .optional(),
-      ),
+      ADMIN_IP_ALLOWLIST: text(cidrListSchema()),
       APP_ENCRYPTION_KEY: text(keySchema(32, true)),
       APP_ENCRYPTION_KEY_PREVIOUS: text(keySchema(32, true).optional()),
       ANALYTICS_HMAC_KEY: text(keySchema(32, false)),
@@ -256,10 +232,6 @@ export interface Env {
   aliasHosts: ReadonlySet<string>
   adminHosts: ReadonlySet<string>
   adminIpAllowlist: BlockList | null
-  trustsProxies: boolean
-  trustedProxies: BlockList
-  cloudflare: BlockList
-  proxyPeerHeader: string | null
   encryptionKey: Buffer
   previousEncryptionKey: Buffer | null
   analyticsKey: Buffer
@@ -303,12 +275,6 @@ export function parseEnv(source: Record<string, string | undefined>): EnvResult 
       adminHosts: new Set(adminHosts),
       adminIpAllowlist:
         data.ADMIN_IP_ALLOWLIST.length > 0 ? buildBlockList(data.ADMIN_IP_ALLOWLIST) : null,
-      trustsProxies: data.TRUSTED_PROXIES.length > 0,
-      trustedProxies: buildBlockList(data.TRUSTED_PROXIES),
-      cloudflare: buildBlockList(
-        CLOUDFLARE_RANGES.map((range) => parseCidr(range)).filter((cidr) => cidr !== null),
-      ),
-      proxyPeerHeader: data.PROXY_PEER_HEADER ?? null,
       encryptionKey: data.APP_ENCRYPTION_KEY,
       previousEncryptionKey: data.APP_ENCRYPTION_KEY_PREVIOUS ?? null,
       analyticsKey: data.ANALYTICS_HMAC_KEY,

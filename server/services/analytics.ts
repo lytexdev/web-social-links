@@ -150,9 +150,7 @@ export function recordFromEvent(event: H3Event, kind: 'view' | 'click', now = Da
           },
           known,
         )
-  const country = event.context.viaCloudflare
-    ? getRequestHeader(event, 'cf-ipcountry')?.toUpperCase()
-    : undefined
+  const country = getRequestHeader(event, 'cf-ipcountry')?.toUpperCase()
   const day = calendarDay(now, env.timeZone)
   let visitorHash: string | null = null
   const optOut =

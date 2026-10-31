@@ -46,7 +46,6 @@ export async function startServer(env: Record<string, string> = {}): Promise<Tes
       APP_ENCRYPTION_KEY: randomBytes(32).toString('base64'),
       ANALYTICS_HMAC_KEY: randomBytes(32).toString('base64'),
       SECURITY_CONTACT: 'mailto:security@example.com',
-      TRUSTED_PROXIES: 'loopback',
       DATA_DIR: dataDir,
       MIGRATIONS_DIR: resolve('server/db/migrations'),
       LOG_LEVEL: 'debug',

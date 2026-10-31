@@ -29,7 +29,7 @@ export function rawRequest(
     host: options.host ?? `127.0.0.1:${server.port}`,
     ...(options.body !== undefined ? { 'content-type': 'application/json' } : {}),
     ...(payload !== undefined ? { 'content-length': String(Buffer.byteLength(payload)) } : {}),
-    ...(options.ip ? { 'x-forwarded-for': options.ip } : {}),
+    ...(options.ip ? { 'x-real-ip': options.ip } : {}),
     ...options.headers,
   }
   return new Promise((resolve, reject) => {

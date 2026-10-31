@@ -6,7 +6,6 @@ import type { UserRow } from '../services/users'
 declare module 'h3' {
   interface H3EventContext {
     clientIp?: string
-    viaCloudflare?: boolean
     session?: SessionRow
     sessionToken?: string
     user?: UserRow
