@@ -78,13 +78,13 @@ The overview searches titles, topics and claims, filters by type and topic and w
 
 ## Calculators
 
-Admin, Calculators serves three calculators under a configurable address, by default `/rechner` with `/rechner/kalorien`, `/rechner/peptide` and `/rechner/wirkstoff-abbau`. Each one has its own title, introduction and visibility, which go live with the next publish.
+Admin, Calculators serves three calculators under a configurable address, by default `/rechner` with `/rechner/kalorien`, `/rechner/peptide` and `/rechner/wirkstoff-abbau`. Each one has its own title, introduction, visibility and a markdown section below the form that may hold links and images, all of which go live with the next publish.
 
 The calorie calculator derives the basal rate from Mifflin-St Jeor, or from Katch-McArdle over the fat free mass as soon as a body fat value is entered, adds daily activity through the PAL factor and sport through the MET value, and shows the total, target values and the calculation.
 
-The peptide calculator turns the peptide in the vial, the solvent and the amount to draw into units on a U-100 or U-40 syringe, draws the syringe, says how far a vial goes, warns when the amount falls outside the readable range of the scale, and lists other solvent amounts.
+A switch beside the title of the peptide calculator chooses between a syringe and a nasal spray. It turns the peptide in the vial, the solvent and the amount to draw into units on a U-100 or U-40 syringe, or into actuations of a nasal pump, draws the syringe, says how far a vial goes, warns when the amount falls outside the readable range of the scale, and lists other solvent amounts.
 
-The decay calculator estimates how much of a dose is still in the body after a given time, from the typical half-life of 27 everyday and prescription substances, and shows the curve, the points in time and the build-up on repeated intake. Beside the calculation it lists what the literature reports for the selected substance: half-life with its range, the main metabolites and the detection ranges in blood and urine. Those ranges are reference data and are not derived from the entered dose; the page states that they depend on dose, duration of use, test method and cut-off and cannot be converted to one person. Substances whose kinetics a single half-life does not describe, such as THC, carry the reference data without a calculation.
+The decay calculator estimates how much of a dose is still in the body after a given time, from the typical half-life of 48 everyday, prescription and research substances grouped by category. The substance field searches by name and category, and a substance can carry preparations, such as the three methylphenidate release forms or an extract with a stated share of active content, and the routes of administration that apply to it. Moving across the curve, tapping it or using the arrow keys reads off any point in time. Beside the calculation it lists what the literature reports for the selected substance: half-life with its range, the main metabolites and the detection ranges in blood and urine. Those ranges are reference data and are not derived from the entered dose; the page states that they depend on dose, duration of use, test method and cut-off and cannot be converted to one person. Substances whose kinetics a single half-life does not describe, such as THC, carry the reference data without a calculation.
 
 Each page has a button that copies its address, and an opt-in box that keeps the entered values in the browser for the next visit. The box is off by default, the data never leaves the device, and clearing the box deletes it, so no consent banner is needed.
 
@@ -103,6 +103,12 @@ Public pages set no cookies and do not touch storage on the device. Counting hap
 | Admin session: IP and browser family                                                                                                                                                                                                   | `sessions` table               | until logout or expiry                                                                                                        |
 
 Bots, `HEAD` requests, prefetches, error responses, signed in admins and the preview are never counted. IP addresses never reach the analytics tables. The reverse proxy writes its own access log; its retention is up to you. The privacy policy generator under Pages, Datenschutz writes a German template that matches the active configuration. Legal basis for analytics and security logging is legitimate interest (Art. 6(1)(f) GDPR); with no device access, section 25 TDDDG does not apply.
+
+## Appearance
+
+Design can put a switch for the light and dark theme at the top right of every public page. The published stylesheet then carries both palettes, so the switch only sets an attribute and fetches nothing. A visitor's choice is stored in their browser on the click and only then.
+
+Settings can place up to six buttons at the top of the start page, each with an icon, a label and a target. A target is either a path on this site, such as the references page or a calculator, or a full address, which then opens in a new tab.
 
 ## Security
 

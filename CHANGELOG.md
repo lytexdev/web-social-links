@@ -12,6 +12,10 @@ All notable changes to this project are documented here. The format follows [Kee
 - Calorie, peptide and substance decay calculators as their own subpages under a configurable address, computed on the server and updated in the browser while typing
 - Short links can redirect to an address entered by hand instead of a link saved on the page
 - Back arrows on every back link, a button that returns to the top of long pages, a copy button for the calculator address and an opt-in box that keeps calculator input in the browser
+- Up to six configurable buttons on the start page that link to a subpage or an outside address
+- An optional switch for the light and dark theme on every public page
+- A markdown section with links and images below each calculator
+- Substance search, preparations with their own share of active content, routes of administration and a decay curve that can be read at any point in time
 
 ### Changed
 
