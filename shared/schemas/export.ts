@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { checkLinkUrl } from '../utils/url-policy'
 import { BLOCK_TYPES, idField, slugField } from './content'
 
 const blockRow = z.object({
@@ -45,9 +46,15 @@ export const exportSchema = z.object({
     .array(
       z.object({
         slug: slugField,
-        kind: z.enum(['source', 'redirect']),
+        kind: z.enum(['source', 'redirect', 'url']),
         sourceKey: slugField.nullable().default(null),
         linkId: idField.nullable().default(null),
+        url: z
+          .string()
+          .max(2048)
+          .refine((value) => checkLinkUrl(value).ok)
+          .nullable()
+          .default(null),
         label: z.string().max(60).default(''),
       }),
     )

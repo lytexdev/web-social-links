@@ -187,4 +187,10 @@ export const slugInputSchema = z.discriminatedUnion('kind', [
     linkId: idField,
     label: z.string().trim().max(60).default(''),
   }),
+  z.object({
+    kind: z.literal('url'),
+    slug: slugField,
+    url: url(true),
+    label: z.string().trim().max(60).default(''),
+  }),
 ])

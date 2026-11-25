@@ -1,8 +1,10 @@
 import { asc, eq } from 'drizzle-orm'
 import { DIRECT_SOURCE, PLATFORM_PRESETS } from '../../shared/constants/platforms'
 import { RESERVED_SLUGS } from '../../shared/constants/routing'
+import { checkLinkUrl } from '../../shared/utils/url-policy'
 import { useDb } from '../db/client'
 import { slugs, sources } from '../db/schema'
+import { useEnv } from '../utils/env'
 import { apiError } from '../utils/http'
 import { recordAudit } from './audit'
 import { getSetting } from './settings'
@@ -91,11 +93,21 @@ export function findSlug(slug: string): SlugRow | undefined {
 export function createSlug(
   input:
     | { kind: 'source'; slug: string; sourceKey: string; label: string }
-    | { kind: 'redirect'; slug: string; linkId: string; label: string },
+    | { kind: 'redirect'; slug: string; linkId: string; label: string }
+    | { kind: 'url'; slug: string; url: string; label: string },
   userId: string,
 ): SlugRow {
   if (RESERVED_SLUGS.has(input.slug)) {
     throw apiError(409, 'slug_reserved', 'This slug is reserved', { fields: { slug: 'reserved' } })
+  }
+  if (input.kind === 'url') {
+    const env = useEnv()
+    const check = checkLinkUrl(input.url, [env.publicHost, ...env.aliasHosts, ...env.adminHosts])
+    if (!check.ok) {
+      throw apiError(422, 'validation_failed', 'Invalid redirect target', {
+        fields: { url: `url_${check.reason}` },
+      })
+    }
   }
   const references = getSetting('references')
   if ([references.path, ...references.aliases].includes(input.slug)) {
@@ -105,7 +117,12 @@ export function createSlug(
   }
   const existing = findSlug(input.slug)
   if (existing) {
-    const target = existing.kind === 'source' ? existing.sourceKey : existing.linkId
+    const target =
+      existing.kind === 'source'
+        ? existing.sourceKey
+        : existing.kind === 'url'
+          ? existing.url
+          : existing.linkId
     throw apiError(409, 'slug_taken', `/${input.slug} already points to ${target}`, {
       fields: { slug: `taken:${existing.label || target}` },
     })
@@ -121,6 +138,7 @@ export function createSlug(
     kind: input.kind,
     sourceKey: input.kind === 'source' ? input.sourceKey : null,
     linkId: input.kind === 'redirect' ? input.linkId : null,
+    url: input.kind === 'url' ? input.url : null,
     label: input.label,
     createdAt: Date.now(),
   }

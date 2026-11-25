@@ -1,0 +1,1 @@
+ALTER TABLE `slugs` ADD `url` text;

@@ -11,9 +11,10 @@ interface Source {
 }
 interface Slug {
   slug: string
-  kind: 'source' | 'redirect'
+  kind: 'source' | 'redirect' | 'url'
   sourceKey: string | null
   linkId: string | null
+  url: string | null
   label: string
 }
 
@@ -26,9 +27,11 @@ const sources = ref<Source[]>([])
 const slugs = ref<Slug[]>([])
 const form = reactive({
   kind: 'source' as 'source' | 'redirect',
+  target: 'link' as 'link' | 'url',
   slug: '',
   sourceKey: 'instagram',
   linkId: '',
+  url: '',
   label: '',
 })
 const sourceForm = reactive({ key: '', label: '', icon: null as string | null })
@@ -82,16 +85,19 @@ async function createSlug(): Promise<void> {
             sourceKey: form.sourceKey,
             label: form.label || sourceLabel(form.sourceKey),
           }
-        : {
-            kind: 'redirect',
-            slug: form.slug,
-            linkId: form.linkId,
-            label: form.label || linkLabel(form.linkId),
-          }
+        : form.target === 'url'
+          ? { kind: 'url', slug: form.slug, url: form.url, label: form.label }
+          : {
+              kind: 'redirect',
+              slug: form.slug,
+              linkId: form.linkId,
+              label: form.label || linkLabel(form.linkId),
+            }
     await request('/api/admin/slugs', { body })
     toasts.push(t.value.sources.created)
     form.slug = ''
     form.label = ''
+    form.url = ''
     await load()
   } catch (failure) {
     fields.value = toFailure(failure).fields
@@ -145,6 +151,19 @@ async function copy(slug: string): Promise<void> {
         class="grid gap-3 rounded-md border border-line p-4 sm:grid-cols-[10rem_1fr_1fr_auto] sm:items-end"
         @submit.prevent="createSlug"
       >
+        <fieldset v-if="form.kind === 'redirect'" class="sm:col-span-4">
+          <legend class="a-label">{{ t.sources.targetKind }}</legend>
+          <div class="mt-1.5 flex flex-wrap gap-4 text-sm">
+            <label class="flex items-center gap-2">
+              <input v-model="form.target" type="radio" value="link" class="a-check" />
+              {{ t.sources.targetLink }}
+            </label>
+            <label class="flex items-center gap-2">
+              <input v-model="form.target" type="radio" value="url" class="a-check" />
+              {{ t.sources.targetUrl }}
+            </label>
+          </div>
+        </fieldset>
         <AdminField v-slot="field" :label="t.sources.kind">
           <select :id="field.id" v-model="form.kind" class="a-select">
             <option v-for="(label, key) in t.sources.kinds" :key="key" :value="key">
@@ -168,6 +187,24 @@ async function copy(slug: string): Promise<void> {
               {{ source.label }}
             </option>
           </select>
+        </AdminField>
+        <AdminField
+          v-else-if="form.target === 'url'"
+          v-slot="field"
+          :label="t.sources.url"
+          :error="fieldError(fields, 'url')"
+        >
+          <input
+            :id="field.id"
+            v-model="form.url"
+            class="a-input"
+            type="url"
+            inputmode="url"
+            placeholder="https://"
+            maxlength="2048"
+            :aria-invalid="field.invalid"
+            :aria-describedby="field.describedby"
+          />
         </AdminField>
         <AdminField
           v-else
@@ -205,8 +242,17 @@ async function copy(slug: string): Promise<void> {
             <tr v-for="item in slugs" :key="item.slug">
               <td class="font-semibold">/{{ item.slug }}</td>
               <td>{{ t.sources.kinds[item.kind] }}</td>
-              <td>
-                {{ item.kind === 'source' ? sourceLabel(item.sourceKey) : linkLabel(item.linkId) }}
+              <td class="max-w-[20rem] break-words">
+                <template v-if="item.kind === 'source'">{{ sourceLabel(item.sourceKey) }}</template>
+                <a
+                  v-else-if="item.kind === 'url'"
+                  :href="item.url ?? ''"
+                  target="_blank"
+                  rel="noopener"
+                  class="underline underline-offset-2"
+                  >{{ item.label || item.url }}</a
+                >
+                <template v-else>{{ linkLabel(item.linkId) }}</template>
               </td>
               <td>
                 <div class="flex flex-wrap justify-end gap-1">

@@ -5,7 +5,7 @@ import { calendarDay, flushEvents } from './analytics'
 import { listBlocks } from './blocks'
 import { latestSnapshot } from './publish'
 import { getSetting } from './settings'
-import { listSources } from './sources'
+import { listSlugs, listSources } from './sources'
 import {
   DIMENSIONS,
   byDimension,
@@ -77,6 +77,9 @@ function linkLabels(): Map<string, string> {
   }
   for (const node of latestSnapshot()?.blocks ?? []) [node, ...node.children].forEach(add)
   for (const node of listBlocks()) [node, ...node.children].forEach(add)
+  for (const entry of listSlugs()) {
+    if (entry.kind === 'url') labels.set(`slug:${entry.slug}`, entry.label || `/${entry.slug}`)
+  }
   for (const social of [
     ...(latestSnapshot()?.settings.profile.social ?? []),
     ...getSetting('profile').social,

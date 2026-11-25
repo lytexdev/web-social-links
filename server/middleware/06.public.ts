@@ -1,6 +1,7 @@
 import type { H3Event } from 'h3'
 import { DIRECT_SOURCE } from '../../shared/constants/platforms'
 import { RESERVED_SLUGS, SLUG_PATTERN } from '../../shared/constants/routing'
+import { checkLinkUrl } from '../../shared/utils/url-policy'
 import { cachedPageModel } from '../services/public-cache'
 import { buildDocumentModel, buildPageModel, resolveLinkTarget, withUtm } from '../services/render'
 import { buildSnapshot, latestSnapshot, snapshotForRevision } from '../services/publish'
@@ -83,6 +84,11 @@ async function resolvePublic(event: H3Event, path: string): Promise<unknown> {
     event.context.viewSlug = slug
     event.context.publicModel = cachedPageModel(entry.sourceKey, origin, path) ?? undefined
     return
+  }
+  if (entry.kind === 'url' && entry.url && checkLinkUrl(entry.url).ok) {
+    event.context.redirectClick = { linkId: `slug:${slug}`, slug, source: DIRECT_SOURCE }
+    setResponseHeader(event, 'Cache-Control', 'no-store')
+    return sendRedirect(event, entry.url, 302)
   }
   if (entry.kind === 'redirect' && entry.linkId) {
     const target = resolveLinkTarget(snapshot, entry.linkId, Date.now())

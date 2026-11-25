@@ -303,7 +303,14 @@ export const enCms: typeof deCms = {
     slug: 'Short link',
     target: 'Target',
     kind: 'Kind',
-    kinds: { source: 'Source', redirect: 'Redirect' },
+    kinds: { source: 'Origin', redirect: 'Redirect', url: 'Redirect to address' } as Record<
+      string,
+      string
+    >,
+    targetKind: 'Redirect target',
+    targetLink: 'Saved link',
+    targetUrl: 'Own address',
+    url: 'Address',
     link: 'Link',
     chooseLink: 'Choose link',
     copyUrl: 'Copy address',

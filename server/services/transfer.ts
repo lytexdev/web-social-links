@@ -60,11 +60,12 @@ export async function exportArchive(): Promise<Buffer> {
       markdown,
     })),
     sources: listSources().map(({ key, label, icon, preset }) => ({ key, label, icon, preset })),
-    slugs: listSlugs().map(({ slug, kind, sourceKey, linkId, label }) => ({
+    slugs: listSlugs().map(({ slug, kind, sourceKey, linkId, url, label }) => ({
       slug,
       kind: kind as 'source',
       sourceKey,
       linkId,
+      url,
       label,
     })),
     media: mediaEntries,
@@ -229,6 +230,7 @@ export async function applyImport(parsed: ParsedImport, userId: string): Promise
       const known = new Set(parsed.data.sources.map((source) => source.key))
       for (const slug of parsed.data.slugs) {
         if (slug.kind === 'source' && (!slug.sourceKey || !known.has(slug.sourceKey))) continue
+        if (slug.kind === 'url' && !slug.url) continue
         db.insert(slugs)
           .values({ ...slug, createdAt: now })
           .onConflictDoNothing()

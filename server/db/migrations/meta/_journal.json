@@ -15,6 +15,13 @@
       "when": 1795598144238,
       "tag": "0001_reference_docs",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1795601360752,
+      "tag": "0002_slug_urls",
+      "breakpoints": true
     }
   ]
 }

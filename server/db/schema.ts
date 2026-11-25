@@ -190,6 +190,7 @@ export const slugs = sqliteTable('slugs', {
   kind: text('kind').notNull(),
   sourceKey: text('source_key').references(() => sources.key, { onDelete: 'cascade' }),
   linkId: text('link_id'),
+  url: text('url'),
   label: text('label').notNull().default(''),
   createdAt: integer('created_at').notNull(),
 })

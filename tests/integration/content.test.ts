@@ -229,6 +229,29 @@ describe('publishing', () => {
     expect(reserved.status).toBe(409)
   })
 
+  it('creates redirect slugs to an own address and refuses unsafe targets', async () => {
+    const created = await admin.send('/api/admin/slugs', {
+      body: { kind: 'url', slug: 'buch', url: 'https://verlag.example.com/buch?id=7' },
+    })
+    expect(created.status).toBe(200)
+    const redirect = await rawRequest(server, '/buch', { ip: '203.0.113.9' })
+    expect(redirect.status).toBe(302)
+    expect(redirect.headers.location).toBe('https://verlag.example.com/buch?id=7')
+    expect(redirect.headers['cache-control']).toBe('no-store')
+    for (const url of ['javascript:alert(1)', '//evil.example.com', `${server.origin}/admin`, '']) {
+      const refused = await admin.send('/api/admin/slugs', {
+        body: { kind: 'url', slug: 'boese', url },
+      })
+      expect(refused.status).toBe(422)
+    }
+    const listed = await admin.send('/api/admin/sources')
+    expect(
+      listed.json<{ slugs: Array<{ slug: string; url: string | null }> }>().slugs,
+    ).toContainEqual(
+      expect.objectContaining({ slug: 'buch', url: 'https://verlag.example.com/buch?id=7' }),
+    )
+  })
+
   it('rejects nesting groups and wrong child types', async () => {
     const nested = await admin.send('/api/admin/blocks', {
       body: { type: 'group', parentId: group.id },
