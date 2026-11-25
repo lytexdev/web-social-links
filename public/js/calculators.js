@@ -26,6 +26,7 @@ if (form && page) {
     const entries = {}
     for (const [name, value] of data.entries()) entries[name] = value
     const result = compute(entries)
+    latest = result
     const query = new URLSearchParams()
     for (const [name, value] of data.entries()) if (value !== '') query.set(name, String(value))
     history.replaceState(null, '', `${location.pathname}?${query.toString()}`)
@@ -72,6 +73,7 @@ if (form && page) {
     for (const node of page.querySelectorAll('[data-calc-fill]')) {
       node.setAttribute('width', String(Math.round((result.fill ?? 0) * 240)))
     }
+    chartDraw()
     for (const row of page.querySelectorAll('[data-alt]')) {
       const alternative = (result.alternatives ?? [])[Number(row.getAttribute('data-alt'))]
       if (!alternative) continue
@@ -183,6 +185,8 @@ if (form && page) {
     if (routeField) routeField.hidden = substance.routes.length < 2
   }
 
+  let latest = null
+  let chartDraw = () => {}
   let timer = 0
   const schedule = () => {
     clearTimeout(timer)
@@ -196,6 +200,66 @@ if (form && page) {
       picker?.sync()
     })
     syncDependent(true)
+  }
+
+  const chart = page.querySelector('[data-chart]')
+  if (chart) {
+    const probe = chart.querySelector('[data-probe]')
+    const probeLine = chart.querySelector('[data-probe-line]')
+    const probeDot = chart.querySelector('[data-probe-dot]')
+    const readout = chart.querySelector('[data-chart-readout]')
+    const template = page.getAttribute('data-chart-at') ?? ''
+    const hint = readout?.textContent ?? ''
+    let fraction = -1
+
+    const draw = () => {
+      if (!probe || !probeLine || !probeDot || !readout) return
+      if (fraction < 0 || !latest?.flags.model) {
+        probe.setAttribute('hidden', '')
+        readout.textContent = hint
+        return
+      }
+      const half = latest.values.half
+      const span = latest.values.span
+      const hours = fraction * span
+      const share = 0.5 ** (hours / half)
+      probe.removeAttribute('hidden')
+      probeLine.setAttribute('x1', String(fraction * 300))
+      probeLine.setAttribute('x2', String(fraction * 300))
+      probeDot.setAttribute('cx', String(fraction * 300))
+      probeDot.setAttribute('cy', String(100 - share * 100))
+      readout.textContent = template
+        .replace('{time}', formatDuration(locale, hours, durationWords))
+        .replace('{percent}', formatNumber(locale, share * 100, 1))
+    }
+
+    const fromEvent = (event) => {
+      const box = chart.getBoundingClientRect()
+      fraction = Math.min(1, Math.max(0, (event.clientX - box.left) / box.width))
+      draw()
+    }
+    chart.addEventListener('pointermove', fromEvent)
+    chart.addEventListener('pointerdown', fromEvent)
+    chart.addEventListener('pointerleave', () => {
+      fraction = -1
+      draw()
+    })
+    chart.addEventListener('keydown', (event) => {
+      const step = event.shiftKey ? 0.1 : 0.02
+      if (event.key === 'ArrowRight') fraction = Math.min(1, (fraction < 0 ? 0 : fraction) + step)
+      else if (event.key === 'ArrowLeft') fraction = Math.max(0, (fraction < 0 ? 0 : fraction) - step)
+      else if (event.key === 'Home') fraction = 0
+      else if (event.key === 'End') fraction = 1
+      else if (event.key === 'Escape') fraction = -1
+      else return
+      event.preventDefault()
+      draw()
+    })
+    chart.addEventListener('blur', () => {
+      fraction = -1
+      draw()
+    })
+    chartDraw = draw
   }
 
   form.addEventListener('input', schedule)

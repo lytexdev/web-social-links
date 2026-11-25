@@ -160,8 +160,15 @@ const range = computed(() => {
           {{ format(t.remainingOf, { dose: model.form.dose ?? '', unit: model.form.unit ?? '' }) }}
         </p>
 
-        <figure class="c-chart">
-          <svg viewBox="0 0 300 124" role="img" :aria-label="t.chart">
+        <figure
+          class="c-chart"
+          data-chart
+          tabindex="0"
+          role="group"
+          :aria-label="t.chart"
+          :aria-describedby="`c-chart-readout`"
+        >
+          <svg viewBox="0 0 300 124" aria-hidden="true">
             <line x1="0" y1="100" x2="300" y2="100" class="c-axis" />
             <line x1="0" y1="50" x2="300" y2="50" class="c-axis c-axis-soft" />
             <polyline :points="model.curve" class="c-curve" data-calc-curve />
@@ -172,6 +179,10 @@ const range = computed(() => {
               class="c-marker"
               data-calc-marker
             />
+            <g data-probe hidden>
+              <line x1="0" y1="0" x2="0" y2="100" class="c-probe-line" data-probe-line />
+              <circle cx="0" cy="0" r="4.5" class="c-probe-dot" data-probe-dot />
+            </g>
             <text x="0" y="116" class="c-scale-text">0</text>
             <text
               x="75"
@@ -195,6 +206,11 @@ const range = computed(() => {
               {{ model.durations.axis4 }}
             </text>
           </svg>
+          <figcaption class="c-hint">
+            <span id="c-chart-readout" data-chart-readout aria-live="polite">{{
+              t.chartHint
+            }}</span>
+          </figcaption>
         </figure>
 
         <dl class="c-stats">

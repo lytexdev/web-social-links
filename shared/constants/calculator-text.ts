@@ -86,6 +86,8 @@ export interface CalculatorText {
     t97: string
     t97Hint: string
     chart: string
+    chartHint: string
+    chartAt: string
     now: string
     repeatedTitle: string
     accumulation: string
@@ -299,6 +301,9 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       t97: 'Praktisch abgebaut',
       t97Hint: 'Nach fünf Halbwertszeiten sind etwa 97 Prozent weg.',
       chart: 'Abbaukurve mit der aktuellen Stunde als Punkt',
+      chartHint:
+        'Fahre über die Kurve oder tippe sie an, um einen Zeitpunkt abzulesen. Mit den Pfeiltasten geht es ebenso.',
+      chartAt: 'Nach {time}: {percent} Prozent übrig',
       now: 'Jetzt',
       repeatedTitle: 'Bei regelmäßiger Einnahme',
       accumulation: 'Anreicherungsfaktor',
@@ -520,6 +525,8 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       t97: 'Practically cleared',
       t97Hint: 'After five half-lives about 97 percent is gone.',
       chart: 'Decay curve with the current hour as a dot',
+      chartHint: 'Move over the curve or tap it to read a point in time. The arrow keys work too.',
+      chartAt: 'After {time}: {percent} percent left',
       now: 'Now',
       repeatedTitle: 'With regular use',
       accumulation: 'Accumulation factor',

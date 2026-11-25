@@ -176,3 +176,30 @@ test('the substance field searches and drives the dependent fields', async ({ pa
   await search.press('Escape')
   await expect(list).toBeHidden()
 })
+
+test('the decay curve can be read by pointer and by keyboard', async ({ page }) => {
+  await page.goto('/rechner/wirkstoff-abbau?substance=caffeine&dose=100&hours=5')
+  const chart = page.locator('[data-chart]')
+  const readout = page.locator('[data-chart-readout]')
+  const probe = page.locator('[data-probe]')
+  await expect(probe).toBeHidden()
+  await expect(readout).toContainText('Pfeiltasten')
+
+  await chart.scrollIntoViewIfNeeded()
+  const box = await chart.boundingBox()
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2)
+  await expect(probe).toBeVisible()
+  await expect(readout).toContainText('Prozent übrig')
+
+  await chart.focus()
+  await page.keyboard.press('Home')
+  await expect(readout).toContainText('100 Prozent übrig')
+  await page.keyboard.press('End')
+  const atEnd = await readout.textContent()
+  expect(
+    Number((atEnd ?? '').replace(/.*: ([\d,]+) Prozent.*/, '$1').replace(',', '.')),
+  ).toBeLessThan(5)
+  await page.keyboard.press('Escape')
+  await expect(probe).toBeHidden()
+  await expectAccessible(page)
+})

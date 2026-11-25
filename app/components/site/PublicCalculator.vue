@@ -17,6 +17,7 @@ defineProps<{ model: CalculatorPageModel }>()
       :data-duration-words="JSON.stringify(model.labels.halflife.duration)"
       :data-route-labels="JSON.stringify(model.labels.halflife.routes)"
       :data-route-notes="JSON.stringify(model.labels.halflife.routeNotes)"
+      :data-chart-at="model.labels.halflife.chartAt"
       :data-picker-labels="
         JSON.stringify({
           search: model.labels.halflife.searchSubstance,

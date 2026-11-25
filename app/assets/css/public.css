@@ -1609,6 +1609,29 @@
 
 .c-chart {
   margin: 1rem 0;
+  touch-action: none;
+}
+
+.c-chart:focus-visible {
+  outline: 2px solid var(--wsl-focus);
+  outline-offset: 4px;
+}
+
+.c-probe-line {
+  stroke: var(--wsl-muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+
+.c-probe-dot {
+  fill: var(--wsl-bg);
+  stroke: var(--wsl-accent);
+  stroke-width: 2.5;
+}
+
+.c-chart figcaption {
+  margin-top: 0.5rem;
+  min-height: 2.5rem;
 }
 
 .c-chart svg {
