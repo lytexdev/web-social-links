@@ -51,6 +51,48 @@ export interface CalculatorText {
     stepTotal: string
     disclaimer: string
   }
+  halflife: {
+    substance: string
+    categories: Record<string, string>
+    dose: string
+    unit: string
+    hours: string
+    hoursHint: string
+    interval: string
+    intervalHint: string
+    remaining: string
+    remainingOf: string
+    percent: string
+    halfLife: string
+    halfRange: string
+    halfHint: string
+    times: string
+    t50: string
+    t25: string
+    t10: string
+    t97: string
+    t97Hint: string
+    chart: string
+    now: string
+    repeatedTitle: string
+    accumulation: string
+    accumulationHint: string
+    steadyPeak: string
+    steadyTrough: string
+    reference: string
+    referenceHint: string
+    metabolites: string
+    blood: string
+    urine: string
+    substanceNote: string
+    noModel: string
+    duration: { minutes: string; hours: string; days: string }
+    stepHalf: string
+    stepRemaining: string
+    stepTimes: string
+    stepAccumulation: string
+    disclaimer: string
+  }
   peptide: {
     vial: string
     vialHint: string
@@ -162,6 +204,66 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       stepTotal: 'Alltag plus Sport ergibt den Gesamtumsatz.',
       disclaimer:
         'Die Werte sind statistische Schätzungen aus Formeln für Gruppen. Der tatsächliche Verbrauch weicht individuell ab. Der Rechner ist keine Ernährungs- oder Gesundheitsberatung.',
+    },
+    halflife: {
+      substance: 'Wirkstoff',
+      categories: {
+        everyday: 'Alltag',
+        sleep: 'Schlaf',
+        adhd: 'ADHS',
+        wakefulness: 'Wachheit',
+        pain: 'Schmerz und Erkältung',
+        allergy: 'Allergie',
+        stomach: 'Magen',
+        nutrients: 'Nährstoffe',
+        cannabis: 'Cannabis',
+      },
+      dose: 'Eingenommene Menge',
+      unit: 'Einheit',
+      hours: 'Stunden seit der Einnahme',
+      hoursHint: 'Halbe Stunden sind möglich, zum Beispiel 7,5.',
+      interval: 'Einnahme alle ... Stunden',
+      intervalHint:
+        'Nur ausfüllen, wenn du den Stoff regelmäßig nimmst. Dann zeigt die Seite zusätzlich, wie viel sich ansammelt.',
+      remaining: 'Noch im Körper',
+      remainingOf: 'von {dose} {unit}',
+      percent: 'Anteil der Dosis',
+      halfLife: 'Halbwertszeit',
+      halfRange: 'Übliche Spanne {low} bis {high} Stunden',
+      halfHint:
+        'Die Rechnung nimmt den typischen Wert für Erwachsene. Leber, Nieren, Gene, andere Medikamente und das Alter verschieben ihn.',
+      times: 'Zeitpunkte',
+      t50: 'Noch die Hälfte',
+      t25: 'Noch ein Viertel',
+      t10: 'Noch ein Zehntel',
+      t97: 'Praktisch abgebaut',
+      t97Hint: 'Nach fünf Halbwertszeiten sind etwa 97 Prozent weg.',
+      chart: 'Abbaukurve mit der aktuellen Stunde als Punkt',
+      now: 'Jetzt',
+      repeatedTitle: 'Bei regelmäßiger Einnahme',
+      accumulation: 'Anreicherungsfaktor',
+      accumulationHint:
+        'Wer nachlegt, bevor der Stoff abgebaut ist, sammelt an. Der Gleichgewichtszustand ist nach etwa fünf Halbwertszeiten erreicht.',
+      steadyPeak: 'Höchstwert im Gleichgewicht',
+      steadyTrough: 'Tiefstwert im Gleichgewicht',
+      reference: 'Angaben zum Wirkstoff',
+      referenceHint:
+        'Typische Werte für Erwachsene aus Fachinformationen und pharmakologischen Übersichtsarbeiten. Nachweiszeiten sind Literaturbereiche und lassen sich nicht auf eine Person umrechnen: Sie hängen von Dosis, Dauer des Konsums, Testverfahren und Grenzwert ab.',
+      metabolites: 'Metaboliten',
+      blood: 'Nachweis im Blut',
+      urine: 'Nachweis im Urin',
+      substanceNote: 'Besonderheit',
+      noModel:
+        'Für diesen Stoff lässt sich keine einzelne Halbwertszeit angeben, deshalb rechnet die Seite hier nicht. Die Angaben darunter gelten weiter.',
+      duration: { minutes: 'Minuten', hours: 'Stunden', days: 'Tage' },
+      stepHalf: 'Der Rechner nimmt die typische Halbwertszeit von {half} Stunden.',
+      stepRemaining: 'Verbleibende Menge: Dosis mal 0,5 hoch (Zeit geteilt durch Halbwertszeit).',
+      stepTimes:
+        'Die Zeitpunkte folgen aus derselben Formel, nach der Zeit aufgelöst: Halbwertszeit mal Logarithmus zur Basis 2.',
+      stepAccumulation:
+        'Anreicherung bei regelmäßiger Einnahme: 1 geteilt durch (1 minus 0,5 hoch (Abstand geteilt durch Halbwertszeit)).',
+      disclaimer:
+        'Keine medizinische Beratung und kein Aufruf zum Konsum. Der Rechner schätzt rechnerisch, wie viel einer Dosis nach einer bestimmten Zeit noch im Körper ist, nach einem vereinfachten Modell mit einer einzigen Halbwertszeit. Er ersetzt keine Messung, sagt keine Wirkung voraus und kann weder Fahrtüchtigkeit noch das Ergebnis eines Tests zu einem bestimmten Zeitpunkt bestimmen.',
     },
     peptide: {
       vial: 'Peptidmenge im Vial in mg',
@@ -278,6 +380,67 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       stepTotal: 'Daily life plus sport gives the total expenditure.',
       disclaimer:
         'The values are statistical estimates from formulas built for groups. Actual expenditure differs individually. The calculator is not nutritional or health advice.',
+    },
+    halflife: {
+      substance: 'Substance',
+      categories: {
+        everyday: 'Everyday',
+        sleep: 'Sleep',
+        adhd: 'ADHD',
+        wakefulness: 'Wakefulness',
+        pain: 'Pain and colds',
+        allergy: 'Allergy',
+        stomach: 'Stomach',
+        nutrients: 'Nutrients',
+        cannabis: 'Cannabis',
+      },
+      dose: 'Amount taken',
+      unit: 'Unit',
+      hours: 'Hours since taking it',
+      hoursHint: 'Half hours work too, for example 7.5.',
+      interval: 'Taken every ... hours',
+      intervalHint:
+        'Only fill this in for regular use. The page then also shows how much builds up.',
+      remaining: 'Still in the body',
+      remainingOf: 'of {dose} {unit}',
+      percent: 'Share of the dose',
+      halfLife: 'Half-life',
+      halfRange: 'Usual range {low} to {high} hours',
+      halfHint:
+        'The calculation uses the typical adult value. Liver, kidneys, genes, other medicines and age shift it.',
+      times: 'Points in time',
+      t50: 'Half left',
+      t25: 'A quarter left',
+      t10: 'A tenth left',
+      t97: 'Practically cleared',
+      t97Hint: 'After five half-lives about 97 percent is gone.',
+      chart: 'Decay curve with the current hour as a dot',
+      now: 'Now',
+      repeatedTitle: 'With regular use',
+      accumulation: 'Accumulation factor',
+      accumulationHint:
+        'Taking more before the previous amount has cleared builds up. Steady state is reached after about five half-lives.',
+      steadyPeak: 'Peak at steady state',
+      steadyTrough: 'Trough at steady state',
+      reference: 'About the substance',
+      referenceHint:
+        'Typical adult values from product information and pharmacological reviews. Detection times are ranges from the literature and cannot be converted to one person: they depend on dose, how long it was used, the test method and its cut-off.',
+      metabolites: 'Metabolites',
+      blood: 'Detection in blood',
+      urine: 'Detection in urine',
+      substanceNote: 'Worth knowing',
+      noModel:
+        'No single half-life applies to this substance, so the page does not compute here. The information below still applies.',
+      duration: { minutes: 'minutes', hours: 'hours', days: 'days' },
+      stepHalf: 'The calculator uses the typical half-life of {half} hours.',
+      stepRemaining:
+        'Remaining amount: dose times 0.5 to the power of (time divided by half-life).',
+      stepTimes:
+        'The points in time follow from the same formula solved for time: half-life times the logarithm to base 2.',
+      stepAccumulation:
+        'Build-up with regular use: 1 divided by (1 minus 0.5 to the power of (interval divided by half-life)).',
+      disclaimer:
+        'Not medical advice and not an encouragement to use anything. The calculator estimates arithmetically how much of a dose is still in the body after a given time, using a simplified model with a single half-life. It replaces no measurement, predicts no effect, and can determine neither fitness to drive nor the result of a test at a given moment.',
     },
     peptide: {
       vial: 'Peptide in the vial in mg',

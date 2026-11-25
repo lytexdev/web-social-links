@@ -121,7 +121,7 @@ export const referencesSchema = z
     })
   })
 
-export const CALCULATOR_KEYS = ['calories', 'peptide'] as const
+export const CALCULATOR_KEYS = ['calories', 'peptide', 'halflife'] as const
 export type CalculatorKey = (typeof CALCULATOR_KEYS)[number]
 
 const calculatorEntry = z.object({
@@ -136,6 +136,7 @@ export const calculatorsSchema = z.object({
   indexIntro: text(600).default(''),
   calories: calculatorEntry.default({ enabled: false, title: '', intro: '' }),
   peptide: calculatorEntry.default({ enabled: false, title: '', intro: '' }),
+  halflife: calculatorEntry.default({ enabled: false, title: '', intro: '' }),
 })
 
 export const settingsSchemas = {

@@ -8,7 +8,9 @@ import {
 } from '../../shared/schemas/settings'
 import type { CalculatorIndexModel, CalculatorPageModel } from '../../shared/types/public'
 import { CALORIES_DIGITS, computeCalories } from '../../shared/calc/calories.js'
-import { formatNumber, formatValues } from '../../shared/calc/format.js'
+import { HALFLIFE_DIGITS, computeHalflife, substanceOptions } from '../../shared/calc/halflife.js'
+import { SUBSTANCE_CATEGORIES } from '../../shared/calc/substances.js'
+import { formatDurations, formatNumber, formatValues } from '../../shared/calc/format.js'
 import { PEPTIDE_DIGITS, SYRINGE_SIZES, computePeptide } from '../../shared/calc/peptide.js'
 import type { Snapshot } from './publish'
 import { chrome } from './render'
@@ -21,13 +23,25 @@ type Alternative = {
   current: boolean
 }
 
+type Substance = {
+  metabolites: Record<string, string>
+  blood: Record<string, string>
+  urine: Record<string, string>
+  note?: Record<string, string>
+}
+
 type Computed = {
   input: Record<string, string | number>
   values: Record<string, number>
   flags: Record<string, boolean>
   fill?: number
   alternatives?: Alternative[]
+  substance?: Substance
+  curve?: string
+  marker?: { x: number; y: number }
 }
+
+const DURATION_KEYS = ['t50', 't25', 't10', 't97', 'axis1', 'axis2', 'axis3', 'axis4']
 
 export function calculatorSettings(snapshot: Snapshot) {
   return calculatorsSchema.parse(snapshot.settings.calculators ?? {})
@@ -57,6 +71,15 @@ function compute(key: CalculatorKey, query: Record<string, unknown>): Computed {
       intensity: read('intensity'),
     }) as Computed
   }
+  if (key === 'halflife') {
+    return computeHalflife({
+      substance: read('substance'),
+      dose: read('dose'),
+      unit: read('unit'),
+      hours: read('hours'),
+      interval: read('interval'),
+    }) as Computed
+  }
   return computePeptide({
     vial: read('vial'),
     solvent: read('solvent'),
@@ -72,7 +95,9 @@ function decimal(value: number, lang: 'de' | 'en'): string {
 }
 
 function digitsFor(key: CalculatorKey): Record<string, number> {
-  return key === 'calories' ? CALORIES_DIGITS : PEPTIDE_DIGITS
+  if (key === 'calories') return CALORIES_DIGITS
+  if (key === 'halflife') return HALFLIFE_DIGITS
+  return PEPTIDE_DIGITS
 }
 
 export function buildCalculator(
@@ -114,6 +139,34 @@ export function buildCalculator(
       fits: item.fits,
       current: item.current,
     })),
+    durations:
+      key === 'halflife'
+        ? (formatDurations(
+            locale,
+            result.values,
+            DURATION_KEYS,
+            labels.halflife.duration,
+          ) as Record<string, string>)
+        : {},
+    substances:
+      key === 'halflife'
+        ? SUBSTANCE_CATEGORIES.map((category: string) => ({
+            category,
+            items: (
+              substanceOptions(base.lang) as Array<{ key: string; category: string; label: string }>
+            )
+              .filter((item) => item.category === category)
+              .map(({ key: value, label }) => ({ key: value, label })),
+          }))
+        : [],
+    reference: {
+      metabolites: result.substance?.metabolites[base.lang] ?? '',
+      blood: result.substance?.blood[base.lang] ?? '',
+      urine: result.substance?.urine[base.lang] ?? '',
+      note: result.substance?.note?.[base.lang] ?? '',
+    },
+    curve: result.curve ?? '',
+    marker: result.marker ?? { x: 0, y: 0 },
     sizes: SYRINGE_SIZES.map((value: number) => ({
       value,
       label: decimal(value, base.lang),
@@ -140,11 +193,17 @@ export function buildCalculatorIndex(
     basePath: `/${settings.path}`,
     labels,
     items: enabledCalculators(snapshot).map((key) => ({
-      href: `/${settings.path}/${key === 'calories' ? 'kalorien' : 'peptide'}`,
+      href: `/${settings.path}/${SEGMENT_FOR[key]}`,
       title: settings[key].title || labels.index.title,
       intro: settings[key].intro,
     })),
   }
+}
+
+const SEGMENT_FOR: Record<CalculatorKey, string> = {
+  calories: 'kalorien',
+  peptide: 'peptide',
+  halflife: 'wirkstoff-abbau',
 }
 
 const SEGMENTS: Record<string, CalculatorKey> = {
@@ -152,6 +211,8 @@ const SEGMENTS: Record<string, CalculatorKey> = {
   calories: 'calories',
   peptide: 'peptide',
   peptides: 'peptide',
+  'wirkstoff-abbau': 'halflife',
+  halflife: 'halflife',
 }
 
 export function resolveCalculators(

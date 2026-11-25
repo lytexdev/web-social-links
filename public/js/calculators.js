@@ -1,13 +1,19 @@
 import { CALORIES_DIGITS, computeCalories } from './calc/calories.js'
-import { formatNumber, formatValues } from './calc/format.js'
+import { formatDuration, formatNumber, formatValues } from './calc/format.js'
+import { HALFLIFE_DIGITS, computeHalflife } from './calc/halflife.js'
 import { PEPTIDE_DIGITS, computePeptide } from './calc/peptide.js'
 
 const form = document.querySelector('.c-form')
 const page = document.querySelector('[data-calculator]')
 if (form && page) {
   const kind = page.getAttribute('data-calculator')
-  const compute = kind === 'calories' ? computeCalories : computePeptide
-  const digits = kind === 'calories' ? CALORIES_DIGITS : PEPTIDE_DIGITS
+  const engines = {
+    calories: [computeCalories, CALORIES_DIGITS],
+    peptide: [computePeptide, PEPTIDE_DIGITS],
+    halflife: [computeHalflife, HALFLIFE_DIGITS],
+  }
+  const [compute, digits] = engines[kind] ?? engines.peptide
+  const durationWords = JSON.parse(page.getAttribute('data-duration-words') ?? '{}')
   const locale = document.documentElement.lang === 'de' ? 'de-DE' : 'en-GB'
   const format = (value, decimals) => formatNumber(locale, value, decimals)
   const submit = form.querySelector('.c-submit')
@@ -31,6 +37,24 @@ if (form && page) {
       const negated = raw.startsWith('!')
       const key = negated ? raw.slice(1) : raw
       node.hidden = negated ? Boolean(result.flags[key]) : !result.flags[key]
+    }
+    for (const node of page.querySelectorAll('[data-calc-duration]')) {
+      node.textContent = formatDuration(
+        locale,
+        result.values[node.getAttribute('data-calc-duration')],
+        durationWords,
+      )
+    }
+    for (const node of page.querySelectorAll('[data-calc-text]')) {
+      const field = result.substance?.[node.getAttribute('data-calc-text')]
+      if (field) node.textContent = field[document.documentElement.lang] ?? ''
+    }
+    for (const node of page.querySelectorAll('[data-calc-curve]')) {
+      node.setAttribute('points', result.curve ?? '')
+    }
+    for (const node of page.querySelectorAll('[data-calc-marker]')) {
+      node.setAttribute('cx', String(result.marker?.x ?? 0))
+      node.setAttribute('cy', String(result.marker?.y ?? 0))
     }
     for (const node of page.querySelectorAll('[data-calc-fill]')) {
       node.setAttribute('width', String(Math.round((result.fill ?? 0) * 240)))

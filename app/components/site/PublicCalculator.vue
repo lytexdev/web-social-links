@@ -9,7 +9,12 @@ defineProps<{ model: CalculatorPageModel }>()
     <a :href="model.indexHref ?? '/'" class="p-back">{{
       model.indexHref ? model.labels.common.all : model.labels.common.home
     }}</a>
-    <main id="main" class="c-page" :data-calculator="model.calculator">
+    <main
+      id="main"
+      class="c-page"
+      :data-calculator="model.calculator"
+      :data-duration-words="JSON.stringify(model.labels.halflife.duration)"
+    >
       <header class="r-hero">
         <h1 class="r-title">{{ model.heading }}</h1>
         <p v-if="model.intro" class="r-intro">{{ model.intro }}</p>
@@ -17,6 +22,7 @@ defineProps<{ model: CalculatorPageModel }>()
 
       <form class="c-form" method="get">
         <PublicCalcCalories v-if="model.calculator === 'calories'" :model="model" />
+        <PublicCalcHalflife v-else-if="model.calculator === 'halflife'" :model="model" />
         <PublicCalcPeptide v-else :model="model" />
         <p class="c-submit">
           <button type="submit" class="p-button">{{ model.labels.common.submit }}</button>

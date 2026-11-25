@@ -238,7 +238,7 @@ export interface CalculatorIndexModel extends ChromeModel {
 
 export interface CalculatorPageModel extends ChromeModel {
   kind: 'calculator'
-  calculator: 'calories' | 'peptide'
+  calculator: 'calories' | 'peptide' | 'halflife'
   heading: string
   intro: string
   basePath: string
@@ -257,6 +257,11 @@ export interface CalculatorPageModel extends ChromeModel {
     current: boolean
   }>
   sizes: Array<{ value: number; label: string }>
+  durations: Record<string, string>
+  substances: Array<{ category: string; items: Array<{ key: string; label: string }> }>
+  reference: { metabolites: string; blood: string; urine: string; note: string }
+  curve: string
+  marker: { x: number; y: number }
   disclaimer: string
 }
 

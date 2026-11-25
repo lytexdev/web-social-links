@@ -1510,6 +1510,68 @@
   font-weight: 600;
 }
 
+.c-chart {
+  margin: 1rem 0;
+}
+
+.c-chart svg {
+  width: 100%;
+  height: auto;
+}
+
+.c-axis {
+  stroke: var(--wsl-line);
+  stroke-width: 1.5;
+}
+
+.c-axis-soft {
+  stroke-dasharray: 4 4;
+}
+
+.c-curve {
+  fill: none;
+  stroke: var(--wsl-accent);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.c-marker {
+  fill: var(--wsl-accent);
+  stroke: var(--wsl-bg);
+  stroke-width: 2;
+}
+
+.c-reference {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.c-reference dt {
+  color: var(--wsl-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.c-reference dd {
+  margin-top: 0.125rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.c-stats-plain {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 0.75rem;
+}
+
+@media (forced-colors: active) {
+  .c-curve {
+    stroke: Highlight;
+  }
+}
+
 .c-table-wrap {
   overflow-x: auto;
 }

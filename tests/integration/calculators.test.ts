@@ -11,6 +11,7 @@ const SETTINGS = {
   indexIntro: 'Werkzeuge zum Nachrechnen.',
   calories: { enabled: true, title: 'Kalorienrechner', intro: 'Grundumsatz und Bedarf.' },
   peptide: { enabled: true, title: 'Peptid-Rechner', intro: 'Konzentration und Einheiten.' },
+  halflife: { enabled: true, title: 'Wirkstoff-Abbau', intro: 'Was noch im Körper ist.' },
 }
 
 async function page(path: string) {
@@ -107,9 +108,39 @@ describe('calculator pages', () => {
     expect(broken.text).toContain('value="230"')
   })
 
+  it('computes what is left of a dose and shows the substance data', async () => {
+    const result = await page('/rechner/wirkstoff-abbau?substance=caffeine&dose=200&hours=5')
+    expect(result.status).toBe(200)
+    expect(reading(result.text, 'percent')).toBe('50')
+    expect(reading(result.text, 'remaining')).toBe('100')
+    expect(reading(result.text, 'half')).toBe('5')
+    expect(result.text).toContain('Paraxanthin')
+    expect(result.text).toContain('Nachweis im Urin')
+    expect(result.text).toContain('<polyline points="0.0,0.0')
+  })
+
+  it('shows the build-up only for repeated intake', async () => {
+    const once = await page('/rechner/wirkstoff-abbau?substance=caffeine&dose=100&hours=1')
+    expect(once.text).toMatch(/data-calc-when="repeated" hidden/)
+    const repeated = await page(
+      '/rechner/wirkstoff-abbau?substance=caffeine&dose=100&hours=1&interval=5',
+    )
+    expect(reading(repeated.text, 'accumulation')).toBe('2')
+    expect(reading(repeated.text, 'steadyPeak')).toBe('200')
+    expect(repeated.text).not.toMatch(/data-calc-when="repeated" hidden/)
+  })
+
+  it('does not compute for a substance without a single half-life', async () => {
+    const result = await page('/rechner/wirkstoff-abbau?substance=thc&hours=24')
+    expect(result.text).toContain('keine einzelne Halbwertszeit')
+    expect(result.text).toContain('THC-COOH')
+    expect(result.text).toMatch(/data-calc-when="model" hidden/)
+  })
+
   it('answers unknown calculators with 404', async () => {
     expect((await page('/rechner/nope')).status).toBe(404)
     expect((await page('/rechner/kalorien/extra')).status).toBe(404)
+    expect((await page('/rechner/wirkstoff-abbau?substance=../etc')).status).toBe(200)
   })
 
   it('does not count as page views', async () => {

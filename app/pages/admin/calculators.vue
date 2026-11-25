@@ -8,7 +8,11 @@ const { t, f } = useAdminI18n()
 const store = useSettings()
 const settings = computed(() => store.settings.value)
 const keys = CALCULATOR_KEYS as readonly CalculatorKey[]
-const segments: Record<CalculatorKey, string> = { calories: 'kalorien', peptide: 'peptide' }
+const segments: Record<CalculatorKey, string> = {
+  calories: 'kalorien',
+  peptide: 'peptide',
+  halflife: 'wirkstoff-abbau',
+}
 
 useHead({ title: () => t.value.calculators.title })
 onBeforeRouteLeave(() => store.flushAll())
