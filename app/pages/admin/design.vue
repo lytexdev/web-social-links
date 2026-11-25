@@ -134,6 +134,21 @@ function choose<
               </option>
             </select>
           </AdminField>
+          <div class="grid content-start gap-1.5">
+            <span class="a-label">{{ t.design.themeToggle }}</span>
+            <label class="flex items-start gap-3 text-sm">
+              <input
+                v-model="theme.toggle"
+                type="checkbox"
+                class="a-check mt-0.5"
+                @change="store.queue('theme', 0)"
+              />
+              <span>
+                {{ t.design.themeToggleLabel }}
+                <span class="a-hint block">{{ t.design.themeToggleHint }}</span>
+              </span>
+            </label>
+          </div>
           <AdminField v-slot="field" :label="t.design.radius">
             <select
               :id="field.id"

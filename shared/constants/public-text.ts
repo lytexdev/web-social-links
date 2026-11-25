@@ -15,6 +15,8 @@ export const PUBLIC_TEXT: Record<'de' | 'en', Omit<PublicText, 'affiliate'>> = {
     legalNav: 'Rechtliches',
     preview: 'Vorschau',
     toTop: 'Nach oben',
+    themeLight: 'Auf helles Design umschalten',
+    themeDark: 'Auf dunkles Design umschalten',
   },
   en: {
     newTab: 'opens in a new tab',
@@ -30,5 +32,7 @@ export const PUBLIC_TEXT: Record<'de' | 'en', Omit<PublicText, 'affiliate'>> = {
     legalNav: 'Legal',
     preview: 'Preview',
     toTop: 'Back to top',
+    themeLight: 'Switch to the light theme',
+    themeDark: 'Switch to the dark theme',
   },
 }

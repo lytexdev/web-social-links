@@ -223,6 +223,10 @@ export const enCms: typeof deCms = {
     presetNames: { datasheet: 'Datasheet', paper: 'Paper' },
     applyPreset: 'Apply colors',
     scheme: 'Color scheme',
+    themeToggle: 'Switch',
+    themeToggleLabel: 'Show a switch for the light and dark theme',
+    themeToggleHint:
+      'Appears at the top right of every public page. The choice stays in the visitor browser and is only stored on a click.',
     schemes: { dark: 'Dark', light: 'Light', auto: 'Automatic by device' },
     colors: 'Colors',
     paletteDark: 'Dark scheme',

@@ -230,6 +230,10 @@ export const deCms = {
     presetNames: { datasheet: 'Datenblatt', paper: 'Paper' } as Record<string, string>,
     applyPreset: 'Farben übernehmen',
     scheme: 'Farbschema',
+    themeToggle: 'Umschalter',
+    themeToggleLabel: 'Schalter für helles und dunkles Design anzeigen',
+    themeToggleHint:
+      'Erscheint oben rechts auf jeder öffentlichen Seite. Die Wahl bleibt im Browser des Besuchers und wird nur auf Klick gespeichert.',
     schemes: { dark: 'Dunkel', light: 'Hell', auto: 'Automatisch nach Gerät' } as Record<
       string,
       string

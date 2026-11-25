@@ -65,6 +65,7 @@ export const PRESETS: Record<'datasheet' | 'paper', { dark: Palette; light: Pale
 export const themeSchema = z.object({
   preset: z.enum(['datasheet', 'paper']).default('datasheet'),
   scheme: z.enum(['dark', 'light', 'auto']).default('dark'),
+  toggle: z.boolean().default(false),
   dark: paletteSchema.default(PRESETS.datasheet.dark),
   light: paletteSchema.default(PRESETS.datasheet.light),
   background: z.enum(['plain', 'dots']).default('dots'),
@@ -137,7 +138,11 @@ export function themeCss(theme: Theme): string {
   const scheme = theme.scheme === 'light' ? 'light' : 'dark'
   let css = `:root:root{${paletteVariables(primary)};${shared};color-scheme:${scheme}}`
   if (theme.scheme === 'auto') {
-    css += `@media (prefers-color-scheme: light){:root:root{${paletteVariables(theme.light)};color-scheme:light}}`
+    css += `@media (prefers-color-scheme: light){:root:root:not([data-theme]){${paletteVariables(theme.light)};color-scheme:light}}`
+  }
+  if (theme.toggle || theme.scheme === 'auto') {
+    css += `:root:root[data-theme='light']{${paletteVariables(theme.light)};color-scheme:light}`
+    css += `:root:root[data-theme='dark']{${paletteVariables(theme.dark)};color-scheme:dark}`
   }
   return css
 }

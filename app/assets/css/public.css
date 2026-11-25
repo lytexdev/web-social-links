@@ -1907,6 +1907,58 @@
   }
 }
 
+.p-theme {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  top: max(1rem, env(safe-area-inset-top));
+  z-index: 20;
+  display: inline-flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--wsl-line);
+  border-radius: 999px;
+  background: var(--wsl-surface);
+  color: var(--wsl-text);
+  cursor: pointer;
+}
+
+.p-theme[hidden] {
+  display: none;
+}
+
+.p-theme:hover {
+  border-color: var(--wsl-accent);
+  color: var(--wsl-accent);
+}
+
+.p-theme-icon[hidden] {
+  display: none;
+}
+
+.p-theme svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 240ms var(--wsl-ease-out);
+}
+
+.p-theme:hover svg {
+  transform: rotate(12deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-theme svg {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-theme {
+    border-color: CanvasText;
+  }
+}
+
 .p-top {
   position: fixed;
   right: max(1rem, env(safe-area-inset-right));

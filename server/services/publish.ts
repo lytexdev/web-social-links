@@ -30,6 +30,8 @@ export const UI_ICONS = [
   'tabler:chevron-down',
   'tabler:arrow-left',
   'tabler:arrow-up',
+  'tabler:sun',
+  'tabler:moon',
 ] as const
 
 export interface SnapshotMedia extends MediaVariants {

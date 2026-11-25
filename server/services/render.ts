@@ -112,6 +112,8 @@ export function chrome(snapshot: Snapshot, origin: string, path: string): Chrome
     themeCss: snapshot.themeCss,
     favicon,
     background: settings.theme.background,
+    themeToggle: settings.theme.toggle,
+    themeScheme: settings.theme.scheme,
     rowStyle: settings.theme.rowStyle,
     profileAlign: settings.theme.profileAlign,
     text,
@@ -121,6 +123,8 @@ export function chrome(snapshot: Snapshot, origin: string, path: string): Chrome
       chevron: snapshot.icons['tabler:chevron-down'] ?? '',
       back: snapshot.icons['tabler:arrow-left'] ?? '',
       top: snapshot.icons['tabler:arrow-up'] ?? '',
+      sun: snapshot.icons['tabler:sun'] ?? '',
+      moon: snapshot.icons['tabler:moon'] ?? '',
     },
     footer: {
       notices: settings.footer.notices.filter(Boolean),

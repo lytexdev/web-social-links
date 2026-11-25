@@ -102,6 +102,8 @@ export interface PublicText {
   legalNav: string
   preview: string
   toTop: string
+  themeLight: string
+  themeDark: string
 }
 
 export interface ChromeModel {
@@ -113,10 +115,20 @@ export interface ChromeModel {
   themeCss: string
   favicon: string | null
   background: 'plain' | 'dots'
+  themeToggle: boolean
+  themeScheme: 'dark' | 'light' | 'auto'
   rowStyle: 'hairline' | 'outlined' | 'filled'
   profileAlign: 'left' | 'center'
   text: PublicText
-  icons: { arrow: string; copy: string; chevron: string; back: string; top: string }
+  icons: {
+    arrow: string
+    copy: string
+    chevron: string
+    back: string
+    top: string
+    sun: string
+    moon: string
+  }
   footer: {
     notices: string[]
     note: string

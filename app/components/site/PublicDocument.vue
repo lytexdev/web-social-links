@@ -14,6 +14,7 @@ defineProps<{ model: DocumentModel }>()
       <div class="p-prose mt-8" v-html="model.html" />
     </main>
     <PublicFooter :footer="model.footer" :text="model.text" />
+    <PublicThemeToggle :chrome="model" />
     <PublicToTop :label="model.text.toTop" :icon="model.icons.top" />
   </div>
 </template>

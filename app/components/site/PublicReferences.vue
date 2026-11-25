@@ -115,6 +115,7 @@ defineProps<{ model: ReferenceIndexModel }>()
       </section>
     </main>
     <PublicFooter :footer="model.footer" :text="model.text" />
+    <PublicThemeToggle :chrome="model" />
     <PublicToTop :label="model.text.toTop" :icon="model.icons.top" />
   </div>
 </template>

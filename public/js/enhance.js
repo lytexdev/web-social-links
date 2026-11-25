@@ -34,3 +34,48 @@ if (toTop) {
     }
   })
 }
+
+const themeToggle = document.querySelector('[data-theme-toggle]')
+if (themeToggle) {
+  const sun = themeToggle.querySelector('[data-theme-sun]')
+  const moon = themeToggle.querySelector('[data-theme-moon]')
+  const root = document.documentElement
+  const stored = (() => {
+    try {
+      return localStorage.getItem('wsl-theme')
+    } catch {
+      return null
+    }
+  })()
+  const base = themeToggle.getAttribute('data-scheme')
+  const current = () =>
+    root.dataset.theme ??
+    (base === 'auto'
+      ? window.matchMedia('(prefers-color-scheme: light)').matches
+        ? 'light'
+        : 'dark'
+      : base)
+  const paint = () => {
+    const light = current() === 'light'
+    if (sun) sun.hidden = light
+    if (moon) moon.hidden = !light
+    themeToggle.setAttribute(
+      'aria-label',
+      themeToggle.getAttribute(light ? 'data-label-dark' : 'data-label-light'),
+    )
+  }
+  if (stored === 'light' || stored === 'dark') root.dataset.theme = stored
+  themeToggle.hidden = false
+  paint()
+  themeToggle.addEventListener('click', () => {
+    const next = current() === 'light' ? 'dark' : 'light'
+    root.dataset.theme = next
+    try {
+      localStorage.setItem('wsl-theme', next)
+    } catch {
+      paint()
+      return
+    }
+    paint()
+  })
+}
