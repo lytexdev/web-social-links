@@ -1,3 +1,13 @@
+import type {
+  EvidenceLevel,
+  ReferenceChange,
+  ReferenceClaim,
+  ReferenceGroup,
+  ReferenceKind,
+  ReferenceSection,
+  ReferencePlatform,
+} from './references'
+
 export interface ImageView {
   width: number
   height: number
@@ -133,4 +143,87 @@ export interface DocumentModel extends ChromeModel {
   html: string
 }
 
-export type PublicModel = PageModel | DocumentModel
+export interface ReferenceText {
+  home: string
+  all: string
+  search: string
+  searchHint: string
+  submit: string
+  filters: string
+  types: Record<'all' | ReferenceKind, string>
+  kinds: Record<ReferenceKind, string>
+  topics: string
+  moreTopics: string
+  reset: string
+  results: string
+  resultOne: string
+  none: string
+  claimsHeading: string
+  sourcesHeading: string
+  changesHeading: string
+  notesHeading: string
+  evidence: string
+  scope: string
+  limits: string
+  refs: string
+  jump: string
+  researched: string
+  published: string
+  watch: Record<ReferencePlatform, string>
+  profile: Record<ReferencePlatform, string>
+  levels: Record<EvidenceLevel, string>
+  legendTitle: string
+  legend: Record<Exclude<EvidenceLevel, 'other'>, string>
+  legendNote: string
+}
+
+export interface ReferenceListItem {
+  href: string
+  title: string
+  kind: string
+  meta: string
+  date: string
+  datetime: string
+  topics: string[]
+  search: string
+}
+
+export interface ReferenceIndexModel extends ChromeModel {
+  kind: 'references'
+  heading: string
+  intro: string
+  basePath: string
+  labels: ReferenceText
+  query: { q: string; topic: string; type: '' | ReferenceKind }
+  types: Array<{ label: string; count: number; href: string; active: boolean }>
+  topics: Array<{ name: string; count: number; href: string; active: boolean }>
+  moreTopics: Array<{ name: string; count: number; href: string; active: boolean }>
+  resetHref: string | null
+  results: string
+  groups: Array<{ label: string; items: ReferenceListItem[] }>
+}
+
+export interface ReferenceDocModel extends ChromeModel {
+  kind: 'reference'
+  basePath: string
+  labels: ReferenceText
+  doc: {
+    title: string
+    kind: string
+    date: string
+    datetime: string
+    researched: string
+    topics: Array<{ name: string; href: string }>
+    links: Array<{ label: string; href: string }>
+    introHtml: string
+    claims: ReferenceClaim[]
+    sourceGroups: ReferenceGroup[]
+    sourceNotes: string[]
+    sections: ReferenceSection[]
+    changes: Array<ReferenceChange & { label: string }>
+    notes: string[]
+    counts: string
+  }
+}
+
+export type PublicModel = PageModel | DocumentModel | ReferenceIndexModel | ReferenceDocModel

@@ -82,7 +82,7 @@ function iconFor(snapshot: Snapshot, ref: unknown): string | null {
   return snapshot.icons[ref] ?? null
 }
 
-function chrome(snapshot: Snapshot, origin: string, path: string): ChromeModel {
+export function chrome(snapshot: Snapshot, origin: string, path: string): ChromeModel {
   const { settings } = snapshot
   const lang = settings.site.lang
   const text = { ...PUBLIC_TEXT[lang], affiliate: settings.legal.affiliateLabel || 'Anzeige' }

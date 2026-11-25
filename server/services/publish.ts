@@ -17,6 +17,7 @@ import { hasPlaceholders, renderDocumentMarkdown, renderTextMarkdown } from './m
 import { listMedia, variantsOf, type MediaVariants } from './media'
 import { listPages, replaceAllPages } from './pages'
 import { getAllSettings, writeSetting } from './settings'
+import { findSlug } from './sources'
 
 export const UI_ICONS = ['tabler:arrow-up-right', 'tabler:copy', 'tabler:chevron-down'] as const
 
@@ -196,6 +197,20 @@ export async function buildSnapshot(
         issues.push({ scope: 'legal', id: target, field: 'page', code: 'legal_empty' })
       } else if (hasPlaceholders(page.markdown)) {
         issues.push({ scope: 'legal', id: target, field: 'page', code: 'legal_placeholders' })
+      }
+    }
+  }
+
+  if (settings.references.enabled) {
+    for (const slug of [settings.references.path, ...settings.references.aliases]) {
+      if (findSlug(slug)) {
+        issues.push({
+          scope: 'settings',
+          id: 'references',
+          field: 'path',
+          code: 'references_slug_taken',
+          detail: `/${slug}`,
+        })
       }
     }
   }

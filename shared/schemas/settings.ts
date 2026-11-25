@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { RESERVED_SLUGS, SLUG_PATTERN } from '../constants/routing'
 import { checkLinkUrl } from '../utils/url-policy'
 import { iconField, idField, mediaIdField } from './content'
 import { themeSchema } from './theme'
@@ -79,6 +80,47 @@ export const siteSchema = z.object({
   animatedImages: z.boolean().default(false),
 })
 
+export const GITHUB_REPOSITORY =
+  /^https:\/\/github\.com\/([A-Za-z0-9_.-]{1,100})\/([A-Za-z0-9_.-]{1,100}?)(?:\.git)?\/?$/
+export const BRANCH_PATTERN = /^(?!.*\.\.)[A-Za-z0-9._/-]{1,100}$/
+
+const pathSlug = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .refine((value) => SLUG_PATTERN.test(value), { error: 'slug_format' })
+  .refine((value) => !RESERVED_SLUGS.has(value), { error: 'reserved' })
+
+export const referencesSchema = z
+  .object({
+    enabled: z.boolean().default(false),
+    title: text(70).default('Quellenangaben'),
+    intro: text(400).default(''),
+    path: pathSlug.default('quellen'),
+    aliases: z.array(pathSlug).max(5).default(['quellenangaben', 'sources']),
+    repository: z
+      .string()
+      .trim()
+      .max(240)
+      .refine((value) => value === '' || GITHUB_REPOSITORY.test(value), {
+        error: 'repository_invalid',
+      })
+      .default(''),
+    branch: z
+      .string()
+      .trim()
+      .refine((value) => BRANCH_PATTERN.test(value), { error: 'branch_invalid' })
+      .default('main'),
+  })
+  .superRefine((value, ctx) => {
+    const seen = new Set([value.path])
+    value.aliases.forEach((alias, index) => {
+      if (seen.has(alias))
+        ctx.addIssue({ code: 'custom', path: ['aliases', index], message: 'taken' })
+      seen.add(alias)
+    })
+  })
+
 export const settingsSchemas = {
   profile: profileSchema,
   theme: themeSchema,
@@ -86,6 +128,7 @@ export const settingsSchemas = {
   legal: legalSchema,
   analytics: analyticsSettingsSchema,
   site: siteSchema,
+  references: referencesSchema,
 }
 
 export type SettingKey = keyof typeof settingsSchemas

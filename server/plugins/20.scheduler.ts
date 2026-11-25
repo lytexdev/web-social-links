@@ -1,5 +1,6 @@
 import { runDailyAnalytics, runHourlyAnalytics } from '../tasks/analytics'
 import { runMaintenance } from '../tasks/maintenance'
+import { referencesDue, syncReferences } from '../services/references'
 import { seedDefaultAvatar } from '../services/seed'
 import { logger } from '../utils/logger'
 
@@ -17,10 +18,15 @@ export default defineNitroPlugin((nitroApp) => {
   const maintenance = safely('maintenance', () => runMaintenance())
   const hourly = safely('analytics_hourly', () => runHourlyAnalytics())
   const daily = safely('analytics_daily', () => runDailyAnalytics())
+  const references = safely('references_sync', async () => {
+    if (referencesDue()) await syncReferences()
+  })
 
   timers.push(setTimeout(avatar, 0))
   timers.push(setTimeout(maintenance, 60_000))
   timers.push(setTimeout(daily, 90_000))
+  timers.push(setTimeout(references, 120_000))
+  timers.push(setInterval(references, HOUR_MS))
   timers.push(setInterval(maintenance, DAY_MS))
   timers.push(setInterval(hourly, HOUR_MS))
   timers.push(setInterval(daily, DAY_MS))

@@ -8,5 +8,8 @@ export default defineNitroPlugin((nitroApp) => {
     const path = event.path.split('?')[0] ?? ''
     if (routeKind(path) !== 'public-page' && path !== '/admin/preview') return
     html.bodyAppend.push('<script src="/js/enhance.js" defer></script>')
+    if (event.context.publicModel?.kind === 'references') {
+      html.bodyAppend.push('<script src="/js/references.js" defer></script>')
+    }
   })
 })

@@ -5,6 +5,7 @@ import { useDb } from '../db/client'
 import { slugs, sources } from '../db/schema'
 import { apiError } from '../utils/http'
 import { recordAudit } from './audit'
+import { getSetting } from './settings'
 
 export type SourceRow = typeof sources.$inferSelect
 export type SlugRow = typeof slugs.$inferSelect
@@ -95,6 +96,12 @@ export function createSlug(
 ): SlugRow {
   if (RESERVED_SLUGS.has(input.slug)) {
     throw apiError(409, 'slug_reserved', 'This slug is reserved', { fields: { slug: 'reserved' } })
+  }
+  const references = getSetting('references')
+  if ([references.path, ...references.aliases].includes(input.slug)) {
+    throw apiError(409, 'slug_taken', `/${input.slug} is used by the references page`, {
+      fields: { slug: `taken:${references.title}` },
+    })
   }
   const existing = findSlug(input.slug)
   if (existing) {

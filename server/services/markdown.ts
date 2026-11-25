@@ -72,6 +72,51 @@ const document = shiftHeadings(
   ]),
 )
 
+function linkified(md: Instance): Instance {
+  md.set({ linkify: true })
+  md.enable('linkify')
+  md.linkify.set({ fuzzyLink: false, fuzzyEmail: false, fuzzyIP: false })
+  return md
+}
+
+function headingsFrom(md: Instance, minimum: number): Instance {
+  md.core.ruler.push('min_headings', (state: StateCore) => {
+    for (const token of state.tokens) {
+      if (token.type === 'heading_open' || token.type === 'heading_close') {
+        token.tag = `h${Math.min(6, Math.max(minimum, Number(token.tag.slice(1)) + 1))}`
+      }
+    }
+  })
+  return md
+}
+
+const referenceInline = linkified(create(['emphasis', 'link', 'escape', 'backticks']))
+const referenceBlock = headingsFrom(
+  linkified(
+    create([
+      'paragraph',
+      'newline',
+      'emphasis',
+      'link',
+      'list',
+      'heading',
+      'blockquote',
+      'escape',
+      'backticks',
+      'table',
+    ]),
+  ),
+  3,
+)
+
+export function renderReferenceInline(source: string): string {
+  return referenceInline.renderInline(source, {})
+}
+
+export function renderReferenceBlock(source: string): string {
+  return referenceBlock.render(source, {})
+}
+
 export function renderTextMarkdown(
   source: string,
   rewrite: (index: number) => string,

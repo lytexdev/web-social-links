@@ -43,6 +43,7 @@ function describe(issue: PublishIssue): string {
 function link(issue: PublishIssue): string {
   if (issue.scope === 'legal') return '/admin/pages'
   if (issue.scope === 'theme') return '/admin/design'
+  if (issue.scope === 'settings' && issue.id === 'references') return '/admin/references'
   if (issue.scope === 'settings') return '/admin/settings'
   return '/admin'
 }

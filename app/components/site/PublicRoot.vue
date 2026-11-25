@@ -37,5 +37,7 @@ useHead({
 
 <template>
   <PublicPage v-if="model.kind === 'page'" :model="model" />
+  <PublicReferences v-else-if="model.kind === 'references'" :model="model" />
+  <PublicReference v-else-if="model.kind === 'reference'" :model="model" />
   <PublicDocument v-else :model="model" />
 </template>

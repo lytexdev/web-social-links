@@ -274,3 +274,17 @@ export const kv = sqliteTable('kv', {
     .notNull()
     .default(sql`(unixepoch() * 1000)`),
 })
+
+export const referenceDocs = sqliteTable(
+  'reference_docs',
+  {
+    slug: text('slug').primaryKey(),
+    path: text('path').notNull(),
+    kind: text('kind', { enum: ['video', 'short'] }).notNull(),
+    published: text('published'),
+    hash: text('hash').notNull(),
+    doc: text('doc', { mode: 'json' }).notNull(),
+    updatedAt: integer('updated_at').notNull(),
+  },
+  (table) => [index('reference_docs_published_idx').on(table.published)],
+)

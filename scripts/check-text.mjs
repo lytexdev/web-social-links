@@ -24,6 +24,7 @@ const HASH_COMMENT_NAMES = new Set([
   '.prettierignore',
   '.dockerignore',
 ])
+const FOREIGN_FORMAT = /^tests\/fixtures\/references\//
 const PROSE =
   /^(README|SECURITY|CONTRIBUTING|CHANGELOG|THIRD_PARTY_NOTICES)\.md$|^app\/i18n\/|^\.github\/.*\.md$/
 const MARKETING = [
@@ -45,7 +46,10 @@ const MARKETING = [
 
 const checks = [
   { test: (line) => /\p{Extended_Pictographic}/u.test(line), message: 'emoji' },
-  { test: (line) => /[\u2013\u2014]/.test(line), message: 'en or em dash, rephrase without it' },
+  {
+    test: (line, file) => !FOREIGN_FORMAT.test(file) && /[\u2013\u2014]/.test(line),
+    message: 'en or em dash, rephrase without it',
+  },
 ]
 
 function trackedFiles() {
@@ -84,7 +88,8 @@ for (const file of trackedFiles()) {
   const marketing = new RegExp(`\\b(${MARKETING.join('|')})\\b`, 'i')
   content.split('\n').forEach((line, index) => {
     const where = `${file}:${index + 1}`
-    for (const check of checks) if (check.test(line)) problems.push(`${where} ${check.message}`)
+    for (const check of checks)
+      if (check.test(line, file)) problems.push(`${where} ${check.message}`)
     if (file !== SELF && /\b(TODO|FIXME|XXX|HACK)\b/.test(line))
       problems.push(`${where} task marker`)
     if (comment?.regex.test(line) && !(index === 0 && line.startsWith('# syntax='))) {
