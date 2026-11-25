@@ -109,6 +109,12 @@ export function createSlug(
       })
     }
   }
+  const calculators = getSetting('calculators')
+  if (calculators.path === input.slug) {
+    throw apiError(409, 'slug_taken', `/${input.slug} is used by the calculators`, {
+      fields: { slug: `taken:${calculators.indexTitle}` },
+    })
+  }
   const references = getSetting('references')
   if ([references.path, ...references.aliases].includes(input.slug)) {
     throw apiError(409, 'slug_taken', `/${input.slug} is used by the references page`, {

@@ -70,6 +70,7 @@ export const en: Messages = {
     stats: 'Statistics',
     sources: 'Origins and short links',
     references: 'References',
+    calculators: 'Calculators',
     settings: 'Settings',
     security: 'Security',
     versions: 'Versions',

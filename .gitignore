@@ -23,3 +23,4 @@ AGENTS.md
 .DS_Store
 *.tsbuildinfo
 server/assets/icons/
+public/js/calc/

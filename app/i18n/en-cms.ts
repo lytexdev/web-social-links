@@ -383,6 +383,33 @@ export const enCms: typeof deCms = {
       ref_unknown: 'Source {detail} is missing from the source list',
     } as Record<string, string>,
   },
+  calculators: {
+    title: 'Calculators',
+    intro:
+      'Calculators are their own subpages. They compute on the server, so they work without JavaScript, and update in the browser as you type. The address carries the input and can be shared.',
+    base: 'Overview',
+    path: 'Address',
+    pathHint: 'The overview lives at /{path}, each calculator below it.',
+    indexTitle: 'Title of the overview',
+    indexIntro: 'Introduction of the overview',
+    indexIntroHint: 'Appears above the list of calculators.',
+    viewIndex: 'Open overview',
+    publishHint: 'The settings become visible on publishing, like everything else.',
+    names: { calories: 'Calorie calculator', peptide: 'Peptide calculator' } as Record<
+      string,
+      string
+    >,
+    descriptions: {
+      calories:
+        'Basal rate by Mifflin-St Jeor, with body fat by Katch-McArdle, plus daily life, sport and targets.',
+      peptide:
+        'Concentration, volume and units on the insulin syringe, how far a vial goes and other solvent amounts.',
+    } as Record<string, string>,
+    enabled: 'Show the calculator at {path}',
+    heading: 'Title',
+    introText: 'Introduction',
+    viewPage: 'Open calculator',
+  },
   stats: {
     title: 'Statistics',
     ranges: {

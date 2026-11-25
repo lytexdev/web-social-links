@@ -5,6 +5,7 @@ import { checkLinkUrl } from '../../shared/utils/url-policy'
 import { cachedPageModel } from '../services/public-cache'
 import { buildDocumentModel, buildPageModel, resolveLinkTarget, withUtm } from '../services/render'
 import { buildSnapshot, latestSnapshot, snapshotForRevision } from '../services/publish'
+import { resolveCalculators } from '../services/calculators-render'
 import { resolveReferences } from '../services/references-render'
 import { SESSION_COOKIE, readSession } from '../services/sessions'
 import { findSlug } from '../services/sources'
@@ -58,6 +59,8 @@ async function resolvePublic(event: H3Event, path: string): Promise<unknown> {
   const references = resolveReferences(event, path, snapshot, origin)
   if (references instanceof Promise) return references
   if (references !== 'other') return
+
+  if (resolveCalculators(event, path, snapshot, origin) !== 'other') return
 
   if (path === '/impressum' || path === '/datenschutz') {
     const target = snapshot.settings.legal[path === '/impressum' ? 'impressum' : 'privacy']

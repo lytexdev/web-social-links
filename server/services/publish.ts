@@ -1,7 +1,12 @@
 import { desc, eq, max } from 'drizzle-orm'
 import type { BlockNode, BlockType } from '../../shared/schemas/content'
 import { strictBlockData } from '../../shared/schemas/content'
-import { SETTING_KEYS, settingsSchemas, type Settings } from '../../shared/schemas/settings'
+import {
+  CALCULATOR_KEYS,
+  SETTING_KEYS,
+  settingsSchemas,
+  type Settings,
+} from '../../shared/schemas/settings'
 import { checkThemeContrast, themeCss } from '../../shared/schemas/theme'
 import { checkLinkUrl } from '../../shared/utils/url-policy'
 import { useDb } from '../db/client'
@@ -198,6 +203,30 @@ export async function buildSnapshot(
       } else if (hasPlaceholders(page.markdown)) {
         issues.push({ scope: 'legal', id: target, field: 'page', code: 'legal_placeholders' })
       }
+    }
+  }
+
+  const calculatorPaths = [settings.calculators.path]
+  if (CALCULATOR_KEYS.some((key) => settings.calculators[key].enabled)) {
+    for (const slug of calculatorPaths) {
+      if (findSlug(slug)) {
+        issues.push({
+          scope: 'settings',
+          id: 'calculators',
+          field: 'path',
+          code: 'references_slug_taken',
+          detail: `/${slug}`,
+        })
+      }
+    }
+    if (settings.references.enabled && settings.references.path === settings.calculators.path) {
+      issues.push({
+        scope: 'settings',
+        id: 'calculators',
+        field: 'path',
+        code: 'references_slug_taken',
+        detail: `/${settings.calculators.path}`,
+      })
     }
   }
 

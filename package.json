@@ -9,10 +9,10 @@
     "node": ">=26.13.0 <27"
   },
   "scripts": {
-    "dev": "node scripts/build-icon-index.ts && nuxt dev",
-    "build": "node scripts/build-icon-index.ts && nuxt build",
+    "dev": "node scripts/build-icon-index.ts && node scripts/build-public-js.ts && nuxt dev",
+    "build": "node scripts/build-icon-index.ts && node scripts/build-public-js.ts && nuxt build",
     "start": "node .output/server/index.mjs",
-    "postinstall": "nuxt prepare && node scripts/build-icon-index.ts",
+    "postinstall": "nuxt prepare && node scripts/build-icon-index.ts && node scripts/build-public-js.ts",
     "lint": "eslint . && prettier --check . && node scripts/check-text.mjs",
     "format": "prettier --write . && eslint . --fix",
     "typecheck": "nuxt typecheck",

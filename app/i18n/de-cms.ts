@@ -404,6 +404,30 @@ export const deCms = {
       ref_unknown: 'Quelle {detail} fehlt in der Quellenliste',
     } as Record<string, string>,
   },
+  calculators: {
+    title: 'Rechner',
+    intro:
+      'Rechner sind eigenständige Unterseiten. Sie rechnen auf dem Server, funktionieren also auch ohne JavaScript, und aktualisieren sich im Browser beim Tippen. Die Adresse enthält die Eingaben und lässt sich teilen.',
+    base: 'Übersicht',
+    path: 'Adresse',
+    pathHint: 'Die Übersicht liegt unter /{path}, jeder Rechner darunter.',
+    indexTitle: 'Titel der Übersicht',
+    indexIntro: 'Einleitung der Übersicht',
+    indexIntroHint: 'Erscheint über der Liste der Rechner.',
+    viewIndex: 'Übersicht öffnen',
+    publishHint: 'Die Einstellungen werden wie alles andere erst mit dem Veröffentlichen sichtbar.',
+    names: { calories: 'Kalorienrechner', peptide: 'Peptid-Rechner' } as Record<string, string>,
+    descriptions: {
+      calories:
+        'Grundumsatz nach Mifflin-St Jeor, mit Körperfettanteil nach Katch-McArdle, dazu Alltag, Sport und Zielwerte.',
+      peptide:
+        'Konzentration, Volumen und Einheiten auf der Insulinspritze, Reichweite des Vials und andere Lösungsmittelmengen.',
+    } as Record<string, string>,
+    enabled: 'Rechner unter {path} anzeigen',
+    heading: 'Titel',
+    introText: 'Einleitung',
+    viewPage: 'Rechner öffnen',
+  },
   stats: {
     title: 'Statistiken',
     ranges: {

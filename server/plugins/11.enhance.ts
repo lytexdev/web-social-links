@@ -11,5 +11,8 @@ export default defineNitroPlugin((nitroApp) => {
     if (event.context.publicModel?.kind === 'references') {
       html.bodyAppend.push('<script src="/js/references.js" defer></script>')
     }
+    if (event.context.publicModel?.kind === 'calculator') {
+      html.bodyAppend.push('<script src="/js/calculators.js" type="module"></script>')
+    }
   })
 })

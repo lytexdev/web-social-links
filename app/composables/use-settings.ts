@@ -1,5 +1,7 @@
 import type { SettingKey, Settings } from '#shared/schemas/settings'
 
+const timers = new Map<SettingKey, ReturnType<typeof setTimeout>>()
+
 export function useSettings() {
   const settings = useState<Settings | null>('settings', () => null)
   const privacyReview = useState('privacy-review', () => false)
@@ -9,7 +11,6 @@ export function useSettings() {
   )
   const { request } = useApi()
   const status = usePublishStatus()
-  const timers = new Map<SettingKey, ReturnType<typeof setTimeout>>()
 
   async function load(): Promise<Settings> {
     const result = await request<{ settings: Settings; privacyReview: boolean }>(

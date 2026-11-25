@@ -12,6 +12,7 @@ import type { PublishIssue } from '~/composables/use-publish-status'
 const open = defineModel<boolean>('open', { required: true })
 const { t, f } = useAdminI18n()
 const status = usePublishStatus()
+const settings = useSettings()
 const blocks = useBlocks()
 const { request } = useApi()
 const toasts = useToasts()
@@ -44,6 +45,7 @@ function link(issue: PublishIssue): string {
   if (issue.scope === 'legal') return '/admin/pages'
   if (issue.scope === 'theme') return '/admin/design'
   if (issue.scope === 'settings' && issue.id === 'references') return '/admin/references'
+  if (issue.scope === 'settings' && issue.id === 'calculators') return '/admin/calculators'
   if (issue.scope === 'settings') return '/admin/settings'
   return '/admin'
 }
@@ -51,6 +53,7 @@ function link(issue: PublishIssue): string {
 async function confirm(): Promise<void> {
   busy.value = true
   try {
+    await Promise.all([settings.flushAll(), blocks.flushAll()])
     const result = await request<{ revision: number }>('/api/admin/publish', {
       body: { note: note.value },
     })

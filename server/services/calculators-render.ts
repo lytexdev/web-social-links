@@ -1,0 +1,180 @@
+import type { H3Event } from 'h3'
+import { getQuery } from 'h3'
+import { CALCULATOR_TEXT } from '../../shared/constants/calculator-text'
+import {
+  CALCULATOR_KEYS,
+  calculatorsSchema,
+  type CalculatorKey,
+} from '../../shared/schemas/settings'
+import type { CalculatorIndexModel, CalculatorPageModel } from '../../shared/types/public'
+import { CALORIES_DIGITS, computeCalories } from '../../shared/calc/calories.js'
+import { formatNumber, formatValues } from '../../shared/calc/format.js'
+import { PEPTIDE_DIGITS, SYRINGE_SIZES, computePeptide } from '../../shared/calc/peptide.js'
+import type { Snapshot } from './publish'
+import { chrome } from './render'
+
+type Alternative = {
+  solvent: number
+  units: number
+  concentrationMgMl: number
+  fits: boolean
+  current: boolean
+}
+
+type Computed = {
+  input: Record<string, string | number>
+  values: Record<string, number>
+  flags: Record<string, boolean>
+  fill?: number
+  alternatives?: Alternative[]
+}
+
+export function calculatorSettings(snapshot: Snapshot) {
+  return calculatorsSchema.parse(snapshot.settings.calculators ?? {})
+}
+
+export function enabledCalculators(snapshot: Snapshot): CalculatorKey[] {
+  const settings = calculatorSettings(snapshot)
+  return CALCULATOR_KEYS.filter((key) => settings[key].enabled)
+}
+
+function text(value: unknown): string {
+  return typeof value === 'string' ? value.slice(0, 40) : ''
+}
+
+function compute(key: CalculatorKey, query: Record<string, unknown>): Computed {
+  const read = (name: string) => text(query[name])
+  if (key === 'calories') {
+    return computeCalories({
+      sex: read('sex'),
+      age: read('age'),
+      height: read('height'),
+      weight: read('weight'),
+      fat: read('fat'),
+      activity: read('activity'),
+      sessions: read('sessions'),
+      minutes: read('minutes'),
+      intensity: read('intensity'),
+    }) as Computed
+  }
+  return computePeptide({
+    vial: read('vial'),
+    solvent: read('solvent'),
+    dose: read('dose'),
+    unit: read('unit'),
+    scale: read('scale'),
+    size: read('size'),
+  }) as Computed
+}
+
+function decimal(value: number, lang: 'de' | 'en'): string {
+  return String(value).replace('.', lang === 'de' ? ',' : '.')
+}
+
+function digitsFor(key: CalculatorKey): Record<string, number> {
+  return key === 'calories' ? CALORIES_DIGITS : PEPTIDE_DIGITS
+}
+
+export function buildCalculator(
+  snapshot: Snapshot,
+  key: CalculatorKey,
+  options: { origin: string; path: string; query: Record<string, unknown> },
+): CalculatorPageModel {
+  const settings = calculatorSettings(snapshot)
+  const base = chrome(snapshot, options.origin, options.path)
+  const labels = CALCULATOR_TEXT[base.lang]
+  const entry = settings[key]
+  const heading = entry.title || labels.index.title
+  const result = compute(key, options.query)
+  const locale = base.lang === 'de' ? 'de-DE' : 'en-GB'
+  const form = Object.fromEntries(
+    Object.entries(result.input).map(([name, value]) => [name, String(value)]),
+  )
+  const others = enabledCalculators(snapshot).filter((item) => item !== key)
+  return {
+    ...base,
+    kind: 'calculator',
+    calculator: key,
+    title: base.title ? `${heading} · ${base.title}` : heading,
+    description: entry.intro || base.description,
+    heading,
+    intro: entry.intro,
+    basePath: `/${settings.path}`,
+    indexHref: others.length > 0 ? `/${settings.path}` : null,
+    labels,
+    form,
+    values: formatValues(locale, result.values, digitsFor(key)) as Record<string, string>,
+    flags: result.flags,
+    fill: result.fill ?? 0,
+    alternatives: (result.alternatives ?? []).map((item, index) => ({
+      index,
+      solvent: decimal(item.solvent, base.lang),
+      units: formatNumber(locale, item.units, 1),
+      conc: formatNumber(locale, item.concentrationMgMl, 2),
+      fits: item.fits,
+      current: item.current,
+    })),
+    sizes: SYRINGE_SIZES.map((value: number) => ({
+      value,
+      label: decimal(value, base.lang),
+    })),
+    disclaimer: labels[key].disclaimer,
+  }
+}
+
+export function buildCalculatorIndex(
+  snapshot: Snapshot,
+  options: { origin: string; path: string },
+): CalculatorIndexModel {
+  const settings = calculatorSettings(snapshot)
+  const base = chrome(snapshot, options.origin, options.path)
+  const labels = CALCULATOR_TEXT[base.lang]
+  const heading = settings.indexTitle || labels.index.title
+  return {
+    ...base,
+    kind: 'calculators',
+    title: base.title ? `${heading} · ${base.title}` : heading,
+    description: settings.indexIntro || base.description,
+    heading,
+    intro: settings.indexIntro,
+    basePath: `/${settings.path}`,
+    labels,
+    items: enabledCalculators(snapshot).map((key) => ({
+      href: `/${settings.path}/${key === 'calories' ? 'kalorien' : 'peptide'}`,
+      title: settings[key].title || labels.index.title,
+      intro: settings[key].intro,
+    })),
+  }
+}
+
+const SEGMENTS: Record<string, CalculatorKey> = {
+  kalorien: 'calories',
+  calories: 'calories',
+  peptide: 'peptide',
+  peptides: 'peptide',
+}
+
+export function resolveCalculators(
+  event: H3Event,
+  path: string,
+  snapshot: Snapshot,
+  origin: string,
+): 'handled' | 'missing' | 'other' {
+  const settings = calculatorSettings(snapshot)
+  const available = enabledCalculators(snapshot)
+  if (available.length === 0) return 'other'
+  const segments = path.split('/').filter(Boolean)
+  if (segments[0] !== settings.path) return 'other'
+  if (segments.length === 1) {
+    event.context.publicModel = buildCalculatorIndex(snapshot, { origin, path })
+    return 'handled'
+  }
+  const key = segments.length === 2 ? SEGMENTS[segments[1] ?? ''] : undefined
+  if (!key || !available.includes(key)) return 'missing'
+  event.context.publicModel = buildCalculator(snapshot, key, {
+    origin,
+    path,
+    query: getQuery(event),
+  })
+  return 'handled'
+}

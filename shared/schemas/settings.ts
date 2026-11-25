@@ -121,6 +121,23 @@ export const referencesSchema = z
     })
   })
 
+export const CALCULATOR_KEYS = ['calories', 'peptide'] as const
+export type CalculatorKey = (typeof CALCULATOR_KEYS)[number]
+
+const calculatorEntry = z.object({
+  enabled: z.boolean().default(false),
+  title: text(70).default(''),
+  intro: text(600).default(''),
+})
+
+export const calculatorsSchema = z.object({
+  path: pathSlug.default('rechner'),
+  indexTitle: text(70).default('Rechner'),
+  indexIntro: text(600).default(''),
+  calories: calculatorEntry.default({ enabled: false, title: '', intro: '' }),
+  peptide: calculatorEntry.default({ enabled: false, title: '', intro: '' }),
+})
+
 export const settingsSchemas = {
   profile: profileSchema,
   theme: themeSchema,
@@ -129,6 +146,7 @@ export const settingsSchemas = {
   analytics: analyticsSettingsSchema,
   site: siteSchema,
   references: referencesSchema,
+  calculators: calculatorsSchema,
 }
 
 export type SettingKey = keyof typeof settingsSchemas

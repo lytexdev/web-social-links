@@ -1,3 +1,4 @@
+import type { CalculatorText } from '../constants/calculator-text'
 import type {
   EvidenceLevel,
   ReferenceChange,
@@ -226,4 +227,43 @@ export interface ReferenceDocModel extends ChromeModel {
   }
 }
 
-export type PublicModel = PageModel | DocumentModel | ReferenceIndexModel | ReferenceDocModel
+export interface CalculatorIndexModel extends ChromeModel {
+  kind: 'calculators'
+  heading: string
+  intro: string
+  basePath: string
+  labels: CalculatorText
+  items: Array<{ href: string; title: string; intro: string }>
+}
+
+export interface CalculatorPageModel extends ChromeModel {
+  kind: 'calculator'
+  calculator: 'calories' | 'peptide'
+  heading: string
+  intro: string
+  basePath: string
+  indexHref: string | null
+  labels: CalculatorText
+  form: Record<string, string>
+  values: Record<string, string>
+  flags: Record<string, boolean>
+  fill: number
+  alternatives: Array<{
+    index: number
+    solvent: string
+    units: string
+    conc: string
+    fits: boolean
+    current: boolean
+  }>
+  sizes: Array<{ value: number; label: string }>
+  disclaimer: string
+}
+
+export type PublicModel =
+  | PageModel
+  | DocumentModel
+  | ReferenceIndexModel
+  | ReferenceDocModel
+  | CalculatorIndexModel
+  | CalculatorPageModel
