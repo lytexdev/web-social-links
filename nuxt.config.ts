@@ -42,6 +42,18 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: [
+        '@tabler/icons-vue',
+        '@zxcvbn-ts/core',
+        '@zxcvbn-ts/language-common',
+        '@zxcvbn-ts/language-de',
+        '@zxcvbn-ts/language-en',
+        'reka-ui',
+        'vue-draggable-plus',
+        'zod',
+      ],
+    },
   },
   nitro: {
     compressPublicAssets: { brotli: true, gzip: true },
