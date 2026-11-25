@@ -45,7 +45,7 @@ function clamp(value, field) {
 
 export function normalizeHalflife(input) {
   const substance = findSubstance(String(input.substance ?? ''))
-  const unit = DOSE_UNITS.includes(input.unit) ? input.unit : 'mg'
+  const unit = DOSE_UNITS.includes(input.unit) ? input.unit : (substance.unit ?? 'mg')
   const typed = Number(
     String(input.dose ?? '')
       .trim()

@@ -8,6 +8,7 @@ export const SUBSTANCE_CATEGORIES = [
   'stomach',
   'nutrients',
   'cannabis',
+  'psychedelics',
 ]
 
 const CAFFEINE = {
@@ -20,6 +21,7 @@ const CAFFEINE = {
   high: 7,
   model: true,
   dose: 100,
+  unit: 'mg',
   metabolites: {
     de: 'Paraxanthin (Hauptmetabolit), Theobromin, Theophyllin',
     en: 'Paraxanthine (main metabolite), theobromine, theophylline',
@@ -44,6 +46,7 @@ export const SUBSTANCES = [
     high: 4,
     model: true,
     dose: 1,
+    unit: 'mg',
     metabolites: {
       de: 'Cotinin (Halbwertszeit etwa 16 Stunden, üblicher Nachweismarker), 3-Hydroxycotinin',
       en: 'Cotinine (half-life about 16 hours, the usual marker), 3-hydroxycotinine',
@@ -71,6 +74,7 @@ export const SUBSTANCES = [
     high: 10,
     model: true,
     dose: 200,
+    unit: 'mg',
     metabolites: {
       de: '3-Methylxanthin, 7-Methylxanthin',
       en: '3-methylxanthine, 7-methylxanthine',
@@ -92,6 +96,7 @@ export const SUBSTANCES = [
     high: 1,
     model: true,
     dose: 1,
+    unit: 'mg',
     metabolites: {
       de: '6-Sulfatoxymelatonin (im Urin gemessener Marker)',
       en: '6-sulfatoxymelatonin (the marker measured in urine)',
@@ -116,6 +121,7 @@ export const SUBSTANCES = [
     high: 9,
     model: true,
     dose: 50,
+    unit: 'mg',
     metabolites: {
       de: 'meta-Chlorphenylpiperazin (mCPP), selbst wirksam, Halbwertszeit etwa 4 bis 14 Stunden',
       en: 'meta-chlorophenylpiperazine (mCPP), active itself, half-life about 4 to 14 hours',
@@ -134,6 +140,7 @@ export const SUBSTANCES = [
     high: 10,
     model: true,
     dose: 50,
+    unit: 'mg',
     metabolites: {
       de: 'überwiegend inaktive Abbauprodukte über CYP3A4',
       en: 'largely inactive products through CYP3A4',
@@ -152,6 +159,7 @@ export const SUBSTANCES = [
     high: 3.5,
     model: true,
     dose: 10,
+    unit: 'mg',
     metabolites: {
       de: 'inaktive Carbonsäuremetaboliten',
       en: 'inactive carboxylic acid metabolites',
@@ -173,6 +181,7 @@ export const SUBSTANCES = [
     high: 6.5,
     model: true,
     dose: 7.5,
+    unit: 'mg',
     metabolites: {
       de: 'Zopiclon-N-oxid (schwach wirksam), N-Desmethylzopiclon',
       en: 'Zopiclone N-oxide (weakly active), N-desmethylzopiclone',
@@ -191,6 +200,7 @@ export const SUBSTANCES = [
     high: 4,
     model: true,
     dose: 10,
+    unit: 'mg',
     metabolites: {
       de: 'Ritalinsäure (unwirksam), Halbwertszeit etwa 3 bis 4 Stunden',
       en: 'Ritalinic acid (inactive), half-life about 3 to 4 hours',
@@ -212,6 +222,7 @@ export const SUBSTANCES = [
     high: 13,
     model: true,
     dose: 30,
+    unit: 'mg',
     metabolites: {
       de: 'Dexamfetamin, das eigentliche Wirkprinzip; Lisdexamfetamin selbst hat eine Halbwertszeit unter einer Stunde',
       en: 'Dexamfetamine, the actual active form; lisdexamfetamine itself has a half-life below one hour',
@@ -233,6 +244,7 @@ export const SUBSTANCES = [
     high: 13,
     model: true,
     dose: 10,
+    unit: 'mg',
     metabolites: {
       de: '4-Hydroxyamphetamin, Benzoesäure; ein großer Teil wird unverändert ausgeschieden',
       en: '4-hydroxyamphetamine, benzoic acid; a large share leaves unchanged',
@@ -254,6 +266,7 @@ export const SUBSTANCES = [
     high: 22,
     model: true,
     dose: 40,
+    unit: 'mg',
     metabolites: {
       de: '4-Hydroxyatomoxetin (wirksam, aber rasch konjugiert)',
       en: '4-hydroxyatomoxetine (active, but quickly conjugated)',
@@ -278,6 +291,7 @@ export const SUBSTANCES = [
     high: 18,
     model: true,
     dose: 2,
+    unit: 'mg',
     metabolites: {
       de: '3-Hydroxyguanfacin und Konjugate',
       en: '3-hydroxyguanfacine and conjugates',
@@ -299,6 +313,7 @@ export const SUBSTANCES = [
     high: 15,
     model: true,
     dose: 200,
+    unit: 'mg',
     metabolites: {
       de: 'Modafinilsäure (unwirksam), Modafinilsulfon',
       en: 'Modafinilic acid (inactive), modafinil sulfone',
@@ -323,6 +338,7 @@ export const SUBSTANCES = [
     high: 17,
     model: true,
     dose: 150,
+    unit: 'mg',
     metabolites: {
       de: 'Modafinilsäure, Modafinilsulfon',
       en: 'Modafinilic acid, modafinil sulfone',
@@ -341,6 +357,7 @@ export const SUBSTANCES = [
     high: 2.5,
     model: true,
     dose: 400,
+    unit: 'mg',
     metabolites: {
       de: 'Hydroxy- und Carboxyibuprofen (unwirksam)',
       en: 'Hydroxy and carboxy ibuprofen (inactive)',
@@ -362,6 +379,7 @@ export const SUBSTANCES = [
     high: 3,
     model: true,
     dose: 500,
+    unit: 'mg',
     metabolites: {
       de: 'Glucuronid und Sulfat (unwirksam), in kleinem Anteil NAPQI, das die Leber belastet',
       en: 'Glucuronide and sulfate (inactive), a small share as NAPQI, which strains the liver',
@@ -380,6 +398,7 @@ export const SUBSTANCES = [
     high: 17,
     model: true,
     dose: 250,
+    unit: 'mg',
     metabolites: {
       de: '6-O-Desmethylnaproxen und Konjugate',
       en: '6-O-desmethylnaproxen and conjugates',
@@ -398,6 +417,7 @@ export const SUBSTANCES = [
     high: 4,
     model: true,
     dose: 500,
+    unit: 'mg',
     metabolites: {
       de: 'Salicylsäure, der eigentlich messbare Stoff; Acetylsalicylsäure selbst zerfällt in etwa 20 Minuten',
       en: 'Salicylic acid, the substance actually measured; acetylsalicylic acid itself breaks down in about 20 minutes',
@@ -419,6 +439,7 @@ export const SUBSTANCES = [
     high: 8,
     model: true,
     dose: 60,
+    unit: 'mg',
     metabolites: {
       de: 'Norpseudoephedrin; der größte Teil wird unverändert ausgeschieden',
       en: 'Norpseudoephedrine; most of it leaves unchanged',
@@ -440,6 +461,7 @@ export const SUBSTANCES = [
     high: 11,
     model: true,
     dose: 10,
+    unit: 'mg',
     metabolites: {
       de: 'kaum verstoffwechselt, überwiegend unverändert über die Niere',
       en: 'barely metabolised, mostly unchanged through the kidney',
@@ -458,6 +480,7 @@ export const SUBSTANCES = [
     high: 11,
     model: true,
     dose: 10,
+    unit: 'mg',
     metabolites: {
       de: 'Desloratadin, selbst wirksam, Halbwertszeit etwa 27 Stunden',
       en: 'Desloratadine, active itself, half-life about 27 hours',
@@ -479,6 +502,7 @@ export const SUBSTANCES = [
     high: 9,
     model: true,
     dose: 50,
+    unit: 'mg',
     metabolites: { de: 'Nordiphenhydramin und weitere', en: 'Nordiphenhydramine and others' },
     blood: { de: 'etwa 1 bis 2 Tage', en: 'about 1 to 2 days' },
     urine: { de: 'etwa 2 bis 4 Tage', en: 'about 2 to 4 days' },
@@ -494,6 +518,7 @@ export const SUBSTANCES = [
     high: 1.9,
     model: true,
     dose: 40,
+    unit: 'mg',
     metabolites: {
       de: 'Desmethylpantoprazol-Sulfat (unwirksam)',
       en: 'Desmethylpantoprazole sulfate (inactive)',
@@ -515,6 +540,7 @@ export const SUBSTANCES = [
     high: 1.5,
     model: true,
     dose: 20,
+    unit: 'mg',
     metabolites: {
       de: 'Hydroxyomeprazol, Omeprazolsulfon',
       en: 'Hydroxyomeprazole, omeprazole sulfone',
@@ -535,7 +561,8 @@ export const SUBSTANCES = [
     low: 360,
     high: 600,
     model: true,
-    dose: 1000,
+    dose: 25,
+    unit: 'mcg',
     metabolites: {
       de: '25-OH-Vitamin-D, der gemessene Speicherwert, und Calcitriol, die aktive Form mit einer Halbwertszeit von nur etwa 4 bis 15 Stunden',
       en: '25-OH vitamin D, the stored form that is measured, and calcitriol, the active form with a half-life of only about 4 to 15 hours',
@@ -548,6 +575,56 @@ export const SUBSTANCES = [
     },
   },
   {
+    key: 'lsd',
+    category: 'psychedelics',
+    de: 'LSD',
+    en: 'LSD',
+    half: 3.6,
+    low: 2.6,
+    high: 5.1,
+    model: true,
+    dose: 100,
+    unit: 'mcg',
+    metabolites: {
+      de: '2-Oxo-3-hydroxy-LSD (O-H-LSD), der im Urin gemessene Hauptmetabolit; LSD selbst erscheint dort nur in geringer Menge',
+      en: '2-oxo-3-hydroxy-LSD (O-H-LSD), the main metabolite measured in urine; LSD itself appears there only in small amounts',
+    },
+    blood: { de: 'etwa 6 bis 12 Stunden', en: 'about 6 to 12 hours' },
+    urine: {
+      de: 'etwa 1 bis 3 Tage, mit einem gezielten Verfahren auf O-H-LSD länger',
+      en: 'about 1 to 3 days, longer with a dedicated assay for O-H-LSD',
+    },
+    note: {
+      de: 'Die Wirkung hält mit etwa 8 bis 12 Stunden deutlich länger an, als die Halbwertszeit vermuten lässt. Übliche Drogenschnelltests enthalten LSD nicht. In Deutschland unterliegt LSD dem Betäubungsmittelgesetz; klinisch untersucht wird es derzeit in Studien, etwa bei Angststörungen.',
+      en: 'The effect lasts about 8 to 12 hours, markedly longer than the half-life suggests. Common drug screens do not include LSD. In Germany LSD falls under the narcotics act; it is currently studied in clinical trials, for example in anxiety disorders.',
+    },
+  },
+  {
+    key: 'psilocybin',
+    category: 'psychedelics',
+    de: 'Psilocybin (Psilocin)',
+    en: 'Psilocybin (psilocin)',
+    half: 2.5,
+    low: 1.5,
+    high: 3.5,
+    model: true,
+    dose: 25,
+    unit: 'mg',
+    metabolites: {
+      de: 'Psilocin, die eigentlich wirksame Form, weil Psilocybin ein Prodrug ist, und Psilocin-Glucuronid, der im Urin gemessene Marker',
+      en: 'Psilocin, the actually active form, because psilocybin is a prodrug, and psilocin glucuronide, the marker measured in urine',
+    },
+    blood: { de: 'Psilocin wenige Stunden', en: 'Psilocin a few hours' },
+    urine: {
+      de: 'etwa 1 bis 3 Tage, nur mit einem gezielten Verfahren',
+      en: 'about 1 to 3 days, only with a dedicated assay',
+    },
+    note: {
+      de: 'Psilocybin selbst ist unwirksam und wird im Körper rasch zu Psilocin umgewandelt; die angegebene Halbwertszeit ist die von Psilocin. Die Wirkung dauert etwa 4 bis 6 Stunden. In Deutschland unterliegt Psilocybin dem Betäubungsmittelgesetz; untersucht wird es derzeit in klinischen Studien, etwa bei therapieresistenter Depression.',
+      en: 'Psilocybin itself is inactive and is quickly turned into psilocin in the body; the half-life shown is that of psilocin. The effect lasts about 4 to 6 hours. In Germany psilocybin falls under the narcotics act; it is currently studied in clinical trials, for example in treatment resistant depression.',
+    },
+  },
+  {
     key: 'thc',
     category: 'cannabis',
     de: 'THC (Cannabis)',
@@ -557,6 +634,7 @@ export const SUBSTANCES = [
     high: 0,
     model: false,
     dose: 0,
+    unit: 'mg',
     metabolites: {
       de: '11-OH-THC (wirksam) und THC-COOH (unwirksam, der eigentliche Nachweismarker im Urin)',
       en: '11-OH-THC (active) and THC-COOH (inactive, the actual marker in urine)',

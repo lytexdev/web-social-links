@@ -105,6 +105,18 @@ describe('substance data', () => {
     }
   })
 
+  it('carries the substances that are only studied clinically with their own note', () => {
+    for (const key of ['lsd', 'psilocybin']) {
+      const item = findSubstance(key)
+      expect(item.key).toBe(key)
+      expect(item.category).toBe('psychedelics')
+      expect(item.note.de).toContain('Betäubungsmittelgesetz')
+      expect(item.model).toBe(true)
+    }
+    expect(normalizeHalflife({ substance: 'lsd' }).unit).toBe('mcg')
+    expect(normalizeHalflife({ substance: 'lsd', unit: 'mg' }).unit).toBe('mg')
+  })
+
   it('keeps the keys unique and finds them again', () => {
     const keys = SUBSTANCES.map((item) => item.key)
     expect(new Set(keys).size).toBe(keys.length)
