@@ -2,6 +2,28 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- References page: a public GitHub repository of Markdown source lists is synced once a day and on request and shown at a configurable address with redirecting aliases, with search, type and topic filters, evidence levels per claim, linked source numbers and a changelog per entry
+- Admin view for the references repository with sync status and notes on incomplete entries
+- Own icons for nasal spray, powder and round tablets, German search terms in the icon picker
+
+### Changed
+
+- The client address comes from `X-Real-IP` set by the reverse proxy; `TRUSTED_PROXIES`, `PROXY_PEER_HEADER`, `APP_PORT`, `PROXY_NETWORK` and `APP_ENCRYPTION_KEY_PREVIOUS` are gone
+- The admin view for traffic origins is now called Origins and short links
+
+### Removed
+
+- GitHub workflows and Dependabot configuration
+
+### Fixed
+
+- The icon picker requested the icon index from a wrong address and listed no icons
+- Dependency advisories in glob, minimatch, esbuild and zod
+
 ## [1.0.0] - 2026-10-30
 
 ### Added

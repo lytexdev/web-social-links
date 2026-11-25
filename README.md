@@ -59,6 +59,23 @@ The app takes the visitor address from the `X-Real-IP` header, which Nginx Proxy
 
 In Cloudflare, keep the DNS records proxied, use SSL mode Full (strict) and do not add a cache rule for HTML.
 
+## References page
+
+Admin, References turns a public GitHub repository of Markdown source lists into an interactive page, by default at `/quellen` with `/quellenangaben` and `/sources` redirecting there. The repository stays the place where entries are written and reviewed, by hand or by AI agents; the app only reads it.
+
+The app downloads the branch as a ZIP archive from `codeload.github.com` once a day and on request, and replaces its copy of the entries. New and changed entries appear without publishing. Title, introduction, addresses and visibility are settings like any other and go live with the next publish.
+
+Expected layout:
+
+```
+videos/2026/Some-Video.md
+shorts/2026/Some-Short.md
+```
+
+Each file starts with front matter (`title`, `published` as `YYYY-MM-DD`, `topics` as a list, `youtube_id` or `tiktok_url` and `instagram_url`). The page reads a table whose header contains the claim, evidence, sources and limitations columns, a numbered source list under a heading such as `Quellen` (with optional `###` groups), a changelog under a heading such as `Korrekturen und Updates` or `Changelogs`, and closing `>` notes. Any other section is shown as Markdown. The admin lists every entry with notes on missing video links, empty tables and claims that cite a number missing from the source list.
+
+The overview searches titles, topics and claims, filters by type and topic and works without JavaScript; a small same origin script filters while typing. Entries show the evidence level of each claim as text with a coloured marker, link every source number to its source and set no cookies. Visits to the references pages are not counted as page views.
+
 ## What it collects
 
 Public pages set no cookies and do not touch storage on the device. Counting happens on the server:
