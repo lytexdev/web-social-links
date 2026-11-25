@@ -14,7 +14,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - Back arrows on every back link, a button that returns to the top of long pages, a copy button for the calculator address and an opt-in box that keeps calculator input in the browser
 - Up to six configurable buttons on the start page that link to a subpage or an outside address
 - An optional switch for the light and dark theme on every public page
-- A markdown section with links and images below each calculator
+- A markdown section with links and images below each calculator; an image with a title becomes a figure with a caption below it
+- The media library copies the address of an image, and an image used in markdown counts as a usage, so it cannot be deleted by accident
 - Substance search, preparations with their own share of active content, routes of administration and a decay curve that can be read at any point in time
 
 ### Changed

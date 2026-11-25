@@ -1,12 +1,19 @@
 import type { BlockNode } from '../../shared/schemas/content'
 import { listBlocks } from './blocks'
+import { listPages } from './pages'
 import { latestSnapshot } from './publish'
 import { getAllSettings } from './settings'
 
 export interface Usage {
-  kind: 'block' | 'avatar' | 'og' | 'social' | 'published'
+  kind: 'block' | 'avatar' | 'og' | 'social' | 'markdown' | 'published'
   id: string
   label: string
+}
+
+const MEDIA_IN_MARKDOWN = /\/media\/([A-Za-z0-9_-]{12})-/g
+
+function markdownMedia(source: string): Set<string> {
+  return new Set([...source.matchAll(MEDIA_IN_MARKDOWN)].map((match) => match[1] ?? ''))
 }
 
 function blockLabel(node: BlockNode): string {
@@ -34,6 +41,15 @@ export function mediaUsages(): Map<string, Usage[]> {
   for (const social of settings.profile.social) {
     if (social.icon.startsWith('media:'))
       add(social.icon.slice(6), { kind: 'social', id: social.id, label: social.label })
+  }
+  for (const page of listPages()) {
+    for (const mediaId of markdownMedia(page.markdown))
+      add(mediaId, { kind: 'markdown', id: page.id, label: page.title })
+  }
+  for (const key of ['calories', 'peptide', 'halflife'] as const) {
+    const entry = settings.calculators[key]
+    for (const mediaId of markdownMedia(entry.content))
+      add(mediaId, { kind: 'markdown', id: key, label: entry.title || key })
   }
   const snapshot = latestSnapshot()
   for (const mediaId of Object.keys(snapshot?.media ?? {})) {

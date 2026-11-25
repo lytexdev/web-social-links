@@ -8,6 +8,7 @@ interface MediaItem {
   alt: string
   decorative: boolean
   preview: string
+  url: string
   usages: Array<{ kind: string; label: string }>
   published: boolean
 }
@@ -66,6 +67,11 @@ async function replace(files: FileList | null): Promise<void> {
     const parsed = toFailure(failure)
     toasts.push(t.value.media.errors[parsed.code] ?? useFailureMessage()(parsed), { tone: 'error' })
   }
+}
+
+async function copyUrl(item: MediaItem): Promise<void> {
+  await navigator.clipboard.writeText(item.url)
+  toasts.push(t.value.common.copied)
 }
 
 async function remove(): Promise<void> {
@@ -144,6 +150,9 @@ async function remove(): Promise<void> {
             <span v-if="item.published"> · {{ t.media.published }}</span>
           </p>
           <div class="flex flex-wrap gap-2">
+            <button type="button" class="a-btn a-btn-sm" @click="copyUrl(item)">
+              {{ t.media.copy }}
+            </button>
             <button type="button" class="a-btn a-btn-sm" @click="startReplace(item.id)">
               {{ t.media.replace }}
             </button>

@@ -199,6 +199,7 @@ export const enCms: typeof deCms = {
     usage: 'Used in {count} places',
     unused: 'Not used',
     published: 'On the published page',
+    copy: 'Copy address',
     replace: 'Replace',
     replaced: 'Image replaced, references stay intact',
     delete: 'Delete',
@@ -414,7 +415,7 @@ export const enCms: typeof deCms = {
     introText: 'Introduction',
     content: 'Further content',
     contentHint:
-      'Appears below the calculator. Markdown with headings, lists, tables, links and images. Add an image from the media library through the address shown there under copy.',
+      'Appears below the calculator. Markdown with headings, lists, tables, links and images. Copy an image address under Media. An image with a link and a caption: [![Alternative text](image address "Caption")](target address)',
     viewPage: 'Open calculator',
   },
   stats: {

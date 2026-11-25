@@ -73,6 +73,29 @@ describe('calculator pages', () => {
     await admin.send('/api/admin/publish', { body: { note: '' } })
   })
 
+  it('renders a linked image with a caption below the calculator', async () => {
+    await admin.send('/api/admin/settings/calculators', {
+      method: 'PUT',
+      body: {
+        ...SETTINGS,
+        calories: {
+          ...SETTINGS.calories,
+          content:
+            '## Dazu passend\n\n[![Waage](/media/abcdefghijkl-1a2b3c4d-640.webp "Unsere Empfehlung")](https://shop.example.com/waage)',
+        },
+      },
+    })
+    await admin.send('/api/admin/publish', { body: { note: '' } })
+    const rendered = await page('/rechner/kalorien')
+    expect(rendered.text).toContain('<h2>Dazu passend</h2>')
+    expect(rendered.text).toContain('<figure>')
+    expect(rendered.text).toContain('href="https://shop.example.com/waage" rel="noopener"')
+    expect(rendered.text).toContain('<img src="/media/abcdefghijkl-1a2b3c4d-640.webp" alt="Waage">')
+    expect(rendered.text).toContain('<figcaption>Unsere Empfehlung</figcaption>')
+    await admin.send('/api/admin/settings/calculators', { method: 'PUT', body: SETTINGS })
+    await admin.send('/api/admin/publish', { body: { note: '' } })
+  })
+
   it('computes the calories on the server without cookies or inline scripts', async () => {
     const result = await page(
       '/rechner/kalorien?sex=female&age=42&height=165&weight=62&fat=24&activity=moderate&sessions=4&minutes=45&intensity=hard',

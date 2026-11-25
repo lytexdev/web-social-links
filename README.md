@@ -78,7 +78,7 @@ The overview searches titles, topics and claims, filters by type and topic and w
 
 ## Calculators
 
-Admin, Calculators serves three calculators under a configurable address, by default `/rechner` with `/rechner/kalorien`, `/rechner/peptide` and `/rechner/wirkstoff-abbau`. Each one has its own title, introduction, visibility and a markdown section below the form that may hold links and images, all of which go live with the next publish.
+Admin, Calculators serves three calculators under a configurable address, by default `/rechner` with `/rechner/kalorien`, `/rechner/peptide` and `/rechner/wirkstoff-abbau`. Each one has its own title, introduction, visibility and a markdown section below the form that may hold links and images, all of which go live with the next publish. The address of an uploaded image is copied in Media; `[![Alt text](address "Caption")](target)` renders a linked image with a caption below it, and an image used this way counts as a usage, so the media library refuses to delete it.
 
 The calorie calculator derives the basal rate from Mifflin-St Jeor, or from Katch-McArdle over the fat free mass as soon as a body fat value is entered, adds daily activity through the PAL factor and sport through the MET value, and shows the total, target values and the calculation.
 

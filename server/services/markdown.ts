@@ -56,22 +56,55 @@ function shiftHeadings(md: Instance): Instance {
   return md
 }
 
-const document = shiftHeadings(
-  create([
-    'paragraph',
-    'newline',
-    'emphasis',
-    'link',
-    'list',
-    'heading',
-    'lheading',
-    'blockquote',
-    'hr',
-    'escape',
-    'backticks',
-    'table',
-    'image',
-  ]),
+function captions(md: Instance): Instance {
+  md.core.ruler.push('captions', (state: StateCore) => {
+    const tokens = state.tokens
+    for (let index = 0; index + 2 < tokens.length; index++) {
+      const open = tokens[index]
+      const body = tokens[index + 1]
+      const close = tokens[index + 2]
+      if (open?.type !== 'paragraph_open' || body?.type !== 'inline') continue
+      if (close?.type !== 'paragraph_close') continue
+      const children = body.children ?? []
+      const shape = children.map((token) => token.type).join(' ')
+      if (shape !== 'image' && shape !== 'link_open image link_close') continue
+      const image = children.find((token) => token.type === 'image')
+      const caption = String(image?.attrGet('title') ?? '').trim()
+      if (!image || !caption) continue
+      image.attrs = (image.attrs ?? []).filter(([name]) => name !== 'title')
+      open.type = 'figure_open'
+      open.tag = 'figure'
+      close.type = 'figure_close'
+      close.tag = 'figure'
+      const captionOpen = new state.Token('figcaption_open', 'figcaption', 1)
+      const text = new state.Token('text', '', 0)
+      text.content = caption
+      const captionClose = new state.Token('figcaption_close', 'figcaption', -1)
+      tokens.splice(index + 2, 0, captionOpen, text, captionClose)
+      index += 4
+    }
+  })
+  return md
+}
+
+const document = captions(
+  shiftHeadings(
+    create([
+      'paragraph',
+      'newline',
+      'emphasis',
+      'link',
+      'list',
+      'heading',
+      'lheading',
+      'blockquote',
+      'hr',
+      'escape',
+      'backticks',
+      'table',
+      'image',
+    ]),
+  ),
 )
 
 function linkified(md: Instance): Instance {

@@ -206,6 +206,7 @@ export const deCms = {
     usage: 'Verwendet in {count} Stellen',
     unused: 'Nicht verwendet',
     published: 'Auf der veröffentlichten Seite',
+    copy: 'Adresse kopieren',
     replace: 'Ersetzen',
     replaced: 'Bild ersetzt, Verweise bleiben erhalten',
     delete: 'Löschen',
@@ -432,7 +433,7 @@ export const deCms = {
     introText: 'Einleitung',
     content: 'Zusätzlicher Inhalt',
     contentHint:
-      'Erscheint unter dem Rechner. Markdown mit Überschriften, Listen, Tabellen, Links und Bildern. Ein Bild aus der Medienbibliothek bindest du mit der Adresse ein, die dort unter Kopieren steht.',
+      'Erscheint unter dem Rechner. Markdown mit Überschriften, Listen, Tabellen, Links und Bildern. Die Adresse eines Bildes kopierst du unter Medien. Ein Bild mit Link und Unterschrift: [![Alternativtext](Bildadresse "Unterschrift")](Zieladresse)',
     viewPage: 'Rechner öffnen',
   },
   stats: {

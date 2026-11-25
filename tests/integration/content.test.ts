@@ -397,6 +397,32 @@ describe('media pipeline', () => {
     expect(response.json<{ media: { preview: string } }>().media.preview).toMatch(/\.webp$/)
   })
 
+  it('offers a copyable address and counts an image embedded in markdown', async () => {
+    const list = (await admin.send('/api/admin/media')).json<Array<{ id: string; url: string }>>()
+    const item = list.find((entry) => entry.id === mediaId)
+    expect(item?.url).toMatch(/^\/media\/.+-\d+\.webp$/)
+    const created = await admin.send('/api/admin/pages', {
+      body: {
+        slug: 'bilder',
+        title: 'Bilder',
+        markdown: `[![Dose](${item?.url} "Woher das Bild ist")](https://shop.example.com)`,
+      },
+    })
+    expect(created.status).toBe(200)
+    const page = created.json<{ id: string }>()
+    const usage = (await admin.send('/api/admin/media')).json<
+      Array<{ id: string; usages: Array<{ kind: string; label: string }> }>
+    >()
+    expect(usage.find((entry) => entry.id === mediaId)?.usages).toContainEqual({
+      kind: 'markdown',
+      id: page.id,
+      label: 'Bilder',
+    })
+    const blocked = await admin.send(`/api/admin/media/${mediaId}`, { method: 'DELETE' })
+    expect(blocked.status).toBe(409)
+    await admin.send(`/api/admin/pages/${page.id}`, { method: 'DELETE' })
+  })
+
   it('refuses to delete media that is in use', async () => {
     await admin.send('/api/admin/settings/site', { method: 'PUT', body: { ogImage: mediaId } })
     const response = await admin.send(`/api/admin/media/${mediaId}`, { method: 'DELETE' })

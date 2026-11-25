@@ -11,6 +11,7 @@ export function presentMedia(row: MediaRow, usages: Usage[] = []) {
   const variants = variantsOf(row)
   const preview = variants.widths.find((width) => width >= 192) ?? variants.widths.at(-1) ?? 48
   const icon = variants.widths.find((width) => width >= 48) ?? variants.widths.at(-1) ?? 48
+  const full = variants.widths.at(-1) ?? preview
   return {
     id: row.id,
     width: row.width,
@@ -22,6 +23,7 @@ export function presentMedia(row: MediaRow, usages: Usage[] = []) {
     dominantColor: row.dominantColor,
     createdAt: row.createdAt,
     preview: `/media/${mediaFileName(row.id, variants.hash, preview, 'webp')}`,
+    url: `/media/${mediaFileName(row.id, variants.hash, full, 'webp')}`,
     icon: `/media/${mediaFileName(row.id, variants.hash, icon, 'webp')}`,
     usages: usages.filter((usage) => usage.kind !== 'published'),
     published: usages.some((usage) => usage.kind === 'published'),
