@@ -412,6 +412,9 @@ export const enCms: typeof deCms = {
     enabled: 'Show the calculator at {path}',
     heading: 'Title',
     introText: 'Introduction',
+    content: 'Further content',
+    contentHint:
+      'Appears below the calculator. Markdown with headings, lists, tables, links and images. Add an image from the media library through the address shown there under copy.',
     viewPage: 'Open calculator',
   },
   stats: {
@@ -485,6 +488,13 @@ export const enCms: typeof deCms = {
     description: 'Description for link previews',
     ogImage: 'Preview image for messengers',
     lang: 'Page language',
+    nav: 'Buttons to subpages',
+    navHint:
+      'Appear at the top of the start page, for example for the references or the calculators. Enter a path such as /quellen or a full address.',
+    navLabel: 'Label',
+    navHref: 'Target',
+    navAdd: 'Add button',
+    navRemove: 'Remove',
     aiCrawlers: 'Blocked AI crawlers',
     aiCrawlersHint: 'One user agent per line. Search engines stay allowed so they can see noindex.',
     animatedImages: 'Keep animated GIF and WebP',

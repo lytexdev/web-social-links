@@ -138,7 +138,15 @@ export interface ChromeModel {
   }
 }
 
+export interface NavView {
+  label: string
+  href: string
+  icon: string | null
+  external: boolean
+}
+
 export interface PageModel extends ChromeModel {
+  nav: NavView[]
   kind: 'page'
   preview: boolean
   profile: {
@@ -283,6 +291,7 @@ export interface CalculatorPageModel extends ChromeModel {
   }
   curve: string
   marker: { x: number; y: number }
+  contentHtml: string
   disclaimer: string
 }
 

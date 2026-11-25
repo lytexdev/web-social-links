@@ -79,6 +79,7 @@ function collectIcons(blocks: BlockNode[], settings: Settings): Set<string> {
     if (typeof icon === 'string') refs.add(icon)
   }
   for (const social of settings.profile.social) refs.add(social.icon)
+  for (const item of settings.site.nav) refs.add(item.icon)
   return refs
 }
 

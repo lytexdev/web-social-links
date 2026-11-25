@@ -137,6 +137,22 @@ const anyEnabled = computed(() => keys.some((key) => settings.value?.calculators
           @input="store.queue('calculators')"
         />
       </AdminField>
+      <AdminField
+        v-slot="field"
+        :label="t.calculators.content"
+        optional
+        :hint="t.calculators.contentHint"
+        :error="store.error('calculators', `${key}.content`)"
+      >
+        <textarea
+          :id="field.id"
+          v-model="settings.calculators[key].content"
+          class="a-textarea min-h-32"
+          maxlength="8000"
+          :aria-describedby="field.describedby"
+          @input="store.queue('calculators')"
+        />
+      </AdminField>
       <p v-if="settings.calculators[key].enabled">
         <a
           class="a-btn a-btn-sm"

@@ -22,7 +22,8 @@ function create(rules: string[]): Instance {
     breaks: true,
   })
   md.enable(rules)
-  md.validateLink = (url: string) => checkLinkUrl(url).ok
+  md.validateLink = (url: string) =>
+    (url.startsWith('/') && !url.startsWith('//')) || checkLinkUrl(url).ok
   const defaultLinkOpen: RendererRule =
     md.renderer.rules.link_open ??
     ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
@@ -69,6 +70,7 @@ const document = shiftHeadings(
     'escape',
     'backticks',
     'table',
+    'image',
   ]),
 )
 

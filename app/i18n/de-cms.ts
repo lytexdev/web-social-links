@@ -430,6 +430,9 @@ export const deCms = {
     enabled: 'Rechner unter {path} anzeigen',
     heading: 'Titel',
     introText: 'Einleitung',
+    content: 'Zusätzlicher Inhalt',
+    contentHint:
+      'Erscheint unter dem Rechner. Markdown mit Überschriften, Listen, Tabellen, Links und Bildern. Ein Bild aus der Medienbibliothek bindest du mit der Adresse ein, die dort unter Kopieren steht.',
     viewPage: 'Rechner öffnen',
   },
   stats: {
@@ -508,6 +511,13 @@ export const deCms = {
     description: 'Beschreibung für Link-Vorschauen',
     ogImage: 'Vorschaubild für Messenger',
     lang: 'Sprache der Seite',
+    nav: 'Buttons zu Unterseiten',
+    navHint:
+      'Erscheinen oben auf der Startseite, zum Beispiel für die Quellenangaben oder die Rechner. Trag einen Pfad wie /quellen ein oder eine vollständige Adresse.',
+    navLabel: 'Beschriftung',
+    navHref: 'Ziel',
+    navAdd: 'Button hinzufügen',
+    navRemove: 'Entfernen',
     aiCrawlers: 'Gesperrte KI-Crawler',
     aiCrawlersHint:
       'Ein User-Agent pro Zeile. Suchmaschinen bleiben erlaubt, damit sie noindex sehen.',

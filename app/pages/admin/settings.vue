@@ -66,6 +66,32 @@ const ogImage = computed({
   },
 })
 
+function newId(): string {
+  const bytes = new Uint8Array(9)
+  crypto.getRandomValues(bytes)
+  return btoa(String.fromCharCode(...bytes))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')
+}
+
+function addNav(): void {
+  if (!settings.value || settings.value.site.nav.length >= 6) return
+  settings.value.site.nav.push({
+    id: newId(),
+    label: '',
+    href: '/',
+    icon: 'tabler:arrow-up-right',
+  })
+  store.queue('site', 0)
+}
+
+function removeNav(id: string): void {
+  if (!settings.value) return
+  settings.value.site.nav = settings.value.site.nav.filter((item) => item.id !== id)
+  store.queue('site', 0)
+}
+
 async function reviewed(): Promise<void> {
   await request('/api/admin/settings/privacy-reviewed', { body: {} })
   store.privacyReview.value = false
@@ -204,6 +230,65 @@ async function setLanguage(value: 'de' | 'en'): Promise<void> {
           :aria-describedby="field.describedby"
         />
       </AdminField>
+      <div class="grid gap-2">
+        <p class="a-label">{{ t.settings.nav }}</p>
+        <p class="a-hint">{{ t.settings.navHint }}</p>
+        <div
+          v-for="(item, index) in settings.site.nav"
+          :key="item.id"
+          class="grid gap-2 rounded-md border border-line p-3 sm:grid-cols-[auto_1fr_2fr_auto] sm:items-end"
+        >
+          <IconField
+            v-model="item.icon"
+            :label="t.blockFields.icon"
+            :allow-empty="false"
+            @update:model-value="store.queue('site', 0)"
+          />
+          <AdminField v-slot="field" :label="t.settings.navLabel">
+            <input
+              :id="field.id"
+              v-model="item.label"
+              class="a-input"
+              maxlength="40"
+              @input="store.queue('site')"
+            />
+          </AdminField>
+          <AdminField
+            v-slot="field"
+            :label="t.settings.navHref"
+            :error="store.error('site', `nav.${index}.href`)"
+          >
+            <input
+              :id="field.id"
+              v-model="item.href"
+              class="a-input"
+              maxlength="120"
+              spellcheck="false"
+              placeholder="/quellen"
+              :aria-invalid="field.invalid"
+              @input="store.queue('site')"
+            />
+          </AdminField>
+          <button
+            type="button"
+            class="a-btn a-btn-sm a-btn-danger"
+            :aria-label="`${t.settings.navRemove} ${item.label || item.href}`"
+            @click="removeNav(item.id)"
+          >
+            {{ t.settings.navRemove }}
+          </button>
+        </div>
+        <p>
+          <button
+            type="button"
+            class="a-btn a-btn-sm"
+            :disabled="settings.site.nav.length >= 6"
+            @click="addNav"
+          >
+            {{ t.settings.navAdd }}
+          </button>
+        </p>
+      </div>
       <label class="flex items-center gap-3 text-sm">
         <input
           v-model="settings.site.animatedImages"

@@ -142,12 +142,29 @@ export function chrome(snapshot: Snapshot, origin: string, path: string): Chrome
   }
 }
 
+function navLinks(snapshot: Snapshot): Array<{
+  label: string
+  href: string
+  icon: string | null
+  external: boolean
+}> {
+  return snapshot.settings.site.nav
+    .filter((item) => item.label && item.href)
+    .map((item) => ({
+      label: item.label,
+      href: item.href,
+      icon: iconFor(snapshot, item.icon),
+      external: !item.href.startsWith('/'),
+    }))
+}
+
 export function buildPageModel(
   snapshot: Snapshot,
   options: { source: string; now: number; origin: string; path: string; preview: boolean },
 ): PageModel {
   const base = chrome(snapshot, options.origin, options.path)
   const { settings } = snapshot
+  const nav = navLinks(snapshot)
   let sectionCounter = 0
   let affiliate = false
   const nextIndex = () => String(++sectionCounter).padStart(2, '0')
@@ -296,6 +313,7 @@ export function buildPageModel(
     ...base,
     kind: 'page',
     preview: options.preview,
+    nav,
     footer: { ...base.footer, affiliateNote: affiliate ? settings.legal.affiliateNote : null },
     profile: {
       displayName: settings.profile.displayName,

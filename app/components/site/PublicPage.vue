@@ -37,6 +37,22 @@ defineProps<{ model: PageModel }>()
         </nav>
       </div>
     </header>
+    <nav v-if="model.nav.length > 0" class="p-nav" :aria-label="model.text.channels">
+      <ul>
+        <li v-for="item in model.nav" :key="item.href">
+          <a
+            class="p-nav-link"
+            :href="item.href"
+            :rel="item.external ? 'noopener' : undefined"
+            :target="item.external ? '_blank' : undefined"
+          >
+            <span v-if="item.icon" class="p-nav-icon" aria-hidden="true" v-html="item.icon" />
+            {{ item.label }}
+            <span v-if="item.external" class="sr-only">{{ model.text.newTab }}</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
     <main id="main" class="p-main p-enter">
       <PublicBlock v-for="block in model.blocks" :key="block.id" :block="block" :chrome="model" />
     </main>

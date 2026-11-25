@@ -13,6 +13,7 @@ import { SUBSTANCE_CATEGORIES } from '../../shared/calc/substances.js'
 import { formatDurations, formatNumber, formatValues } from '../../shared/calc/format.js'
 import { PEPTIDE_DIGITS, SYRINGE_SIZES, computePeptide } from '../../shared/calc/peptide.js'
 import type { Snapshot } from './publish'
+import { renderDocumentMarkdown } from './markdown'
 import { chrome } from './render'
 
 type Alternative = {
@@ -195,6 +196,7 @@ export function buildCalculator(
       value,
       label: decimal(value, base.lang),
     })),
+    contentHtml: entry.content ? renderDocumentMarkdown(entry.content) : '',
     disclaimer: labels[key].disclaimer,
   }
 }

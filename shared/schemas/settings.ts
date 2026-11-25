@@ -71,6 +71,17 @@ export const analyticsSettingsSchema = z.object({
   utmMedium: text(40).default('link_in_bio'),
 })
 
+const internalPath = z
+  .string()
+  .trim()
+  .max(120)
+  .refine(
+    (value) =>
+      /^\/[a-z0-9][a-z0-9\-/]{0,100}$/.test(value) ||
+      (value !== '' && !value.startsWith('//') && checkLinkUrl(value).ok),
+    { error: 'url_invalid' },
+  )
+
 export const siteSchema = z.object({
   title: text(70).default(''),
   description: text(200).default(''),
@@ -78,6 +89,10 @@ export const siteSchema = z.object({
   lang: z.enum(['de', 'en']).default('de'),
   aiCrawlers: z.array(text(64)).max(60).default(DEFAULT_AI_CRAWLERS),
   animatedImages: z.boolean().default(false),
+  nav: z
+    .array(z.object({ id: idField, label: text(40), href: internalPath, icon: iconField }))
+    .max(6)
+    .default([]),
 })
 
 export const GITHUB_REPOSITORY =
@@ -128,15 +143,16 @@ const calculatorEntry = z.object({
   enabled: z.boolean().default(false),
   title: text(70).default(''),
   intro: text(600).default(''),
+  content: z.string().trim().max(8000, { error: 'too_long' }).default(''),
 })
 
 export const calculatorsSchema = z.object({
   path: pathSlug.default('rechner'),
   indexTitle: text(70).default('Rechner'),
   indexIntro: text(600).default(''),
-  calories: calculatorEntry.default({ enabled: false, title: '', intro: '' }),
-  peptide: calculatorEntry.default({ enabled: false, title: '', intro: '' }),
-  halflife: calculatorEntry.default({ enabled: false, title: '', intro: '' }),
+  calories: calculatorEntry.default({ enabled: false, title: '', intro: '', content: '' }),
+  peptide: calculatorEntry.default({ enabled: false, title: '', intro: '', content: '' }),
+  halflife: calculatorEntry.default({ enabled: false, title: '', intro: '', content: '' }),
 })
 
 export const settingsSchemas = {

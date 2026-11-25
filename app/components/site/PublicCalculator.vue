@@ -75,6 +75,8 @@ defineProps<{ model: CalculatorPageModel }>()
         </div>
       </form>
 
+      <div v-if="model.contentHtml" class="p-prose c-content" v-html="model.contentHtml" />
+
       <aside class="r-disclaimer" :aria-label="model.labels.common.note">
         <p>{{ model.disclaimer }}</p>
       </aside>
