@@ -11,6 +11,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Own icons for nasal spray, powder and round tablets, German search terms in the icon picker
 - Calorie, peptide and substance decay calculators as their own subpages under a configurable address, computed on the server and updated in the browser while typing
 - Short links can redirect to an address entered by hand instead of a link saved on the page
+- Back arrows on every back link, a button that returns to the top of long pages, a copy button for the calculator address and an opt-in box that keeps calculator input in the browser
 
 ### Changed
 

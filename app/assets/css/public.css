@@ -1401,6 +1401,42 @@
   margin-top: 1.5rem;
 }
 
+.c-tools {
+  display: grid;
+  gap: 0.875rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--wsl-line);
+}
+
+.c-tools[hidden] {
+  display: none;
+}
+
+.c-tools .p-button {
+  width: fit-content;
+}
+
+.c-remember {
+  display: flex;
+  align-items: start;
+  gap: 0.625rem;
+  font-size: 0.875rem;
+}
+
+.c-remember input {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.1875rem;
+  flex: none;
+  accent-color: var(--wsl-accent);
+}
+
+.c-remember .c-hint {
+  display: block;
+  margin-top: 0.25rem;
+}
+
 .c-result {
   min-width: 0;
   margin-top: 1.5rem;

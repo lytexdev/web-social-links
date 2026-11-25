@@ -112,3 +112,25 @@ test('every public page offers a back link and a way to the top', async ({ page 
   await top.click()
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(100)
 })
+
+test('the calculator copies its link and remembers input only on request', async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.goto('/rechner/kalorien')
+  await page.fill('#c-weight', '83')
+  await expect(page).toHaveURL(/weight=83/)
+  await page.getByRole('button', { name: 'Link kopieren' }).click()
+  await expect(page.getByRole('button', { name: 'Kopiert' })).toBeVisible()
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('weight=83')
+
+  expect(await page.evaluate(() => localStorage.length)).toBe(0)
+  await page.getByRole('checkbox', { name: /Eingaben auf diesem Gerät merken/ }).check()
+  await page.fill('#c-weight', '84')
+  await expect(page).toHaveURL(/weight=84/)
+  await page.goto('/rechner/kalorien')
+  await expect(page.locator('#c-weight')).toHaveValue('84')
+  await page.getByRole('checkbox', { name: /Eingaben auf diesem Gerät merken/ }).uncheck()
+  expect(await page.evaluate(() => localStorage.length)).toBe(0)
+})

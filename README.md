@@ -86,6 +86,8 @@ The peptide calculator turns the peptide in the vial, the solvent and the amount
 
 The decay calculator estimates how much of a dose is still in the body after a given time, from the typical half-life of 27 everyday and prescription substances, and shows the curve, the points in time and the build-up on repeated intake. Beside the calculation it lists what the literature reports for the selected substance: half-life with its range, the main metabolites and the detection ranges in blood and urine. Those ranges are reference data and are not derived from the entered dose; the page states that they depend on dose, duration of use, test method and cut-off and cannot be converted to one person. Substances whose kinetics a single half-life does not describe, such as THC, carry the reference data without a calculation.
 
+Each page has a button that copies its address, and an opt-in box that keeps the entered values in the browser for the next visit. The box is off by default, the data never leaves the device, and clearing the box deletes it, so no consent banner is needed.
+
 All three compute on the server from the query string, so they work without JavaScript and every result has an address that can be shared. A same origin module recomputes while typing and keeps the address in step. The arithmetic lives once in `shared/calc`, which the server imports and the browser loads, so the two sides cannot drift apart.
 
 ## What it collects

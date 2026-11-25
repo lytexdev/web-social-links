@@ -10,6 +10,10 @@ export interface CalculatorText {
     noScript: string
     share: string
     submit: string
+    copyLink: string
+    copied: string
+    remember: string
+    rememberHint: string
   }
   calories: {
     sex: string
@@ -148,6 +152,11 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'Ohne JavaScript rechnet die Seite beim Absenden des Formulars. Mit JavaScript aktualisiert sich das Ergebnis beim Tippen.',
       share: 'Die Adresse der Seite enthält deine Eingaben und lässt sich so teilen.',
       submit: 'Berechnen',
+      copyLink: 'Link kopieren',
+      copied: 'Kopiert',
+      remember: 'Eingaben auf diesem Gerät merken',
+      rememberHint:
+        'Speichert deine Eingaben nur in deinem Browser, damit sie beim nächsten Besuch wieder da sind. Nichts davon wird übertragen oder gespeichert. Nimm den Haken weg, um die Daten zu löschen.',
     },
     calories: {
       sex: 'Biologisches Geschlecht',
@@ -325,6 +334,11 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'Without JavaScript the page calculates when the form is submitted. With JavaScript the result updates as you type.',
       share: 'The address of the page carries your input and can be shared.',
       submit: 'Calculate',
+      copyLink: 'Copy link',
+      copied: 'Copied',
+      remember: 'Remember the input on this device',
+      rememberHint:
+        'Keeps your input in your browser only, so it is there on your next visit. None of it is sent or stored anywhere else. Clear the box to delete it.',
     },
     calories: {
       sex: 'Biological sex',

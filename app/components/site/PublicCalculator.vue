@@ -29,6 +29,26 @@ defineProps<{ model: CalculatorPageModel }>()
           <button type="submit" class="p-button">{{ model.labels.common.submit }}</button>
           <span class="c-hint">{{ model.labels.common.noScript }}</span>
         </p>
+
+        <div class="c-tools" data-tools hidden>
+          <button
+            type="button"
+            class="p-button"
+            data-copy-url
+            :data-copied="model.labels.common.copied"
+          >
+            <span aria-hidden="true" v-html="model.icons.copy" />
+            <span data-copy-label>{{ model.labels.common.copyLink }}</span>
+          </button>
+          <span class="sr-only" role="status" data-copy-status />
+          <label class="c-remember">
+            <input type="checkbox" data-remember />
+            <span>
+              {{ model.labels.common.remember }}
+              <span class="c-hint">{{ model.labels.common.rememberHint }}</span>
+            </span>
+          </label>
+        </div>
       </form>
 
       <aside class="r-disclaimer" :aria-label="model.labels.common.note">
