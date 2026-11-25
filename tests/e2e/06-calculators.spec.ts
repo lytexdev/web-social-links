@@ -1,5 +1,14 @@
 import { expect, test } from '@playwright/test'
+import type { Page } from '@playwright/test'
 import { expectAccessible, login } from './fixtures'
+
+async function pickSubstance(page: Page, term: string, expected: RegExp): Promise<void> {
+  const search = page.getByRole('combobox', { name: 'Wirkstoff' })
+  await search.fill(term)
+  await search.press('ArrowDown')
+  await search.press('Enter')
+  await expect(search).toHaveValue(expected)
+}
 
 test('enables both calculators and publishes them', async ({ page }) => {
   await login(page)
@@ -78,7 +87,7 @@ test('the decay calculator switches substance, curve and reference together', as
   await expect(page.locator('[data-calc="remaining"]')).toHaveText('100')
   await page.fill('#c-hours', '10')
   await expect(page.locator('[data-calc="percent"]')).toHaveText('25')
-  await page.selectOption('#c-substance', 'lisdexamfetamine')
+  await pickSubstance(page, 'lisdexam', /Lisdexamfetamin/)
   await expect(page.locator('[data-calc="half"]').first()).toHaveText('11')
   await expect(page.locator('[data-calc="low"]')).toHaveText('9')
   await expect(page.locator('[data-calc-text="blood"]')).toContainText('Dexamfetamin')
@@ -96,7 +105,7 @@ test('the decay calculator refuses to model THC', async ({ page }) => {
   await expect(page.getByText('keine einzelne Halbwertszeit angeben').first()).toBeVisible()
   await expect(page.locator('[data-calc="percent"]')).toBeHidden()
   await expect(page.getByText('THC-COOH').first()).toBeVisible()
-  await page.selectOption('#c-substance', 'caffeine')
+  await pickSubstance(page, 'koffein', /Koffein/)
   await expect(page.locator('[data-calc="percent"]')).toBeVisible()
 })
 
@@ -133,4 +142,37 @@ test('the calculator copies its link and remembers input only on request', async
   await expect(page.locator('#c-weight')).toHaveValue('84')
   await page.getByRole('checkbox', { name: /Eingaben auf diesem Gerät merken/ }).uncheck()
   expect(await page.evaluate(() => localStorage.length)).toBe(0)
+})
+
+test('the substance field searches and drives the dependent fields', async ({ page }) => {
+  await page.goto('/rechner/wirkstoff-abbau')
+  const search = page.getByRole('combobox', { name: 'Wirkstoff' })
+  await expect(search).toHaveValue('Koffein')
+  await expect(page.locator('[data-field="route"]')).toBeHidden()
+  await expect(page.locator('[data-field="preparation"]')).toBeHidden()
+
+  await search.fill('ashwa')
+  const list = page.getByRole('listbox', { name: 'Wirkstoff' })
+  await expect(list.getByRole('option')).toHaveCount(1)
+  await search.press('ArrowDown')
+  await search.press('Enter')
+  await expect(search).toHaveValue(/Ashwagandha/)
+  await expect(page.locator('[data-field="preparation"]')).toBeVisible()
+  await page.selectOption('#c-preparation', 'sensoril')
+  await expect(page.locator('[data-calc="activeDose"]')).toHaveText('10')
+
+  await search.fill('nikotin')
+  await search.press('ArrowDown')
+  await search.press('Enter')
+  const route = page.locator('#c-route')
+  await expect(page.locator('[data-field="route"]')).toBeVisible()
+  await expect(route).toHaveValue('inhaled')
+  await expect(page.locator('[data-route-note]')).toContainText('Sekunden')
+  await page.selectOption('#c-route', 'transdermal')
+  await expect(page.locator('[data-route-note]')).toContainText('Stunden')
+
+  await search.fill('gibtesnicht')
+  await expect(list).toContainText('Kein Wirkstoff gefunden.')
+  await search.press('Escape')
+  await expect(list).toBeHidden()
 })

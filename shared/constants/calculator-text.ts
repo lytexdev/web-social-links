@@ -57,6 +57,15 @@ export interface CalculatorText {
   }
   halflife: {
     substance: string
+    searchSubstance: string
+    noMatch: string
+    preparation: string
+    route: string
+    routes: Record<string, string>
+    routeHint: string
+    routeNotes: Record<string, string>
+    active: string
+    preparationNote: string
     categories: Record<string, string>
     dose: string
     unit: string
@@ -216,6 +225,43 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
     },
     halflife: {
       substance: 'Wirkstoff',
+      searchSubstance: 'Wirkstoff suchen',
+      noMatch: 'Kein Wirkstoff gefunden.',
+      preparation: 'Präparat',
+      route: 'Einnahmeart',
+      routes: {
+        oral: 'Oral, geschluckt',
+        sublingual: 'Sublingual, unter der Zunge',
+        buccal: 'Bukkal, in der Wange',
+        inhaled: 'Inhaliert',
+        intranasal: 'Intranasal, über die Nase',
+        transdermal: 'Transdermal, über die Haut',
+        subcutaneous: 'Subkutan, unter die Haut',
+        intramuscular: 'Intramuskulär, in den Muskel',
+        intravenous: 'Intravenös, in die Vene',
+      },
+      routeHint:
+        'Die Einnahmeart ändert, wie schnell der Stoff wirkt und wie viel davon überhaupt ins Blut gelangt. Die Halbwertszeit der Ausscheidung bleibt davon unberührt, deshalb rechnet die Seite damit weiter.',
+      routeNotes: {
+        oral: 'Wirkungseintritt nach etwa 30 bis 90 Minuten. Der erste Weg führt durch die Leber, die oft einen erheblichen Teil abbaut.',
+        sublingual:
+          'Wirkungseintritt nach etwa 10 bis 30 Minuten. Die Aufnahme über die Mundschleimhaut umgeht die Leber zum Teil.',
+        buccal:
+          'Wirkungseintritt nach etwa 15 bis 45 Minuten, ähnlich sublingual, aber langsamer und gleichmäßiger.',
+        inhaled:
+          'Wirkungseintritt nach Sekunden bis wenigen Minuten, weil der Stoff direkt über die Lunge ins Blut geht.',
+        intranasal:
+          'Wirkungseintritt nach etwa 5 bis 15 Minuten. Wie viel ankommt, schwankt je nach Schleimhaut stark.',
+        transdermal:
+          'Wirkungseintritt nach Stunden, dafür gleichmäßig über den ganzen Tragezeitraum.',
+        subcutaneous:
+          'Wirkungseintritt nach etwa 15 bis 30 Minuten, die Aufnahme ist langsamer und gleichmäßiger als in den Muskel.',
+        intramuscular:
+          'Wirkungseintritt nach etwa 10 bis 20 Minuten, schneller als unter die Haut.',
+        intravenous: 'Sofort vollständig im Blut, ohne Aufnahmephase.',
+      },
+      active: 'Davon Wirkstoff',
+      preparationNote: 'Zum Präparat',
       categories: {
         everyday: 'Alltag',
         sleep: 'Schlaf',
@@ -227,6 +273,10 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         nutrients: 'Nährstoffe',
         cannabis: 'Cannabis',
         psychedelics: 'Psychedelika',
+        mood: 'Stimmung und Psyche',
+        nootropics: 'Nootropika',
+        herbal: 'Pflanzlich',
+        performance: 'Leistung',
       },
       dose: 'Eingenommene Menge',
       unit: 'Einheit',
@@ -398,6 +448,41 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
     },
     halflife: {
       substance: 'Substance',
+      searchSubstance: 'Search substance',
+      noMatch: 'No substance found.',
+      preparation: 'Preparation',
+      route: 'Route',
+      routes: {
+        oral: 'Oral, swallowed',
+        sublingual: 'Sublingual, under the tongue',
+        buccal: 'Buccal, in the cheek',
+        inhaled: 'Inhaled',
+        intranasal: 'Intranasal, through the nose',
+        transdermal: 'Transdermal, through the skin',
+        subcutaneous: 'Subcutaneous, under the skin',
+        intramuscular: 'Intramuscular, into the muscle',
+        intravenous: 'Intravenous, into the vein',
+      },
+      routeHint:
+        'The route changes how fast a substance acts and how much of it reaches the blood at all. The elimination half-life is unaffected, so the page keeps calculating with it.',
+      routeNotes: {
+        oral: 'Onset after about 30 to 90 minutes. The first pass goes through the liver, which often breaks down a sizeable share.',
+        sublingual:
+          'Onset after about 10 to 30 minutes. Uptake through the lining of the mouth partly bypasses the liver.',
+        buccal:
+          'Onset after about 15 to 45 minutes, similar to sublingual but slower and steadier.',
+        inhaled:
+          'Onset within seconds to a few minutes, because the substance passes straight through the lungs into the blood.',
+        intranasal:
+          'Onset after about 5 to 15 minutes. How much arrives varies a lot with the state of the lining.',
+        transdermal: 'Onset after hours, but steady across the whole wearing time.',
+        subcutaneous:
+          'Onset after about 15 to 30 minutes; uptake is slower and steadier than into the muscle.',
+        intramuscular: 'Onset after about 10 to 20 minutes, faster than under the skin.',
+        intravenous: 'Fully in the blood at once, with no uptake phase.',
+      },
+      active: 'Active content',
+      preparationNote: 'About the preparation',
       categories: {
         everyday: 'Everyday',
         sleep: 'Sleep',
@@ -409,6 +494,10 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         nutrients: 'Nutrients',
         cannabis: 'Cannabis',
         psychedelics: 'Psychedelics',
+        mood: 'Mood and mind',
+        nootropics: 'Nootropics',
+        herbal: 'Herbal',
+        performance: 'Performance',
       },
       dose: 'Amount taken',
       unit: 'Unit',

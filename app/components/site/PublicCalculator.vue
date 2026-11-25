@@ -15,6 +15,15 @@ defineProps<{ model: CalculatorPageModel }>()
       class="c-page"
       :data-calculator="model.calculator"
       :data-duration-words="JSON.stringify(model.labels.halflife.duration)"
+      :data-route-labels="JSON.stringify(model.labels.halflife.routes)"
+      :data-route-notes="JSON.stringify(model.labels.halflife.routeNotes)"
+      :data-picker-labels="
+        JSON.stringify({
+          search: model.labels.halflife.searchSubstance,
+          none: model.labels.halflife.noMatch,
+          categories: model.labels.halflife.categories,
+        })
+      "
     >
       <header class="r-hero">
         <h1 class="r-title">{{ model.heading }}</h1>

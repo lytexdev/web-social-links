@@ -25,9 +25,9 @@ const range = computed(() => {
       <fieldset class="c-fieldset">
         <legend class="p-label">{{ model.labels.common.inputs }}</legend>
         <div class="c-fields">
-          <p class="c-field c-field-wide">
+          <p class="c-field c-field-wide" data-picker>
             <label for="c-substance">{{ t.substance }}</label>
-            <select id="c-substance" name="substance" class="c-input">
+            <select id="c-substance" name="substance" class="c-input" data-picker-select>
               <optgroup
                 v-for="group in model.substances"
                 :key="group.category"
@@ -43,6 +43,39 @@ const range = computed(() => {
                 </option>
               </optgroup>
             </select>
+          </p>
+          <p class="c-field" data-field="preparation" :hidden="!model.flags.hasPreparations">
+            <label for="c-preparation">{{ t.preparation }}</label>
+            <select id="c-preparation" name="preparation" class="c-input" data-preparation>
+              <option
+                v-for="item in model.preparations"
+                :key="item.key"
+                :value="item.key"
+                :selected="model.form.preparation === item.key"
+              >
+                {{ item.label }}
+              </option>
+            </select>
+          </p>
+          <p class="c-field" data-field="route" :hidden="!model.flags.hasRoutes">
+            <label for="c-route">{{ t.route }}</label>
+            <select
+              id="c-route"
+              name="route"
+              class="c-input"
+              data-route
+              aria-describedby="c-route-hint"
+            >
+              <option
+                v-for="key in model.routeKeys"
+                :key="key"
+                :value="key"
+                :selected="model.form.route === key"
+              >
+                {{ t.routes[key] }}
+              </option>
+            </select>
+            <span id="c-route-hint" class="c-hint">{{ t.routeHint }}</span>
           </p>
           <p class="c-field">
             <label for="c-dose">{{ t.dose }}</label>
@@ -117,6 +150,10 @@ const range = computed(() => {
           <span class="c-hero-number" data-calc="percent">{{ model.values.percent }}</span>
           <span class="c-hero-unit">%</span>
           <span class="c-hero-name">{{ t.remaining }}</span>
+        </p>
+        <p class="c-hint" data-calc-when="hasShare" :hidden="!model.flags.hasShare">
+          {{ t.active }}: <span data-calc="activeDose">{{ model.values.activeDose }}</span>
+          {{ model.form.unit }}
         </p>
         <p class="c-hint">
           <span data-calc="remaining">{{ model.values.remaining }}</span> {{ model.form.unit }}
@@ -240,6 +277,14 @@ const range = computed(() => {
         <div data-calc-when="hasNote" :hidden="!model.flags.hasNote">
           <dt>{{ t.substanceNote }}</dt>
           <dd data-calc-text="note">{{ model.reference.note }}</dd>
+        </div>
+        <div data-calc-when="hasPreparationNote" :hidden="!model.flags.hasPreparationNote">
+          <dt>{{ t.preparationNote }}</dt>
+          <dd data-prep-note>{{ model.reference.preparationNote }}</dd>
+        </div>
+        <div data-calc-when="hasRoutes" :hidden="!model.flags.hasRoutes">
+          <dt>{{ t.route }}</dt>
+          <dd data-route-note>{{ t.routeNotes[model.form.route ?? 'oral'] }}</dd>
         </div>
       </dl>
       <p class="c-hint">{{ t.referenceHint }}</p>

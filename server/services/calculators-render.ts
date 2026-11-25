@@ -23,11 +23,21 @@ type Alternative = {
   current: boolean
 }
 
+type Preparation = {
+  key: string
+  de: string
+  en: string
+  share?: number
+  note?: Record<string, string>
+}
+
 type Substance = {
   metabolites: Record<string, string>
   blood: Record<string, string>
   urine: Record<string, string>
   note?: Record<string, string>
+  routes?: string[]
+  preparations?: Preparation[]
 }
 
 type Computed = {
@@ -74,6 +84,8 @@ function compute(key: CalculatorKey, query: Record<string, unknown>): Computed {
   if (key === 'halflife') {
     return computeHalflife({
       substance: read('substance'),
+      preparation: read('preparation'),
+      route: read('route'),
       dose: read('dose'),
       unit: read('unit'),
       hours: read('hours'),
@@ -88,6 +100,12 @@ function compute(key: CalculatorKey, query: Record<string, unknown>): Computed {
     scale: read('scale'),
     size: read('size'),
   }) as Computed
+}
+
+function preparationNote(result: Computed, lang: 'de' | 'en'): string {
+  const chosen = String(result.input.preparation ?? '')
+  const found = (result.substance?.preparations ?? []).find((item) => item.key === chosen)
+  return found?.note?.[lang] ?? ''
 }
 
 function decimal(value: number, lang: 'de' | 'en'): string {
@@ -159,11 +177,17 @@ export function buildCalculator(
               .map(({ key: value, label }) => ({ key: value, label })),
           }))
         : [],
+    preparations: (result.substance?.preparations ?? []).map((item) => ({
+      key: item.key,
+      label: base.lang === 'de' ? item.de : item.en,
+    })),
+    routeKeys: result.substance?.routes ?? [],
     reference: {
       metabolites: result.substance?.metabolites[base.lang] ?? '',
       blood: result.substance?.blood[base.lang] ?? '',
       urine: result.substance?.urine[base.lang] ?? '',
       note: result.substance?.note?.[base.lang] ?? '',
+      preparationNote: preparationNote(result, base.lang),
     },
     curve: result.curve ?? '',
     marker: result.marker ?? { x: 0, y: 0 },

@@ -1,6 +1,8 @@
 import { CALORIES_DIGITS, computeCalories } from './calc/calories.js'
 import { formatDuration, formatNumber, formatValues } from './calc/format.js'
 import { HALFLIFE_DIGITS, computeHalflife } from './calc/halflife.js'
+import { findSubstance } from './calc/substances.js'
+import { createPicker } from './picker.js'
 import { PEPTIDE_DIGITS, computePeptide } from './calc/peptide.js'
 
 const form = document.querySelector('.c-form')
@@ -45,6 +47,16 @@ if (form && page) {
         result.values[node.getAttribute('data-calc-duration')],
         durationWords,
       )
+    }
+    const prepNote = page.querySelector('[data-prep-note]')
+    if (prepNote && result.input?.preparation) {
+      const substance = findSubstance(String(result.input.substance))
+      const chosen = substance.preparations.find((item) => item.key === result.input.preparation)
+      prepNote.textContent = chosen?.note?.[lang] ?? ''
+    }
+    const routeNote = page.querySelector('[data-route-note]')
+    if (routeNote && result.input?.route) {
+      routeNote.textContent = routeNotes[result.input.route] ?? ''
     }
     for (const node of page.querySelectorAll('[data-calc-text]')) {
       const field = result.substance?.[node.getAttribute('data-calc-text')]
@@ -130,13 +142,67 @@ if (form && page) {
     copyButton.hidden = true
   }
 
+  const lang = document.documentElement.lang === 'de' ? 'de' : 'en'
+  const routeLabels = JSON.parse(page.getAttribute('data-route-labels') ?? '{}')
+  const routeNotes = JSON.parse(page.getAttribute('data-route-notes') ?? '{}')
+  const pickerField = page.querySelector('[data-picker]')
+  const substanceSelect = page.querySelector('[data-picker-select]')
+  const preparationSelect = page.querySelector('[data-preparation]')
+  const routeSelect = page.querySelector('[data-route]')
+  const preparationField = page.querySelector('[data-field="preparation"]')
+  const routeField = page.querySelector('[data-field="route"]')
+
+  const fillOptions = (select, options, keep) => {
+    if (!select) return
+    const previous = select.value
+    select.textContent = ''
+    for (const option of options) {
+      const node = document.createElement('option')
+      node.value = option.value
+      node.textContent = option.label
+      select.append(node)
+    }
+    if (keep && options.some((option) => option.value === previous)) select.value = previous
+    else if (options[0]) select.value = options[0].value
+  }
+
+  const syncDependent = (keep) => {
+    if (!substanceSelect) return
+    const substance = findSubstance(substanceSelect.value)
+    fillOptions(
+      preparationSelect,
+      substance.preparations.map((item) => ({ value: item.key, label: item[lang] })),
+      keep,
+    )
+    fillOptions(
+      routeSelect,
+      substance.routes.map((key) => ({ value: key, label: routeLabels[key] ?? key })),
+      keep,
+    )
+    if (preparationField) preparationField.hidden = substance.preparations.length === 0
+    if (routeField) routeField.hidden = substance.routes.length < 2
+  }
+
   let timer = 0
   const schedule = () => {
     clearTimeout(timer)
     timer = setTimeout(apply, 120)
   }
+  if (pickerField) {
+    const labels = JSON.parse(page.getAttribute('data-picker-labels') ?? '{}')
+    const picker = createPicker(pickerField, labels, () => {
+      syncDependent(false)
+      apply()
+      picker?.sync()
+    })
+    syncDependent(true)
+  }
+
   form.addEventListener('input', schedule)
-  form.addEventListener('change', apply)
+  form.addEventListener('change', (event) => {
+    if (event.target === substanceSelect) syncDependent(false)
+    apply()
+  })
   form.addEventListener('submit', (event) => {
     event.preventDefault()
     apply()

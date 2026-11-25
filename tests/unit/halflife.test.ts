@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { formatDuration } from '../../shared/calc/format.js'
 import { computeHalflife, normalizeHalflife, substanceOptions } from '../../shared/calc/halflife.js'
-import { SUBSTANCE_CATEGORIES, SUBSTANCES, findSubstance } from '../../shared/calc/substances.js'
+import {
+  ROUTES,
+  SUBSTANCE_CATEGORIES,
+  SUBSTANCES,
+  findSubstance,
+} from '../../shared/calc/substances.js'
 
 const WORDS = { minutes: 'Minuten', hours: 'Stunden', days: 'Tage' }
 
@@ -97,6 +102,12 @@ describe('substance data', () => {
         expect(typeof item.note[field], item.key).toBe('string')
       }
       expect(SUBSTANCE_CATEGORIES, item.key).toContain(item.category)
+      expect(item.routes.length, item.key).toBeGreaterThan(0)
+      for (const route of item.routes) expect(ROUTES, item.key).toContain(route)
+      for (const preparation of item.preparations) {
+        expect(preparation.de, item.key).toBeTruthy()
+        expect(preparation.en, item.key).toBeTruthy()
+      }
       if (item.model) {
         expect(item.half, item.key).toBeGreaterThan(0)
         expect(item.low, item.key).toBeLessThanOrEqual(item.half)
@@ -117,11 +128,75 @@ describe('substance data', () => {
     expect(normalizeHalflife({ substance: 'lsd', unit: 'mg' }).unit).toBe('mg')
   })
 
+  it('scales the dose to the active content of a preparation', () => {
+    const { values, flags } = computeHalflife({
+      substance: 'ashwagandha',
+      dose: '600',
+      preparation: 'sensoril',
+      hours: '0',
+    })
+    expect(values.share).toBe(10)
+    expect(values.activeDose).toBeCloseTo(60, 6)
+    expect(values.remaining).toBeCloseTo(60, 6)
+    expect(flags.hasShare).toBe(true)
+    expect(flags.hasPreparations).toBe(true)
+    const plain = computeHalflife({ substance: 'caffeine', dose: '600' })
+    expect(plain.values.activeDose).toBe(600)
+    expect(plain.flags.hasShare).toBe(false)
+    expect(plain.flags.hasPreparations).toBe(false)
+  })
+
+  it('falls back to the first preparation and an allowed route', () => {
+    expect(normalizeHalflife({ substance: 'methylphenidate' }).preparation).toBe('ir')
+    expect(
+      normalizeHalflife({ substance: 'methylphenidate', preparation: 'nope' }).preparation,
+    ).toBe('ir')
+    expect(normalizeHalflife({ substance: 'nicotine', route: 'inhaled' }).route).toBe('inhaled')
+    expect(normalizeHalflife({ substance: 'nicotine', route: 'intravenous' }).route).toBe('inhaled')
+    expect(normalizeHalflife({ substance: 'caffeine', route: 'inhaled' }).route).toBe('oral')
+    expect(computeHalflife({ substance: 'nicotine' }).flags.hasRoutes).toBe(true)
+    expect(computeHalflife({ substance: 'caffeine' }).flags.hasRoutes).toBe(false)
+  })
+
   it('keeps the keys unique and finds them again', () => {
     const keys = SUBSTANCES.map((item) => item.key)
     expect(new Set(keys).size).toBe(keys.length)
     expect(findSubstance('nicotine').key).toBe('nicotine')
     expect(findSubstance('nope').key).toBe('caffeine')
+  })
+
+  it('covers the requested substances', () => {
+    const keys = SUBSTANCES.map((item) => item.key)
+    for (const key of [
+      'melatonin',
+      'lsd',
+      'psilocybin',
+      'sertraline',
+      'fluoxetine',
+      'escitalopram',
+      'citalopram',
+      'lithium',
+      'methyleneblue',
+      'stjohnswort',
+      'piracetam',
+      'phenylpiracetam',
+      'aniracetam',
+      'oxiracetam',
+      'nefiracetam',
+      'huperzinea',
+      'nattokinase',
+      'ashwagandha',
+      'ltheanine',
+      'somatropin',
+      'tadalafil',
+      'sildenafil',
+    ]) {
+      expect(keys, key).toContain(key)
+    }
+    expect(findSubstance('lithium').preparations.map((item) => item.key)).toEqual([
+      'carbonate',
+      'orotate',
+    ])
   })
 
   it('offers every substance under a category in the chosen language', () => {
