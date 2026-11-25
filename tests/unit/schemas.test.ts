@@ -83,6 +83,19 @@ describe('themeCss', () => {
     expect(light.startsWith(':root:root{--wsl-bg:#f4f2ee')).toBe(true)
     expect(light).toContain('color-scheme:light')
     const auto = themeCss(themeSchema.parse({ scheme: 'auto' }))
-    expect(auto).toContain('@media (prefers-color-scheme: light){:root:root{--wsl-bg:#f4f2ee')
+    expect(auto).toContain(
+      '@media (prefers-color-scheme: light){:root:root:not([data-theme]){--wsl-bg:#f4f2ee',
+    )
+    expect(auto).toContain(":root:root[data-theme='light']{--wsl-bg:#f4f2ee")
+    expect(auto).toContain(":root:root[data-theme='dark']{--wsl-bg:#0d0e10")
+  })
+
+  it('carries both palettes only when a switch or the automatic scheme needs them', async () => {
+    const { themeCss } = await import('../../shared/schemas/theme')
+    const fixed = themeCss(themeSchema.parse({ scheme: 'dark' }))
+    expect(fixed).not.toContain('data-theme')
+    const withSwitch = themeCss(themeSchema.parse({ scheme: 'dark', toggle: true }))
+    expect(withSwitch).toContain(":root:root[data-theme='light']")
+    expect(withSwitch).toContain(":root:root[data-theme='dark']")
   })
 })
