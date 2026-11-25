@@ -9,6 +9,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - References page: a public GitHub repository of Markdown source lists is synced once a day and on request and shown at a configurable address with redirecting aliases, with search, type and topic filters, evidence levels per claim, linked source numbers and a changelog per entry
 - Admin view for the references repository with sync status and notes on incomplete entries
 - Own icons for nasal spray, powder and round tablets, German search terms in the icon picker
+- Calorie calculator and peptide calculator as their own subpages under a configurable address, computed on the server and updated in the browser while typing
+- Short links can redirect to an address entered by hand instead of a link saved on the page
 
 ### Changed
 
@@ -21,8 +23,11 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- Publishing could leave out a setting or block edit typed moments earlier
+- A scrollable table could not be reached with the keyboard
 - The icon picker requested the icon index from a wrong address and listed no icons
-- Dependency advisories in glob, minimatch, esbuild and zod
+- Dependency advisories in glob, minimatch, esbuild, zod and node-forge
+- The development server did not start with @nuxt/cli 4.0.1
 
 ## [1.0.0] - 2026-10-30
 

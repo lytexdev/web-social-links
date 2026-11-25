@@ -76,6 +76,16 @@ Each file starts with front matter (`title`, `published` as `YYYY-MM-DD`, `topic
 
 The overview searches titles, topics and claims, filters by type and topic and works without JavaScript; a small same origin script filters while typing. Entries show the evidence level of each claim as text with a coloured marker, link every source number to its source and set no cookies. Visits to the references pages are not counted as page views.
 
+## Calculators
+
+Admin, Calculators serves two calculators under a configurable address, by default `/rechner` with `/rechner/kalorien` and `/rechner/peptide`. Each one has its own title, introduction and visibility, which go live with the next publish.
+
+The calorie calculator derives the basal rate from Mifflin-St Jeor, or from Katch-McArdle over the fat free mass as soon as a body fat value is entered, adds daily activity through the PAL factor and sport through the MET value, and shows the total, target values and the calculation.
+
+The peptide calculator turns the peptide in the vial, the solvent and the amount to draw into units on a U-100 or U-40 syringe, draws the syringe, says how far a vial goes, warns when the amount falls outside the readable range of the scale, and lists other solvent amounts.
+
+Both compute on the server from the query string, so they work without JavaScript and every result has an address that can be shared. A same origin module recomputes while typing and keeps the address in step. The arithmetic lives once in `shared/calc`, which the server imports and the browser loads, so the two sides cannot drift apart.
+
 ## What it collects
 
 Public pages set no cookies and do not touch storage on the device. Counting happens on the server:
