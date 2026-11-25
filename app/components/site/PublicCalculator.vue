@@ -6,9 +6,10 @@ defineProps<{ model: CalculatorPageModel }>()
 
 <template>
   <div class="p-document r-page c-wide">
-    <a :href="model.indexHref ?? '/'" class="p-back">{{
-      model.indexHref ? model.labels.common.all : model.labels.common.home
-    }}</a>
+    <a :href="model.indexHref ?? '/'" class="p-back">
+      <span aria-hidden="true" v-html="model.icons.back" />
+      {{ model.indexHref ? model.labels.common.all : model.labels.common.home }}
+    </a>
     <main
       id="main"
       class="c-page"
@@ -35,5 +36,6 @@ defineProps<{ model: CalculatorPageModel }>()
       </aside>
     </main>
     <PublicFooter :footer="model.footer" :text="model.text" />
+    <PublicToTop :label="model.text.toTop" :icon="model.icons.top" />
   </div>
 </template>

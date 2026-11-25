@@ -101,6 +101,7 @@ export interface PublicText {
   skip: string
   legalNav: string
   preview: string
+  toTop: string
 }
 
 export interface ChromeModel {
@@ -115,7 +116,7 @@ export interface ChromeModel {
   rowStyle: 'hairline' | 'outlined' | 'filled'
   profileAlign: 'left' | 'center'
   text: PublicText
-  icons: { arrow: string; copy: string; chevron: string }
+  icons: { arrow: string; copy: string; chevron: string; back: string; top: string }
   footer: {
     notices: string[]
     note: string

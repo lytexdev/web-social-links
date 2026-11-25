@@ -22,7 +22,9 @@ const numbers = {
 
 <template>
   <div class="p-document r-page">
-    <a :href="model.basePath" class="p-back">{{ labels.all }}</a>
+    <a :href="model.basePath" class="p-back"
+      ><span aria-hidden="true" v-html="model.icons.back" />{{ labels.all }}</a
+    >
     <main id="main" class="r-doc">
       <header class="r-hero">
         <p class="r-kicker">
@@ -158,5 +160,6 @@ const numbers = {
       </aside>
     </main>
     <PublicFooter :footer="model.footer" :text="model.text" />
+    <PublicToTop :label="model.text.toTop" :icon="model.icons.top" />
   </div>
 </template>

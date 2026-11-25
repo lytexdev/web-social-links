@@ -17,100 +17,102 @@ function format(template: string, values: Record<string, string>): string {
 
 <template>
   <div class="c-grid">
-    <fieldset class="c-fieldset">
-      <legend class="p-label">{{ model.labels.common.inputs }}</legend>
-      <div class="c-fields">
-        <p class="c-field">
-          <label for="c-vial">{{ t.vial }}</label>
-          <input
-            id="c-vial"
-            class="c-input"
-            type="number"
-            name="vial"
-            inputmode="decimal"
-            aria-describedby="c-vial-hint"
-            :min="fields.vial.min"
-            :max="fields.vial.max"
-            :step="fields.vial.step"
-            :value="model.form.vial"
-          />
-          <span id="c-vial-hint" class="c-hint">{{ t.vialHint }}</span>
-        </p>
-        <p class="c-field">
-          <label for="c-solvent">{{ t.solvent }}</label>
-          <input
-            id="c-solvent"
-            class="c-input"
-            type="number"
-            name="solvent"
-            inputmode="decimal"
-            aria-describedby="c-solvent-hint"
-            :min="fields.solvent.min"
-            :max="fields.solvent.max"
-            :step="fields.solvent.step"
-            :value="model.form.solvent"
-          />
-          <span id="c-solvent-hint" class="c-hint">{{ t.solventHint }}</span>
-        </p>
-        <p class="c-field">
-          <label for="c-dose">{{ t.dose }}</label>
-          <span class="c-pair">
+    <div class="c-inputs">
+      <fieldset class="c-fieldset">
+        <legend class="p-label">{{ model.labels.common.inputs }}</legend>
+        <div class="c-fields">
+          <p class="c-field">
+            <label for="c-vial">{{ t.vial }}</label>
             <input
-              id="c-dose"
+              id="c-vial"
               class="c-input"
               type="number"
-              name="dose"
+              name="vial"
               inputmode="decimal"
-              :min="fields.dose.min"
-              :max="fields.dose.max"
-              :step="fields.dose.step"
-              :value="model.form.dose"
+              aria-describedby="c-vial-hint"
+              :min="fields.vial.min"
+              :max="fields.vial.max"
+              :step="fields.vial.step"
+              :value="model.form.vial"
             />
-            <select name="unit" class="c-input c-unit" :aria-label="t.unit">
-              <option
-                v-for="item in doseUnits"
-                :key="item"
-                :value="item"
-                :selected="model.form.unit === item"
-              >
-                {{ t.units[item] }}
-              </option>
-            </select>
-          </span>
-        </p>
-        <p class="c-field">
-          <label for="c-scale">{{ t.syringe }}</label>
-          <span class="c-pair">
-            <select id="c-scale" name="scale" class="c-input" aria-describedby="c-scale-hint">
-              <option
-                v-for="item in scales"
-                :key="item.key"
-                :value="item.key"
-                :selected="model.form.scale === item.key"
-              >
-                {{ t.scales[item.key] }}
-              </option>
-            </select>
-            <select name="size" class="c-input" :aria-label="t.size">
-              <option
-                v-for="item in model.sizes"
-                :key="item.value"
-                :value="item.value"
-                :selected="Number(model.form.size) === item.value"
-              >
-                {{
-                  format(t.sizeOption, {
-                    ml: item.label,
-                    units: String(item.value * Number(model.form.unitsPerMl ?? 100)),
-                  })
-                }}
-              </option>
-            </select>
-          </span>
-          <span id="c-scale-hint" class="c-hint">{{ t.scaleHint }}</span>
-        </p>
-      </div>
-    </fieldset>
+            <span id="c-vial-hint" class="c-hint">{{ t.vialHint }}</span>
+          </p>
+          <p class="c-field">
+            <label for="c-solvent">{{ t.solvent }}</label>
+            <input
+              id="c-solvent"
+              class="c-input"
+              type="number"
+              name="solvent"
+              inputmode="decimal"
+              aria-describedby="c-solvent-hint"
+              :min="fields.solvent.min"
+              :max="fields.solvent.max"
+              :step="fields.solvent.step"
+              :value="model.form.solvent"
+            />
+            <span id="c-solvent-hint" class="c-hint">{{ t.solventHint }}</span>
+          </p>
+          <p class="c-field">
+            <label for="c-dose">{{ t.dose }}</label>
+            <span class="c-pair">
+              <input
+                id="c-dose"
+                class="c-input"
+                type="number"
+                name="dose"
+                inputmode="decimal"
+                :min="fields.dose.min"
+                :max="fields.dose.max"
+                :step="fields.dose.step"
+                :value="model.form.dose"
+              />
+              <select name="unit" class="c-input c-unit" :aria-label="t.unit">
+                <option
+                  v-for="item in doseUnits"
+                  :key="item"
+                  :value="item"
+                  :selected="model.form.unit === item"
+                >
+                  {{ t.units[item] }}
+                </option>
+              </select>
+            </span>
+          </p>
+          <p class="c-field c-field-wide">
+            <label for="c-scale">{{ t.syringe }}</label>
+            <span class="c-pair">
+              <select id="c-scale" name="scale" class="c-input" aria-describedby="c-scale-hint">
+                <option
+                  v-for="item in scales"
+                  :key="item.key"
+                  :value="item.key"
+                  :selected="model.form.scale === item.key"
+                >
+                  {{ t.scales[item.key] }}
+                </option>
+              </select>
+              <select name="size" class="c-input" :aria-label="t.size">
+                <option
+                  v-for="item in model.sizes"
+                  :key="item.value"
+                  :value="item.value"
+                  :selected="Number(model.form.size) === item.value"
+                >
+                  {{
+                    format(t.sizeOption, {
+                      ml: item.label,
+                      units: String(item.value * Number(model.form.unitsPerMl ?? 100)),
+                    })
+                  }}
+                </option>
+              </select>
+            </span>
+            <span id="c-scale-hint" class="c-hint">{{ t.scaleHint }}</span>
+          </p>
+        </div>
+      </fieldset>
+    </div>
 
     <section class="c-result" aria-live="polite">
       <h2 class="p-label c-result-label">{{ model.labels.common.result }}</h2>

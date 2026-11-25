@@ -14,6 +14,7 @@ export const PUBLIC_TEXT: Record<'de' | 'en', Omit<PublicText, 'affiliate'>> = {
     skip: 'Zum Inhalt springen',
     legalNav: 'Rechtliches',
     preview: 'Vorschau',
+    toTop: 'Nach oben',
   },
   en: {
     newTab: 'opens in a new tab',
@@ -28,5 +29,6 @@ export const PUBLIC_TEXT: Record<'de' | 'en', Omit<PublicText, 'affiliate'>> = {
     skip: 'Skip to content',
     legalNav: 'Legal',
     preview: 'Preview',
+    toTop: 'Back to top',
   },
 }

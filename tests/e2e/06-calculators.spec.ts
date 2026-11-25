@@ -99,3 +99,16 @@ test('the decay calculator refuses to model THC', async ({ page }) => {
   await page.selectOption('#c-substance', 'caffeine')
   await expect(page.locator('[data-calc="percent"]')).toBeVisible()
 })
+
+test('every public page offers a back link and a way to the top', async ({ page }) => {
+  await page.goto('/rechner/wirkstoff-abbau')
+  const back = page.getByRole('link', { name: 'Alle Rechner' })
+  await expect(back.locator('svg')).toBeVisible()
+  const top = page.locator('[data-to-top]')
+  await expect(top).toBeHidden()
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+  await expect(top).toBeVisible()
+  await expect(top).toHaveAccessibleName('Nach oben')
+  await top.click()
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(100)
+})

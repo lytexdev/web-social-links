@@ -6,7 +6,9 @@ defineProps<{ model: ReferenceIndexModel }>()
 
 <template>
   <div class="p-document r-page">
-    <a href="/" class="p-back">{{ model.labels.home }}</a>
+    <a href="/" class="p-back"
+      ><span aria-hidden="true" v-html="model.icons.back" />{{ model.labels.home }}</a
+    >
     <main id="main" class="r-index">
       <header class="r-hero">
         <h1 class="p-name r-heading">{{ model.heading }}</h1>
@@ -42,8 +44,11 @@ defineProps<{ model: ReferenceIndexModel }>()
             >
           </li>
         </ul>
-        <div v-if="model.topics.length > 0" class="r-topic-block">
-          <p class="r-filter-label">{{ model.labels.topics }}</p>
+        <details v-if="model.topics.length > 0" class="r-topic-block" :open="!!model.query.topic">
+          <summary class="r-filter-label">
+            {{ model.labels.topics }}
+            <span aria-hidden="true" v-html="model.icons.chevron" />
+          </summary>
           <ul class="r-chips">
             <li v-for="item in model.topics" :key="item.name">
               <a class="r-chip" :href="item.href" :aria-current="item.active ? 'true' : undefined"
@@ -51,7 +56,7 @@ defineProps<{ model: ReferenceIndexModel }>()
               >
             </li>
           </ul>
-          <details v-if="model.moreTopics.length > 0" class="r-more">
+          <details v-if="model.moreTopics.length > 0" class="r-more r-more-inner">
             <summary>{{ model.labels.moreTopics }} ({{ model.moreTopics.length }})</summary>
             <ul class="r-chips">
               <li v-for="item in model.moreTopics" :key="item.name">
@@ -61,7 +66,7 @@ defineProps<{ model: ReferenceIndexModel }>()
               </li>
             </ul>
           </details>
-        </div>
+        </details>
       </nav>
 
       <div class="r-status">
@@ -110,5 +115,6 @@ defineProps<{ model: ReferenceIndexModel }>()
       </section>
     </main>
     <PublicFooter :footer="model.footer" :text="model.text" />
+    <PublicToTop :label="model.text.toTop" :icon="model.icons.top" />
   </div>
 </template>

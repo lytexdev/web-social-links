@@ -6,11 +6,14 @@ defineProps<{ model: DocumentModel }>()
 
 <template>
   <div class="p-document">
-    <a href="/" class="p-back">{{ model.text.back }}</a>
+    <a href="/" class="p-back"
+      ><span aria-hidden="true" v-html="model.icons.back" />{{ model.text.back }}</a
+    >
     <main id="main">
       <h1 class="p-name mt-4">{{ model.heading }}</h1>
       <div class="p-prose mt-8" v-html="model.html" />
     </main>
     <PublicFooter :footer="model.footer" :text="model.text" />
+    <PublicToTop :label="model.text.toTop" :icon="model.icons.top" />
   </div>
 </template>

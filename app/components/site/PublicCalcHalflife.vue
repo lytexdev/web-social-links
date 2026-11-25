@@ -21,87 +21,89 @@ const range = computed(() => {
 
 <template>
   <div class="c-grid">
-    <fieldset class="c-fieldset">
-      <legend class="p-label">{{ model.labels.common.inputs }}</legend>
-      <div class="c-fields">
-        <p class="c-field c-field-wide">
-          <label for="c-substance">{{ t.substance }}</label>
-          <select id="c-substance" name="substance" class="c-input">
-            <optgroup
-              v-for="group in model.substances"
-              :key="group.category"
-              :label="t.categories[group.category]"
-            >
-              <option
-                v-for="item in group.items"
-                :key="item.key"
-                :value="item.key"
-                :selected="model.form.substance === item.key"
+    <div class="c-inputs">
+      <fieldset class="c-fieldset">
+        <legend class="p-label">{{ model.labels.common.inputs }}</legend>
+        <div class="c-fields">
+          <p class="c-field c-field-wide">
+            <label for="c-substance">{{ t.substance }}</label>
+            <select id="c-substance" name="substance" class="c-input">
+              <optgroup
+                v-for="group in model.substances"
+                :key="group.category"
+                :label="t.categories[group.category]"
               >
-                {{ item.label }}
-              </option>
-            </optgroup>
-          </select>
-        </p>
-        <p class="c-field">
-          <label for="c-dose">{{ t.dose }}</label>
-          <span class="c-pair">
+                <option
+                  v-for="item in group.items"
+                  :key="item.key"
+                  :value="item.key"
+                  :selected="model.form.substance === item.key"
+                >
+                  {{ item.label }}
+                </option>
+              </optgroup>
+            </select>
+          </p>
+          <p class="c-field">
+            <label for="c-dose">{{ t.dose }}</label>
+            <span class="c-pair">
+              <input
+                id="c-dose"
+                class="c-input"
+                type="number"
+                name="dose"
+                inputmode="decimal"
+                :min="fields.dose.min"
+                :max="fields.dose.max"
+                :step="fields.dose.step"
+                :value="model.form.dose"
+              />
+              <select name="unit" class="c-input c-unit" :aria-label="t.unit">
+                <option
+                  v-for="item in doseUnits"
+                  :key="item"
+                  :value="item"
+                  :selected="model.form.unit === item"
+                >
+                  {{ item }}
+                </option>
+              </select>
+            </span>
+          </p>
+          <p class="c-field">
+            <label for="c-hours">{{ t.hours }}</label>
             <input
-              id="c-dose"
+              id="c-hours"
               class="c-input"
               type="number"
-              name="dose"
+              name="hours"
               inputmode="decimal"
-              :min="fields.dose.min"
-              :max="fields.dose.max"
-              :step="fields.dose.step"
-              :value="model.form.dose"
+              aria-describedby="c-hours-hint"
+              :min="fields.hours.min"
+              :max="fields.hours.max"
+              :step="fields.hours.step"
+              :value="model.form.hours"
             />
-            <select name="unit" class="c-input c-unit" :aria-label="t.unit">
-              <option
-                v-for="item in doseUnits"
-                :key="item"
-                :value="item"
-                :selected="model.form.unit === item"
-              >
-                {{ item }}
-              </option>
-            </select>
-          </span>
-        </p>
-        <p class="c-field">
-          <label for="c-hours">{{ t.hours }}</label>
-          <input
-            id="c-hours"
-            class="c-input"
-            type="number"
-            name="hours"
-            inputmode="decimal"
-            aria-describedby="c-hours-hint"
-            :min="fields.hours.min"
-            :max="fields.hours.max"
-            :step="fields.hours.step"
-            :value="model.form.hours"
-          />
-          <span id="c-hours-hint" class="c-hint">{{ t.hoursHint }}</span>
-        </p>
-        <p class="c-field c-field-wide">
-          <label for="c-interval">{{ t.interval }}</label>
-          <input
-            id="c-interval"
-            class="c-input"
-            type="number"
-            name="interval"
-            inputmode="numeric"
-            aria-describedby="c-interval-hint"
-            :min="0"
-            :max="fields.interval.max"
-            :value="model.form.interval === '0' ? '' : model.form.interval"
-          />
-          <span id="c-interval-hint" class="c-hint">{{ t.intervalHint }}</span>
-        </p>
-      </div>
-    </fieldset>
+            <span id="c-hours-hint" class="c-hint">{{ t.hoursHint }}</span>
+          </p>
+          <p class="c-field c-field-wide">
+            <label for="c-interval">{{ t.interval }}</label>
+            <input
+              id="c-interval"
+              class="c-input"
+              type="number"
+              name="interval"
+              inputmode="numeric"
+              aria-describedby="c-interval-hint"
+              :min="0"
+              :max="fields.interval.max"
+              :value="model.form.interval === '0' ? '' : model.form.interval"
+            />
+            <span id="c-interval-hint" class="c-hint">{{ t.intervalHint }}</span>
+          </p>
+        </div>
+      </fieldset>
+    </div>
 
     <section class="c-result" aria-live="polite">
       <h2 class="p-label c-result-label">{{ model.labels.common.result }}</h2>

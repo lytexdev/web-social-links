@@ -16,3 +16,21 @@ document.querySelectorAll('[data-copy]').forEach((button) => {
     }, 2000)
   })
 })
+
+const toTop = document.querySelector('[data-to-top]')
+if (toTop) {
+  const sync = () => {
+    toTop.hidden = window.scrollY < 400
+  }
+  sync()
+  window.addEventListener('scroll', sync, { passive: true })
+  toTop.addEventListener('click', (event) => {
+    event.preventDefault()
+    const target = document.getElementById('main')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (target) {
+      target.setAttribute('tabindex', '-1')
+      target.focus({ preventScroll: true })
+    }
+  })
+}

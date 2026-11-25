@@ -119,6 +119,8 @@ export function chrome(snapshot: Snapshot, origin: string, path: string): Chrome
       arrow: snapshot.icons['tabler:arrow-up-right'] ?? '',
       copy: snapshot.icons['tabler:copy'] ?? '',
       chevron: snapshot.icons['tabler:chevron-down'] ?? '',
+      back: snapshot.icons['tabler:arrow-left'] ?? '',
+      top: snapshot.icons['tabler:arrow-up'] ?? '',
     },
     footer: {
       notices: settings.footer.notices.filter(Boolean),

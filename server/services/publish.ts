@@ -24,7 +24,13 @@ import { listPages, replaceAllPages } from './pages'
 import { getAllSettings, writeSetting } from './settings'
 import { findSlug } from './sources'
 
-export const UI_ICONS = ['tabler:arrow-up-right', 'tabler:copy', 'tabler:chevron-down'] as const
+export const UI_ICONS = [
+  'tabler:arrow-up-right',
+  'tabler:copy',
+  'tabler:chevron-down',
+  'tabler:arrow-left',
+  'tabler:arrow-up',
+] as const
 
 export interface SnapshotMedia extends MediaVariants {
   width: number

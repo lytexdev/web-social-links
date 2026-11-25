@@ -607,9 +607,21 @@
   display: inline-flex;
   min-height: 2.75rem;
   align-items: center;
+  gap: 0.375rem;
   color: var(--wsl-muted);
   font-size: 0.875rem;
   font-weight: 600;
+}
+
+.p-back svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 150ms ease-out;
+}
+
+.p-back:hover svg,
+.p-back:focus-visible svg {
+  transform: translateX(-2px);
 }
 
 .p-document {
@@ -1293,17 +1305,12 @@
   gap: 1.5rem;
 }
 
-@media (min-width: 56rem) {
-  .c-grid {
+@media (min-width: 46rem) {
+  .c-inputs {
+    display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: start;
-  }
-
-  .c-result {
-    grid-column: 2;
-    grid-row: 1 / span 3;
-    position: sticky;
-    top: 1.5rem;
+    gap: 1.5rem;
   }
 }
 
@@ -1315,7 +1322,7 @@
 
 .c-fields {
   display: grid;
-  gap: 1rem;
+  gap: 1rem 1.25rem;
   margin-top: 0.75rem;
 }
 
@@ -1368,8 +1375,16 @@
 }
 
 .c-unit {
-  width: 6rem;
+  width: 7rem;
   flex: none;
+}
+
+.c-pair > .c-input:first-child {
+  flex: 1 1 7rem;
+}
+
+.c-pair > select.c-input {
+  min-width: 6.5rem;
 }
 
 .c-hint {
@@ -1388,6 +1403,7 @@
 
 .c-result {
   min-width: 0;
+  margin-top: 1.5rem;
   padding: 1.25rem;
   border: 1px solid var(--wsl-line);
   border-radius: var(--wsl-radius);
@@ -1485,7 +1501,9 @@
 }
 
 .c-syringe svg {
+  display: block;
   width: 100%;
+  max-width: 30rem;
   height: auto;
 }
 
@@ -1515,7 +1533,9 @@
 }
 
 .c-chart svg {
+  display: block;
   width: 100%;
+  max-width: 34rem;
   height: auto;
 }
 
@@ -1544,6 +1564,15 @@
 .c-reference {
   display: grid;
   gap: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.c-reference + .c-hint {
+  margin-top: 0.75rem;
+}
+
+.c-hint + .c-hint {
+  margin-top: 0.5rem;
 }
 
 .c-reference dt {
@@ -1702,6 +1731,62 @@
   .p-tag,
   .p-tile,
   .p-ticket {
+    border-color: CanvasText;
+  }
+}
+
+.p-top {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 20;
+  display: inline-flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--wsl-line);
+  border-radius: 999px;
+  background: var(--wsl-surface);
+  color: var(--wsl-text);
+  text-decoration: none;
+  animation: p-fade 200ms ease-out both;
+}
+
+.p-top[hidden] {
+  display: none;
+}
+
+.p-top:hover {
+  border-color: var(--wsl-accent);
+  color: var(--wsl-accent);
+}
+
+.p-top svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@keyframes p-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-top {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .p-top {
     border-color: CanvasText;
   }
 }

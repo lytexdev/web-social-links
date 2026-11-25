@@ -6,7 +6,9 @@ defineProps<{ model: CalculatorIndexModel }>()
 
 <template>
   <div class="p-document r-page">
-    <a href="/" class="p-back">{{ model.labels.common.home }}</a>
+    <a href="/" class="p-back"
+      ><span aria-hidden="true" v-html="model.icons.back" />{{ model.labels.common.home }}</a
+    >
     <main id="main">
       <header class="r-hero">
         <h1 class="r-title">{{ model.heading }}</h1>
@@ -25,5 +27,6 @@ defineProps<{ model: CalculatorIndexModel }>()
       </ol>
     </main>
     <PublicFooter :footer="model.footer" :text="model.text" />
+    <PublicToTop :label="model.text.toTop" :icon="model.icons.top" />
   </div>
 </template>

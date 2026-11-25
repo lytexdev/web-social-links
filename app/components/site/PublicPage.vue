@@ -41,5 +41,6 @@ defineProps<{ model: PageModel }>()
       <PublicBlock v-for="block in model.blocks" :key="block.id" :block="block" :chrome="model" />
     </main>
     <PublicFooter :footer="model.footer" :text="model.text" />
+    <PublicToTop :label="model.text.toTop" :icon="model.icons.top" />
   </div>
 </template>

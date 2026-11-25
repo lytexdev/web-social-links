@@ -230,7 +230,7 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       remainingOf: 'von {dose} {unit}',
       percent: 'Anteil der Dosis',
       halfLife: 'Halbwertszeit',
-      halfRange: 'Übliche Spanne {low} bis {high} Stunden',
+      halfRange: 'übliche Spanne {low} bis {high} h',
       halfHint:
         'Die Rechnung nimmt den typischen Wert für Erwachsene. Leber, Nieren, Gene, andere Medikamente und das Alter verschieben ihn.',
       times: 'Zeitpunkte',
@@ -256,7 +256,7 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       substanceNote: 'Besonderheit',
       noModel:
         'Für diesen Stoff lässt sich keine einzelne Halbwertszeit angeben, deshalb rechnet die Seite hier nicht. Die Angaben darunter gelten weiter.',
-      duration: { minutes: 'Minuten', hours: 'Stunden', days: 'Tage' },
+      duration: { minutes: 'min.', hours: 'h', days: 'Tage' },
       stepHalf: 'Der Rechner nimmt die typische Halbwertszeit von {half} Stunden.',
       stepRemaining: 'Verbleibende Menge: Dosis mal 0,5 hoch (Zeit geteilt durch Halbwertszeit).',
       stepTimes:
@@ -407,7 +407,7 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       remainingOf: 'of {dose} {unit}',
       percent: 'Share of the dose',
       halfLife: 'Half-life',
-      halfRange: 'Usual range {low} to {high} hours',
+      halfRange: 'usual range {low} to {high} h',
       halfHint:
         'The calculation uses the typical adult value. Liver, kidneys, genes, other medicines and age shift it.',
       times: 'Points in time',
@@ -433,7 +433,7 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       substanceNote: 'Worth knowing',
       noModel:
         'No single half-life applies to this substance, so the page does not compute here. The information below still applies.',
-      duration: { minutes: 'minutes', hours: 'hours', days: 'days' },
+      duration: { minutes: 'min', hours: 'h', days: 'days' },
       stepHalf: 'The calculator uses the typical half-life of {half} hours.',
       stepRemaining:
         'Remaining amount: dose times 0.5 to the power of (time divided by half-life).',
