@@ -50,9 +50,32 @@ type Computed = {
   substance?: Substance
   curve?: string
   marker?: { x: number; y: number }
+  effectCurve?: string
+  effectMarker?: { x: number; y: number }
+  material?: { kind: string; active: string } | null
+  unit?: string
+  doseShare?: number
+  dots?: string[]
 }
 
-const DURATION_KEYS = ['t50', 't25', 't10', 't97', 'axis1', 'axis2', 'axis3', 'axis4']
+const DURATION_KEYS = [
+  't50',
+  't25',
+  't10',
+  't97',
+  'axis1',
+  'axis2',
+  'axis3',
+  'axis4',
+  'onset',
+  'peak',
+  'effectEnd',
+  'soberIn',
+  'eAxis1',
+  'eAxis2',
+  'eAxis3',
+  'eAxis4',
+]
 
 export function calculatorSettings(snapshot: Snapshot) {
   return calculatorsSchema.parse(snapshot.settings.calculators ?? {})
@@ -91,6 +114,10 @@ function compute(key: CalculatorKey, query: Record<string, unknown>): Computed {
       unit: read('unit'),
       hours: read('hours'),
       interval: read('interval'),
+      amount: read('amount'),
+      potency: read('potency'),
+      weight: read('weight'),
+      sex: read('sex'),
     }) as Computed
   }
   return computePeptide({
@@ -150,6 +177,8 @@ export function buildCalculator(
     values: formatValues(locale, result.values, digitsFor(key)) as Record<string, string>,
     flags: result.flags,
     fill: result.fill ?? 0,
+    doseShare: result.doseShare ?? 0,
+    sprayDots: result.dots ?? [],
     alternatives: (result.alternatives ?? []).map((item, index) => ({
       index,
       solvent: decimal(item.solvent, base.lang),
@@ -192,6 +221,15 @@ export function buildCalculator(
     },
     curve: result.curve ?? '',
     marker: result.marker ?? { x: 0, y: 0 },
+    effectCurve: result.effectCurve ?? '',
+    effectMarker: result.effectMarker ?? { x: 0, y: 0 },
+    material: result.material
+      ? {
+          amount: labels.halflife.material.amount[result.material.kind] ?? '',
+          potency: labels.halflife.material.potency[result.material.active] ?? '',
+        }
+      : null,
+    doseUnit: result.unit ?? String(result.input.unit ?? ''),
     sizes: SYRINGE_SIZES.map((value: number) => ({
       value,
       label: decimal(value, base.lang),

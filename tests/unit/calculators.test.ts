@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { computeCalories, normalizeCalories } from '../../shared/calc/calories.js'
 import { formatValues } from '../../shared/calc/format.js'
-import { computePeptide, normalizePeptide } from '../../shared/calc/peptide.js'
+import { computePeptide, normalizePeptide, sprayDots } from '../../shared/calc/peptide.js'
 import { calculatorsSchema } from '../../shared/schemas/settings'
 
 const MAN = {
@@ -153,6 +153,23 @@ describe('peptide calculator', () => {
     })
     expect(smaller.values.spraysPerDose).toBe(2)
     expect(computePeptide({ vial: '5', solvent: '2', dose: '250' }).flags.isSyringe).toBe(true)
+  })
+
+  it('marks the dose share of the bottle and one dot per actuation', () => {
+    const { doseShare, dots } = computePeptide({
+      vial: '5',
+      solvent: '2',
+      dose: '250',
+      mode: 'spray',
+      spray: '100',
+    })
+    expect(doseShare).toBeCloseTo(0.05, 6)
+    expect(dots.filter((level) => level === 'full')).toHaveLength(1)
+    expect(dots[1]).toBe('empty')
+    expect(sprayDots(2.5).slice(0, 4)).toEqual(['full', 'full', 'part', 'empty'])
+    expect(sprayDots(0)).toHaveLength(12)
+    expect(sprayDots(99).every((level) => level === 'full')).toBe(true)
+    expect(computePeptide({ vial: '5', solvent: '2', dose: '5000' }).doseShare).toBe(1)
   })
 
   it('falls back to defaults and accepts a comma as the decimal mark', () => {

@@ -153,11 +153,52 @@ describe('calculator pages', () => {
     expect(repeated.text).not.toMatch(/data-calc-when="repeated" hidden/)
   })
 
-  it('does not compute for a substance without a single half-life', async () => {
-    const result = await page('/rechner/wirkstoff-abbau?substance=thc&hours=24')
-    expect(result.text).toContain('keine einzelne Halbwertszeit')
-    expect(result.text).toContain('THC-COOH')
+  it('shows the course of the effect but no decay curve without a measured half-life', async () => {
+    const result = await page('/rechner/wirkstoff-abbau?substance=hhc&route=smoked&hours=0.2')
+    expect(result.text).toContain('keine Halbwertszeit gemessen')
+    expect(result.text).toContain('HHC-COOH')
     expect(result.text).toMatch(/data-calc-when="model" hidden/)
+    expect(result.text).not.toMatch(/data-calc-when="hasEffect" hidden/)
+    expect(reading(result.text, 'effectNow')).toBe('100')
+  })
+
+  it('turns cannabis flower into milligrams and separates the routes', async () => {
+    const smoked = await page(
+      '/rechner/wirkstoff-abbau?substance=thc&route=smoked&amount=0.5&potency=20&hours=0',
+    )
+    expect(smoked.status).toBe(200)
+    expect(smoked.text).toContain('Menge Blüten in Gramm')
+    expect(smoked.text).toContain('THC-Gehalt in Prozent')
+    expect(reading(smoked.text, 'content')).toBe('100')
+    expect(reading(smoked.text, 'bio')).toBe('25')
+    expect(reading(smoked.text, 'absorbed')).toBe('25')
+    expect(smoked.text).toContain('class="c-chart c-chart-effect"')
+    expect(smoked.text).toContain('c-marked c-blood')
+    expect(smoked.text).toContain('c-marked c-urine')
+    const eaten = await page(
+      '/rechner/wirkstoff-abbau?substance=thc&route=oral&amount=0.5&potency=20&hours=0',
+    )
+    expect(reading(eaten.text, 'absorbed')).toBe('6')
+    expect(reading(eaten.text, 'half')).toBe('30')
+    const regular = await page(
+      '/rechner/wirkstoff-abbau?substance=thc&preparation=regular&hours=24',
+    )
+    expect(reading(regular.text, 'half')).toBe('120')
+  })
+
+  it('works out alcohol with the Widmark formula instead of a half-life', async () => {
+    const result = await page(
+      '/rechner/wirkstoff-abbau?substance=alcohol&amount=500&potency=5&weight=80&sex=male&hours=1',
+    )
+    expect(result.status).toBe(200)
+    expect(result.text).toContain('Getränkemenge in Milliliter')
+    expect(result.text).toContain('Körpergewicht in Kilogramm')
+    expect(reading(result.text, 'bac')).toBe('0,36')
+    expect(reading(result.text, 'remaining')).toBe('0,29')
+    expect(reading(result.text, 'rate')).toBe('0,15')
+    expect(result.text).toContain('Nachweis der Fahrtüchtigkeit')
+    expect(result.text).toMatch(/data-calc-when="!zero" hidden/)
+    expect(result.text).toMatch(/data-calc-when="hasEffect" hidden/)
   })
 
   it('answers unknown calculators with 404', async () => {

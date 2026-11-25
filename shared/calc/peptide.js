@@ -14,6 +14,15 @@ export const SYRINGE_SCALES = [
 ]
 export const SYRINGE_SIZES = [0.3, 0.5, 1]
 export const ALTERNATIVE_SOLVENTS = [0.5, 1, 2, 3, 5]
+export const SPRAY_DOTS = 12
+
+export function sprayDots(count) {
+  return Array.from({ length: SPRAY_DOTS }, (_, index) => {
+    const rest = (Number.isFinite(count) ? count : 0) - index
+    if (rest >= 1) return 'full'
+    return rest > 0.05 ? 'part' : 'empty'
+  })
+}
 
 export const PEPTIDE_DIGITS = {
   concentrationMgMl: 2,
@@ -119,5 +128,7 @@ export function computePeptide(raw) {
     },
     alternatives,
     fill: Math.max(0, Math.min(1, units / capacityUnits)),
+    doseShare: Math.max(0, Math.min(1, volumeMl / input.solvent)),
+    dots: sprayDots(values.spraysPerDose),
   }
 }

@@ -1,9 +1,9 @@
 import { CALORIES_DIGITS, computeCalories } from './calc/calories.js'
 import { formatDuration, formatNumber, formatValues } from './calc/format.js'
-import { HALFLIFE_DIGITS, computeHalflife } from './calc/halflife.js'
+import { HALFLIFE_DIGITS, computeHalflife, effectShare } from './calc/halflife.js'
 import { findSubstance } from './calc/substances.js'
 import { createPicker } from './picker.js'
-import { PEPTIDE_DIGITS, computePeptide } from './calc/peptide.js'
+import { PEPTIDE_DIGITS, computePeptide, sprayDots } from './calc/peptide.js'
 
 const form = document.querySelector('.c-form')
 const page = document.querySelector('[data-calculator]')
@@ -63,17 +63,49 @@ if (form && page) {
       const field = result.substance?.[node.getAttribute('data-calc-text')]
       if (field) node.textContent = field[document.documentElement.lang] ?? ''
     }
+    const curveOf = (series) => (series === 'effect' ? result.effectCurve : result.curve) ?? ''
+    const markerOf = (series) =>
+      (series === 'effect' ? result.effectMarker : result.marker) ?? { x: 0, y: 0 }
     for (const node of page.querySelectorAll('[data-calc-curve]')) {
-      node.setAttribute('points', result.curve ?? '')
+      node.setAttribute('points', curveOf(node.getAttribute('data-calc-curve')))
+    }
+    for (const node of page.querySelectorAll('[data-calc-area]')) {
+      const curve = curveOf(node.getAttribute('data-calc-area'))
+      node.setAttribute('points', curve ? `0,100 ${curve} 300,100` : '')
     }
     for (const node of page.querySelectorAll('[data-calc-marker]')) {
-      node.setAttribute('cx', String(result.marker?.x ?? 0))
-      node.setAttribute('cy', String(result.marker?.y ?? 0))
+      const marker = markerOf(node.getAttribute('data-calc-marker'))
+      node.setAttribute('cx', String(marker.x))
+      node.setAttribute('cy', String(marker.y))
+    }
+    if (result.unit) {
+      for (const node of page.querySelectorAll('[data-calc-unit]')) node.textContent = result.unit
+    }
+    if (result.material) {
+      for (const node of page.querySelectorAll('[data-label]')) {
+        const group = materialLabels[node.getAttribute('data-label')] ?? {}
+        const key =
+          node.getAttribute('data-label') === 'potency'
+            ? result.material.active
+            : result.material.kind
+        node.textContent = group[key] ?? node.textContent
+      }
     }
     for (const node of page.querySelectorAll('[data-calc-fill]')) {
       node.setAttribute('width', String(Math.round((result.fill ?? 0) * 240)))
     }
-    chartDraw()
+    for (const node of page.querySelectorAll('[data-calc-dose]')) {
+      node.setAttribute('height', String(Math.max(2, Math.round((result.doseShare ?? 0) * 57))))
+    }
+    if (kind === 'peptide') {
+      const levels = sprayDots(result.values.spraysPerDose)
+      for (const node of page.querySelectorAll('[data-dot]')) {
+        node.setAttribute('data-level', levels[Number(node.getAttribute('data-dot'))] ?? 'empty')
+      }
+      const sprayText = page.querySelector('[data-spray-text]')
+      if (sprayText) sprayText.textContent = `${sprayLabel}: ${values.spraysPerDose}`
+    }
+    for (const redraw of chartDraws) redraw()
     for (const row of page.querySelectorAll('[data-alt]')) {
       const alternative = (result.alternatives ?? [])[Number(row.getAttribute('data-alt'))]
       if (!alternative) continue
@@ -90,6 +122,7 @@ if (form && page) {
     }
   }
 
+  const sprayLabel = page.getAttribute('data-spray-label') ?? ''
   const tools = page.querySelector('[data-tools]')
   const remember = page.querySelector('[data-remember]')
   const copyButton = page.querySelector('[data-copy-url]')
@@ -147,6 +180,7 @@ if (form && page) {
   const lang = document.documentElement.lang === 'de' ? 'de' : 'en'
   const routeLabels = JSON.parse(page.getAttribute('data-route-labels') ?? '{}')
   const routeNotes = JSON.parse(page.getAttribute('data-route-notes') ?? '{}')
+  const materialLabels = JSON.parse(page.getAttribute('data-material-labels') ?? '{}')
   const pickerField = page.querySelector('[data-picker]')
   const substanceSelect = page.querySelector('[data-picker-select]')
   const preparationSelect = page.querySelector('[data-preparation]')
@@ -186,7 +220,7 @@ if (form && page) {
   }
 
   let latest = null
-  let chartDraw = () => {}
+  const chartDraws = []
   let timer = 0
   const schedule = () => {
     clearTimeout(timer)
@@ -202,27 +236,40 @@ if (form && page) {
     syncDependent(true)
   }
 
-  const chart = page.querySelector('[data-chart]')
-  if (chart) {
+  for (const chart of page.querySelectorAll('[data-chart]')) {
+    const series = chart.getAttribute('data-chart')
     const probe = chart.querySelector('[data-probe]')
     const probeLine = chart.querySelector('[data-probe-line]')
     const probeDot = chart.querySelector('[data-probe-dot]')
     const readout = chart.querySelector('[data-chart-readout]')
-    const template = page.getAttribute('data-chart-at') ?? ''
+    const template = page.getAttribute(series === 'effect' ? 'data-effect-at' : 'data-chart-at') ?? ''
     const hint = readout?.textContent ?? ''
     let fraction = -1
 
+    const available = () =>
+      series === 'effect' ? Boolean(latest?.flags.hasEffect) : Boolean(latest?.flags.model)
+
+    const shareAt = (hours) => {
+      if (series === 'effect') return effectShare(latest.effect, hours)
+      if (latest.flags.zero) {
+        const peak = latest.values.bac
+        if (peak <= 0) return 0
+        if (hours < 0.5) return hours / 0.5
+        return Math.max(0, peak - latest.values.rate * (hours - 0.5)) / peak
+      }
+      return 0.5 ** (hours / latest.values.half)
+    }
+
     const draw = () => {
       if (!probe || !probeLine || !probeDot || !readout) return
-      if (fraction < 0 || !latest?.flags.model) {
+      if (fraction < 0 || !available()) {
         probe.setAttribute('hidden', '')
         readout.textContent = hint
         return
       }
-      const half = latest.values.half
-      const span = latest.values.span
+      const span = series === 'effect' ? latest.values.effectSpan : latest.values.span
       const hours = fraction * span
-      const share = 0.5 ** (hours / half)
+      const share = shareAt(hours)
       probe.removeAttribute('hidden')
       probeLine.setAttribute('x1', String(fraction * 300))
       probeLine.setAttribute('x2', String(fraction * 300))
@@ -259,7 +306,7 @@ if (form && page) {
       fraction = -1
       draw()
     })
-    chartDraw = draw
+    chartDraws.push(draw)
   }
 
   form.addEventListener('input', schedule)

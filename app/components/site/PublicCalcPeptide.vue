@@ -177,6 +177,47 @@ function format(template: string, values: Record<string, string>): string {
         <figcaption class="c-hint">{{ t.scales[model.form.scale ?? 'u100'] }}</figcaption>
       </figure>
 
+      <figure class="c-spray" data-calc-when="isSpray" :hidden="!model.flags.isSpray">
+        <svg viewBox="0 0 220 150" role="img" :aria-label="t.sprayPicture">
+          <g class="c-plume" data-plume>
+            <circle cx="110" cy="26" r="3.5" />
+            <circle cx="96" cy="20" r="2.5" />
+            <circle cx="124" cy="20" r="2.5" />
+            <circle cx="110" cy="12" r="2" />
+          </g>
+          <rect x="100" y="32" width="20" height="14" rx="2" class="c-barrel" />
+          <rect x="88" y="46" width="44" height="16" rx="3" class="c-barrel" />
+          <rect x="70" y="62" width="80" height="78" rx="10" class="c-barrel" />
+          <rect x="75" y="78" width="70" height="57" rx="6" class="c-liquid" />
+          <rect
+            x="75"
+            y="78"
+            width="70"
+            :height="Math.max(2, Math.round(model.doseShare * 57))"
+            rx="3"
+            class="c-dose-slice"
+            data-calc-dose
+          />
+          <text x="160" y="84" class="c-scale-text">{{ t.sprayDose }}</text>
+          <text x="160" y="132" class="c-scale-text">{{ t.sprayVial }}</text>
+        </svg>
+        <figcaption class="c-hint">{{ t.sprayPictureHint }}</figcaption>
+      </figure>
+
+      <p class="c-dots" data-calc-when="isSpray" :hidden="!model.flags.isSpray">
+        <span class="sr-only" data-spray-text
+          >{{ t.drawSpray }}: {{ model.values.spraysPerDose }}</span
+        >
+        <span
+          v-for="(level, index) in model.sprayDots"
+          :key="index"
+          class="c-dot-spray"
+          :data-level="level"
+          :data-dot="index"
+          aria-hidden="true"
+        />
+      </p>
+
       <p class="p-notice" data-calc-when="overCapacity" :hidden="!model.flags.overCapacity">
         {{ t.overCapacity }}
       </p>

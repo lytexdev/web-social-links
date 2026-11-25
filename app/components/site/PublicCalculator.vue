@@ -17,7 +17,15 @@ defineProps<{ model: CalculatorPageModel }>()
       :data-duration-words="JSON.stringify(model.labels.halflife.duration)"
       :data-route-labels="JSON.stringify(model.labels.halflife.routes)"
       :data-route-notes="JSON.stringify(model.labels.halflife.routeNotes)"
+      :data-spray-label="model.labels.peptide.drawSpray"
       :data-chart-at="model.labels.halflife.chartAt"
+      :data-effect-at="model.labels.halflife.effectChartAt"
+      :data-material-labels="
+        JSON.stringify({
+          amount: model.labels.halflife.material.amount,
+          potency: model.labels.halflife.material.potency,
+        })
+      "
       :data-picker-labels="
         JSON.stringify({
           search: model.labels.halflife.searchSubstance,

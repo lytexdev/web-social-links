@@ -812,6 +812,29 @@
   gap: 0.625rem;
 }
 
+.r-topic-block > summary {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.r-topic-block > summary::-webkit-details-marker {
+  display: none;
+}
+
+.r-topic-block > summary svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 150ms ease-out;
+}
+
+.r-topic-block[open] > summary svg {
+  transform: rotate(180deg);
+}
+
 .r-chips {
   display: flex;
   flex-wrap: wrap;
@@ -863,6 +886,18 @@
 
 .r-chip {
   white-space: nowrap;
+}
+
+.r-more > summary,
+.r-legend > summary,
+.c-steps > summary {
+  list-style: none;
+}
+
+.r-more > summary::-webkit-details-marker,
+.r-legend > summary::-webkit-details-marker,
+.c-steps > summary::-webkit-details-marker {
+  display: none;
 }
 
 .r-more > summary {
@@ -1633,6 +1668,21 @@
   border-top: 1px solid var(--wsl-line);
 }
 
+@media (min-width: 46rem) {
+  .c-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem 2.5rem;
+  }
+
+  .c-result {
+    padding: 1.5rem;
+  }
+}
+
+.c-first-label {
+  margin-top: 0;
+}
+
 .c-stats > div {
   display: flex;
   flex-wrap: wrap;
@@ -1682,7 +1732,7 @@
 .c-syringe svg {
   display: block;
   width: 100%;
-  max-width: 30rem;
+  max-width: 36rem;
   height: auto;
 }
 
@@ -1690,6 +1740,87 @@
   fill: none;
   stroke: var(--wsl-muted);
   stroke-width: 2;
+}
+
+.c-spray {
+  margin: 1rem 0;
+}
+
+.c-spray svg {
+  display: block;
+  width: 100%;
+  max-width: 16rem;
+  height: auto;
+}
+
+.c-liquid {
+  fill: color-mix(in oklab, var(--wsl-accent) 24%, transparent);
+}
+
+.c-plume circle {
+  fill: color-mix(in oklab, var(--wsl-accent) 70%, var(--wsl-text));
+  opacity: 0;
+  animation: c-puff 2400ms var(--wsl-ease-out) infinite;
+}
+
+.c-plume circle:nth-child(2) {
+  animation-delay: 300ms;
+}
+
+.c-plume circle:nth-child(3) {
+  animation-delay: 600ms;
+}
+
+.c-plume circle:nth-child(4) {
+  animation-delay: 900ms;
+}
+
+@keyframes c-puff {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.6);
+  }
+
+  30% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(1.3);
+  }
+}
+
+.c-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.c-dot-spray {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid color-mix(in oklab, var(--wsl-accent) 60%, var(--wsl-line));
+  border-radius: 999px;
+  transition: background-color 180ms var(--wsl-ease-out);
+}
+
+.c-dot-spray[data-level='full'] {
+  background: var(--wsl-accent);
+}
+
+.c-dot-spray[data-level='part'] {
+  background: color-mix(in oklab, var(--wsl-accent) 45%, transparent);
+}
+
+.c-dot-spray[data-level='empty'] {
+  display: none;
+}
+
+.c-dose-slice {
+  fill: var(--wsl-accent);
+  transition: height 200ms var(--wsl-ease-out);
 }
 
 .c-fill {
@@ -1763,6 +1894,16 @@
   .c-curve,
   .c-combo-list {
     animation: none;
+  }
+
+  .c-plume circle {
+    opacity: 0.7;
+    animation: none;
+  }
+
+  .c-dot-spray,
+  .c-dose-slice {
+    transition: none;
   }
 
   .c-fill,
@@ -1845,7 +1986,6 @@
 .c-chart svg {
   display: block;
   width: 100%;
-  max-width: 34rem;
   height: auto;
 }
 
@@ -1859,10 +1999,35 @@
 }
 
 .c-curve {
+  --c-series: var(--wsl-accent);
   fill: none;
-  stroke: var(--wsl-accent);
+  stroke: var(--c-series);
   stroke-width: 2.5;
+  stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.c-area {
+  --c-series: var(--wsl-accent);
+  fill: color-mix(in oklab, var(--c-series) 16%, transparent);
+  stroke: none;
+}
+
+.c-chart-effect .c-curve,
+.c-chart-effect .c-area {
+  --c-series: color-mix(in oklab, #6e9bf5 82%, var(--wsl-text));
+}
+
+.c-chart-effect .c-marker {
+  fill: color-mix(in oklab, #6e9bf5 82%, var(--wsl-text));
+}
+
+.c-chart-effect .c-probe-dot {
+  stroke: color-mix(in oklab, #6e9bf5 82%, var(--wsl-text));
+}
+
+.c-hero-effect {
+  color: color-mix(in oklab, #6e9bf5 82%, var(--wsl-text));
 }
 
 .c-marker {
@@ -1897,6 +2062,37 @@
   margin-top: 0.125rem;
   font-size: 0.9375rem;
   line-height: 1.5;
+}
+
+.c-marked {
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid color-mix(in oklab, var(--c-hue) 70%, var(--wsl-line));
+  border-radius: 0 var(--wsl-radius) var(--wsl-radius) 0;
+  background: color-mix(in oklab, var(--c-hue) 10%, transparent);
+}
+
+.c-marked dt {
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
+  color: color-mix(in oklab, var(--c-hue) 72%, var(--wsl-text));
+}
+
+.c-marked dt::before {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--c-hue) 80%, var(--wsl-text));
+  content: '';
+}
+
+.c-blood {
+  --c-hue: #e5534b;
+}
+
+.c-urine {
+  --c-hue: #d4a72c;
 }
 
 .c-stats-plain {

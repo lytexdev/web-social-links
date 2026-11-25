@@ -269,6 +269,8 @@ export interface CalculatorPageModel extends ChromeModel {
   values: Record<string, string>
   flags: Record<string, boolean>
   fill: number
+  doseShare: number
+  sprayDots: string[]
   alternatives: Array<{
     index: number
     solvent: string
@@ -291,6 +293,10 @@ export interface CalculatorPageModel extends ChromeModel {
   }
   curve: string
   marker: { x: number; y: number }
+  effectCurve: string
+  effectMarker: { x: number; y: number }
+  material: { amount: string; potency: string } | null
+  doseUnit: string
   contentHtml: string
   disclaimer: string
 }

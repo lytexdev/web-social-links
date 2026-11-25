@@ -64,6 +64,36 @@ export interface CalculatorText {
     routes: Record<string, string>
     routeHint: string
     routeNotes: Record<string, string>
+    material: {
+      amount: Record<string, string>
+      potency: Record<string, string>
+      content: string
+      contentHint: string
+      bio: string
+      absorbed: string
+      absorbedHint: string
+    }
+    weight: string
+    weightHint: string
+    sex: string
+    sexes: Record<string, string>
+    effectTitle: string
+    effectChart: string
+    effectChartHint: string
+    effectChartAt: string
+    effectNow: string
+    onset: string
+    peak: string
+    effectEnd: string
+    effectHint: string
+    decayTitle: string
+    bac: string
+    rate: string
+    rateUnit: string
+    soberIn: string
+    zeroHint: string
+    stepZero: string
+    stepMaterial: string
     active: string
     preparationNote: string
     categories: Record<string, string>
@@ -113,6 +143,10 @@ export interface CalculatorText {
     modes: Record<string, string>
     sprayVolume: string
     sprayVolumeHint: string
+    sprayPicture: string
+    sprayPictureHint: string
+    sprayDose: string
+    sprayVial: string
     sprays: string
     drawSpray: string
     perSpray: string
@@ -246,6 +280,8 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         sublingual: 'Sublingual, unter der Zunge',
         buccal: 'Bukkal, in der Wange',
         inhaled: 'Inhaliert',
+        smoked: 'Geraucht',
+        vaporized: 'Verdampft',
         intranasal: 'Intranasal, über die Nase',
         transdermal: 'Transdermal, über die Haut',
         subcutaneous: 'Subkutan, unter die Haut',
@@ -270,8 +306,58 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
           'Wirkungseintritt nach etwa 15 bis 30 Minuten, die Aufnahme ist langsamer und gleichmäßiger als in den Muskel.',
         intramuscular:
           'Wirkungseintritt nach etwa 10 bis 20 Minuten, schneller als unter die Haut.',
+        smoked:
+          'Wirkungseintritt nach Sekunden bis wenigen Minuten. Beim Verbrennen geht ein Teil des Wirkstoffs verloren.',
+        vaporized:
+          'Wirkungseintritt nach Sekunden bis wenigen Minuten. Beim Verdampfen kommt etwas mehr an als beim Rauchen, weil weniger verbrennt.',
         intravenous: 'Sofort vollständig im Blut, ohne Aufnahmephase.',
       },
+      material: {
+        amount: {
+          flower: 'Menge Blüten in Gramm',
+          powder: 'Menge Blattpulver in Gramm',
+          drink: 'Getränkemenge in Milliliter',
+        },
+        potency: {
+          thc: 'THC-Gehalt in Prozent',
+          cbd: 'CBD-Gehalt in Prozent',
+          hhc: 'HHC-Gehalt in Prozent',
+          mitragynine: 'Mitragynin-Gehalt in Prozent',
+          alcohol: 'Alkoholgehalt in Volumenprozent',
+        },
+        content: 'Enthaltener Wirkstoff',
+        contentHint: 'Menge mal Gehalt. Das ist die Menge im Material, nicht die Menge im Blut.',
+        bio: 'Bioverfügbarkeit',
+        absorbed: 'Davon im Blut',
+        absorbedHint:
+          'Nur ein Teil des Wirkstoffs gelangt in den Blutkreislauf. Wie groß dieser Teil ist, hängt vor allem von der Einnahmeart ab und schwankt von Mensch zu Mensch erheblich. Die Rechnung nimmt den typischen Wert aus der Literatur.',
+      },
+      weight: 'Körpergewicht in Kilogramm',
+      weightHint: 'Wird für die Verteilung im Körperwasser gebraucht.',
+      sex: 'Biologisches Geschlecht',
+      sexes: { male: 'Männlich', female: 'Weiblich' },
+      effectTitle: 'Wirkverlauf',
+      effectChart: 'Wirkverlauf mit der aktuellen Stunde als Punkt',
+      effectChartHint:
+        'Fahre über die Kurve oder tippe sie an, um einen Zeitpunkt abzulesen. Mit den Pfeiltasten geht es ebenso.',
+      effectChartAt: 'Nach {time}: {percent} Prozent der stärksten Wirkung',
+      effectNow: 'Wirkung jetzt',
+      onset: 'Wirkungseintritt',
+      peak: 'Stärkste Wirkung',
+      effectEnd: 'Wirkung abgeklungen',
+      effectHint:
+        'Die Kurve ist ein Modell aus Wirkungseintritt, Maximum und Dauer und zeigt die Stärke im Verhältnis zum eigenen Höchstwert, nicht die gemessene Menge im Blut. Je nach Person, Magenfüllung und Gewöhnung verschiebt sie sich.',
+      decayTitle: 'Abbau im Körper',
+      bac: 'Höchster Promillewert',
+      rate: 'Abbau pro Stunde',
+      rateUnit: '‰ pro Stunde',
+      soberIn: 'Bei null angekommen',
+      zeroHint:
+        'Alkohol hat keine Halbwertszeit: Der Spiegel sinkt um einen festen Betrag pro Stunde, nicht um einen Anteil. Die Rechnung folgt Widmark mit 0,15 Promille pro Stunde und ist eine grobe Schätzung, kein Nachweis der Fahrtüchtigkeit.',
+      stepZero:
+        'Promille: Gramm Alkohol geteilt durch (Körpergewicht mal Verteilungsfaktor). Danach 0,15 Promille Abzug pro Stunde.',
+      stepMaterial:
+        'Wirkstoff im Material: Menge mal Gehalt. Davon kommt der Anteil der Bioverfügbarkeit im Blut an.',
       active: 'Davon Wirkstoff',
       preparationNote: 'Zum Präparat',
       categories: {
@@ -329,7 +415,7 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       urine: 'Nachweis im Urin',
       substanceNote: 'Besonderheit',
       noModel:
-        'Für diesen Stoff lässt sich keine einzelne Halbwertszeit angeben, deshalb rechnet die Seite hier nicht. Die Angaben darunter gelten weiter.',
+        'Für diesen Stoff ist beim Menschen keine Halbwertszeit gemessen worden, deshalb zeigt die Seite keine Abbaukurve. Der Wirkverlauf und die Angaben darunter gelten weiter.',
       duration: { minutes: 'min.', hours: 'h', days: 'Tage' },
       stepHalf: 'Der Rechner nimmt die typische Halbwertszeit von {half} Stunden.',
       stepRemaining: 'Verbleibende Menge: Dosis mal 0,5 hoch (Zeit geteilt durch Halbwertszeit).',
@@ -346,6 +432,11 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       sprayVolume: 'Sprühstoß in Mikroliter',
       sprayVolumeHint:
         'Menge, die ein Hub abgibt. Übliche Nasenspraypumpen geben 50 bis 140 Mikroliter ab, der Wert steht meist auf der Pumpe.',
+      sprayPicture: 'Zeichnung einer Nasenspray-Flasche mit der Dosis als hellem Anteil',
+      sprayPictureHint:
+        'Der helle Anteil oben ist das Volumen einer Dosis, der dunkle Rest bleibt in der Flasche. Jeder Punkt darunter ist ein Hub.',
+      sprayDose: 'Dosis',
+      sprayVial: 'Flasche',
       sprays: 'Hübe',
       drawSpray: 'Zu sprühen',
       perSpray: 'Pro Hub',
@@ -484,6 +575,8 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         sublingual: 'Sublingual, under the tongue',
         buccal: 'Buccal, in the cheek',
         inhaled: 'Inhaled',
+        smoked: 'Smoked',
+        vaporized: 'Vaporized',
         intranasal: 'Intranasal, through the nose',
         transdermal: 'Transdermal, through the skin',
         subcutaneous: 'Subcutaneous, under the skin',
@@ -506,8 +599,57 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         subcutaneous:
           'Onset after about 15 to 30 minutes; uptake is slower and steadier than into the muscle.',
         intramuscular: 'Onset after about 10 to 20 minutes, faster than under the skin.',
+        smoked: 'Onset within seconds to a few minutes. Burning destroys part of the substance.',
+        vaporized:
+          'Onset within seconds to a few minutes. Vaporizing delivers somewhat more than smoking because less is burnt.',
         intravenous: 'Fully in the blood at once, with no uptake phase.',
       },
+      material: {
+        amount: {
+          flower: 'Amount of flower in grams',
+          powder: 'Amount of leaf powder in grams',
+          drink: 'Amount of drink in millilitres',
+        },
+        potency: {
+          thc: 'THC content in percent',
+          cbd: 'CBD content in percent',
+          hhc: 'HHC content in percent',
+          mitragynine: 'Mitragynine content in percent',
+          alcohol: 'Alcohol content in percent by volume',
+        },
+        content: 'Substance it contains',
+        contentHint: 'Amount times content. That is the amount in the material, not in the blood.',
+        bio: 'Bioavailability',
+        absorbed: 'Of that in the blood',
+        absorbedHint:
+          'Only part of the substance reaches the bloodstream. How large that part is depends mainly on the route and varies considerably between people. The calculation uses the typical value from the literature.',
+      },
+      weight: 'Body weight in kilograms',
+      weightHint: 'Needed for the distribution in body water.',
+      sex: 'Biological sex',
+      sexes: { male: 'Male', female: 'Female' },
+      effectTitle: 'Course of the effect',
+      effectChart: 'Course of the effect with the current hour as a dot',
+      effectChartHint:
+        'Move over the curve or tap it to read a point in time. The arrow keys work too.',
+      effectChartAt: 'After {time}: {percent} percent of the strongest effect',
+      effectNow: 'Effect now',
+      onset: 'Onset',
+      peak: 'Strongest effect',
+      effectEnd: 'Effect faded',
+      effectHint:
+        'The curve is a model built from onset, peak and duration and shows the strength relative to its own maximum, not the measured amount in the blood. It shifts with the person, the stomach and tolerance.',
+      decayTitle: 'Breakdown in the body',
+      bac: 'Highest level',
+      rate: 'Cleared per hour',
+      rateUnit: 'per mille per hour',
+      soberIn: 'Back at zero',
+      zeroHint:
+        'Alcohol has no half-life: the level falls by a fixed amount per hour, not by a share. The calculation follows Widmark with 0.15 per mille per hour and is a rough estimate, not proof of fitness to drive.',
+      stepZero:
+        'Per mille: grams of alcohol divided by (body weight times the distribution factor). After that 0.15 per mille is taken off per hour.',
+      stepMaterial:
+        'Substance in the material: amount times content. The share given by bioavailability reaches the blood.',
       active: 'Active content',
       preparationNote: 'About the preparation',
       categories: {
@@ -564,7 +706,7 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       urine: 'Detection in urine',
       substanceNote: 'Worth knowing',
       noModel:
-        'No single half-life applies to this substance, so the page does not compute here. The information below still applies.',
+        'No half-life has been measured in humans for this substance, so the page shows no decay curve. The course of the effect and the information below still apply.',
       duration: { minutes: 'min', hours: 'h', days: 'days' },
       stepHalf: 'The calculator uses the typical half-life of {half} hours.',
       stepRemaining:
@@ -582,6 +724,11 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       sprayVolume: 'Spray volume in microlitres',
       sprayVolumeHint:
         'Amount one actuation delivers. Common nasal pumps deliver 50 to 140 microlitres, and the figure is usually printed on the pump.',
+      sprayPicture: 'Drawing of a nasal spray bottle with the dose as the lighter part',
+      sprayPictureHint:
+        'The lighter part at the top is the volume of one dose, the darker rest stays in the bottle. Each dot below is one actuation.',
+      sprayDose: 'Dose',
+      sprayVial: 'Bottle',
       sprays: 'actuations',
       drawSpray: 'To spray',
       perSpray: 'Per actuation',
