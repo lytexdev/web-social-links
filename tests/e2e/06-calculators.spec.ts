@@ -203,3 +203,21 @@ test('the decay curve can be read by pointer and by keyboard', async ({ page }) 
   await expect(probe).toBeHidden()
   await expectAccessible(page)
 })
+
+test('the peptide calculator switches between syringe and nasal spray', async ({ page }) => {
+  await page.goto('/rechner/peptide?vial=5&solvent=2&dose=250')
+  await expect(page.locator('[data-calc="units"]').first()).toHaveText('10')
+  await expect(page.locator('.c-syringe')).toBeVisible()
+
+  await page.getByRole('radio', { name: 'Nasenspray' }).check()
+  await expect(page.locator('.c-syringe')).toBeHidden()
+  await expect(page.locator('[data-calc="spraysPerDose"]')).toHaveText('1')
+  await expect(page.locator('[data-calc="mcgPerSpray"]')).toHaveText('250')
+  await expect(page.locator('[data-calc="spraysPerVial"]')).toHaveText('20')
+  await page.fill('#c-spray', '50')
+  await expect(page.locator('[data-calc="spraysPerDose"]')).toHaveText('2')
+  await expectAccessible(page)
+
+  await page.getByRole('radio', { name: 'Spritze' }).check()
+  await expect(page.locator('.c-syringe')).toBeVisible()
+})

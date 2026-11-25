@@ -79,7 +79,7 @@ function format(template: string, values: Record<string, string>): string {
               </select>
             </span>
           </p>
-          <p class="c-field c-field-wide">
+          <p class="c-field c-field-wide" data-calc-when="isSyringe" :hidden="model.flags.isSpray">
             <label for="c-scale">{{ t.syringe }}</label>
             <span class="c-pair">
               <select id="c-scale" name="scale" class="c-input" aria-describedby="c-scale-hint">
@@ -110,19 +110,42 @@ function format(template: string, values: Record<string, string>): string {
             </span>
             <span id="c-scale-hint" class="c-hint">{{ t.scaleHint }}</span>
           </p>
+          <p class="c-field" data-calc-when="isSpray" :hidden="!model.flags.isSpray">
+            <label for="c-spray">{{ t.sprayVolume }}</label>
+            <input
+              id="c-spray"
+              class="c-input"
+              type="number"
+              name="spray"
+              inputmode="numeric"
+              aria-describedby="c-spray-hint"
+              :min="20"
+              :max="250"
+              :step="10"
+              :value="model.form.spray"
+            />
+            <span id="c-spray-hint" class="c-hint">{{ t.sprayVolumeHint }}</span>
+          </p>
         </div>
       </fieldset>
     </div>
 
     <section class="c-result" aria-live="polite">
       <h2 class="p-label c-result-label">{{ model.labels.common.result }}</h2>
-      <p class="c-hero-value">
+      <p class="c-hero-value" data-calc-when="isSyringe" :hidden="model.flags.isSpray">
         <span class="c-hero-number" data-calc="units">{{ model.values.units }}</span>
         <span class="c-hero-unit">{{ t.drawUnit }}</span>
         <span class="c-hero-name">{{ t.draw }}</span>
       </p>
+      <p class="c-hero-value" data-calc-when="isSpray" :hidden="!model.flags.isSpray">
+        <span class="c-hero-number" data-calc="spraysPerDose">{{
+          model.values.spraysPerDose
+        }}</span>
+        <span class="c-hero-unit">{{ t.sprays }}</span>
+        <span class="c-hero-name">{{ t.drawSpray }}</span>
+      </p>
 
-      <figure class="c-syringe">
+      <figure class="c-syringe" data-calc-when="isSyringe" :hidden="model.flags.isSpray">
         <svg viewBox="0 0 320 60" role="img" :aria-label="`${t.draw}: ${model.values.units}`">
           <rect x="24" y="16" width="240" height="24" rx="3" class="c-barrel" />
           <rect
@@ -174,11 +197,21 @@ function format(template: string, values: Record<string, string>): string {
             <span data-calc="volumeMl">{{ model.values.volumeMl }}</span> ml
           </dd>
         </div>
-        <div>
+        <div data-calc-when="isSyringe" :hidden="model.flags.isSpray">
           <dt>{{ t.mcgPerUnit }}</dt>
           <dd>
             <span data-calc="mcgPerUnit">{{ model.values.mcgPerUnit }}</span> mcg
           </dd>
+        </div>
+        <div data-calc-when="isSpray" :hidden="!model.flags.isSpray">
+          <dt>{{ t.perSpray }}</dt>
+          <dd>
+            <span data-calc="mcgPerSpray">{{ model.values.mcgPerSpray }}</span> mcg
+          </dd>
+        </div>
+        <div data-calc-when="isSpray" :hidden="!model.flags.isSpray">
+          <dt>{{ t.spraysPerVial }}</dt>
+          <dd data-calc="spraysPerVial">{{ model.values.spraysPerVial }}</dd>
         </div>
         <div>
           <dt>{{ t.coverage }}</dt>
@@ -254,7 +287,10 @@ function format(template: string, values: Record<string, string>): string {
               mcg/ml = <span data-calc="volumeMl">{{ model.values.volumeMl }}</span> ml</span
             >
           </li>
-          <li>
+          <li data-calc-when="isSpray" :hidden="!model.flags.isSpray">
+            {{ t.stepSpray }}
+          </li>
+          <li data-calc-when="isSyringe" :hidden="model.flags.isSpray">
             {{ format(t.stepUnits, { unitsPerMl: model.form.unitsPerMl ?? '' }) }}
             <span class="c-mono"
               ><span data-calc="volumeMl">{{ model.values.volumeMl }}</span> ml ×

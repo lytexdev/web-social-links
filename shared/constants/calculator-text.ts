@@ -109,6 +109,16 @@ export interface CalculatorText {
     disclaimer: string
   }
   peptide: {
+    mode: string
+    modes: Record<string, string>
+    sprayVolume: string
+    sprayVolumeHint: string
+    sprays: string
+    drawSpray: string
+    perSpray: string
+    spraysPerVial: string
+    columnSprays: string
+    stepSpray: string
     vial: string
     vialHint: string
     solvent: string
@@ -331,6 +341,18 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'Keine medizinische Beratung und kein Aufruf zum Konsum. Der Rechner schätzt rechnerisch, wie viel einer Dosis nach einer bestimmten Zeit noch im Körper ist, nach einem vereinfachten Modell mit einer einzigen Halbwertszeit. Er ersetzt keine Messung, sagt keine Wirkung voraus und kann weder Fahrtüchtigkeit noch das Ergebnis eines Tests zu einem bestimmten Zeitpunkt bestimmen.',
     },
     peptide: {
+      mode: 'Anwendung',
+      modes: { syringe: 'Spritze', spray: 'Nasenspray' },
+      sprayVolume: 'Sprühstoß in Mikroliter',
+      sprayVolumeHint:
+        'Menge, die ein Hub abgibt. Übliche Nasenspraypumpen geben 50 bis 140 Mikroliter ab, der Wert steht meist auf der Pumpe.',
+      sprays: 'Hübe',
+      drawSpray: 'Zu sprühen',
+      perSpray: 'Pro Hub',
+      spraysPerVial: 'Hübe pro Vial',
+      columnSprays: 'Hübe',
+      stepSpray:
+        'Konzentration mal Hubvolumen ergibt die Menge pro Hub, die Entnahmemenge geteilt durch diesen Wert die Zahl der Hübe.',
       vial: 'Peptidmenge im Vial in mg',
       vialHint: 'Steht auf dem Etikett, zum Beispiel 5 mg.',
       solvent: 'Lösungsmittel in ml',
@@ -555,6 +577,18 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'Not medical advice and not an encouragement to use anything. The calculator estimates arithmetically how much of a dose is still in the body after a given time, using a simplified model with a single half-life. It replaces no measurement, predicts no effect, and can determine neither fitness to drive nor the result of a test at a given moment.',
     },
     peptide: {
+      mode: 'Application',
+      modes: { syringe: 'Syringe', spray: 'Nasal spray' },
+      sprayVolume: 'Spray volume in microlitres',
+      sprayVolumeHint:
+        'Amount one actuation delivers. Common nasal pumps deliver 50 to 140 microlitres, and the figure is usually printed on the pump.',
+      sprays: 'actuations',
+      drawSpray: 'To spray',
+      perSpray: 'Per actuation',
+      spraysPerVial: 'Actuations per vial',
+      columnSprays: 'Actuations',
+      stepSpray:
+        'Concentration times the spray volume gives the amount per actuation, and the amount to draw divided by it gives the number of actuations.',
       vial: 'Peptide in the vial in mg',
       vialHint: 'Printed on the label, for example 5 mg.',
       solvent: 'Solvent in ml',

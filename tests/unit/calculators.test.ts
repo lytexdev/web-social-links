@@ -131,6 +131,30 @@ describe('peptide calculator', () => {
     expect(alternatives.map((item) => item.fits)).toEqual([false, false, false, false, true])
   })
 
+  it('turns the vial into actuations in nasal spray mode', () => {
+    const { values, flags } = computePeptide({
+      vial: '5',
+      solvent: '2',
+      dose: '250',
+      mode: 'spray',
+      spray: '100',
+    })
+    expect(flags.isSpray).toBe(true)
+    expect(flags.overCapacity).toBe(false)
+    expect(values.mcgPerSpray).toBe(250)
+    expect(values.spraysPerDose).toBe(1)
+    expect(values.spraysPerVial).toBe(20)
+    const smaller = computePeptide({
+      vial: '5',
+      solvent: '2',
+      dose: '250',
+      mode: 'spray',
+      spray: '50',
+    })
+    expect(smaller.values.spraysPerDose).toBe(2)
+    expect(computePeptide({ vial: '5', solvent: '2', dose: '250' }).flags.isSyringe).toBe(true)
+  })
+
   it('falls back to defaults and accepts a comma as the decimal mark', () => {
     expect(normalizePeptide({})).toMatchObject({ vial: 5, solvent: 2, dose: 250, unit: 'mcg' })
     expect(normalizePeptide({ solvent: '1,5' })).toMatchObject({ solvent: 1.5 })
@@ -138,6 +162,8 @@ describe('peptide calculator', () => {
       unitsPerMl: 40,
       size: 1,
     })
+    expect(normalizePeptide({ mode: 'nope' }).mode).toBe('syringe')
+    expect(normalizePeptide({ mode: 'spray' })).toMatchObject({ mode: 'spray', spray: 100 })
   })
 })
 

@@ -26,12 +26,26 @@ defineProps<{ model: CalculatorPageModel }>()
         })
       "
     >
-      <header class="r-hero">
-        <h1 class="r-title">{{ model.heading }}</h1>
-        <p v-if="model.intro" class="r-intro">{{ model.intro }}</p>
-      </header>
-
       <form class="c-form" method="get">
+        <header class="r-hero c-head">
+          <div class="c-head-text">
+            <h1 class="r-title">{{ model.heading }}</h1>
+            <p v-if="model.intro" class="r-intro">{{ model.intro }}</p>
+          </div>
+          <fieldset v-if="model.calculator === 'peptide'" class="c-modes">
+            <legend class="sr-only">{{ model.labels.peptide.mode }}</legend>
+            <label v-for="key in ['syringe', 'spray']" :key="key" class="c-mode">
+              <input
+                type="radio"
+                name="mode"
+                :value="key"
+                :checked="(model.form.mode ?? 'syringe') === key"
+              />
+              <span>{{ model.labels.peptide.modes[key] }}</span>
+            </label>
+          </fieldset>
+        </header>
+
         <PublicCalcCalories v-if="model.calculator === 'calories'" :model="model" />
         <PublicCalcHalflife v-else-if="model.calculator === 'halflife'" :model="model" />
         <PublicCalcPeptide v-else :model="model" />
