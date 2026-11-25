@@ -9,7 +9,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - References page: a public GitHub repository of Markdown source lists is synced once a day and on request and shown at a configurable address with redirecting aliases, with search, type and topic filters, evidence levels per claim, linked source numbers and a changelog per entry
 - Admin view for the references repository with sync status and notes on incomplete entries
 - Own icons for nasal spray, powder and round tablets, German search terms in the icon picker
-- Calorie calculator and peptide calculator as their own subpages under a configurable address, computed on the server and updated in the browser while typing
+- Calorie, peptide and substance decay calculators as their own subpages under a configurable address, computed on the server and updated in the browser while typing
 - Short links can redirect to an address entered by hand instead of a link saved on the page
 
 ### Changed

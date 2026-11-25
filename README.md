@@ -78,13 +78,15 @@ The overview searches titles, topics and claims, filters by type and topic and w
 
 ## Calculators
 
-Admin, Calculators serves two calculators under a configurable address, by default `/rechner` with `/rechner/kalorien` and `/rechner/peptide`. Each one has its own title, introduction and visibility, which go live with the next publish.
+Admin, Calculators serves three calculators under a configurable address, by default `/rechner` with `/rechner/kalorien`, `/rechner/peptide` and `/rechner/wirkstoff-abbau`. Each one has its own title, introduction and visibility, which go live with the next publish.
 
 The calorie calculator derives the basal rate from Mifflin-St Jeor, or from Katch-McArdle over the fat free mass as soon as a body fat value is entered, adds daily activity through the PAL factor and sport through the MET value, and shows the total, target values and the calculation.
 
 The peptide calculator turns the peptide in the vial, the solvent and the amount to draw into units on a U-100 or U-40 syringe, draws the syringe, says how far a vial goes, warns when the amount falls outside the readable range of the scale, and lists other solvent amounts.
 
-Both compute on the server from the query string, so they work without JavaScript and every result has an address that can be shared. A same origin module recomputes while typing and keeps the address in step. The arithmetic lives once in `shared/calc`, which the server imports and the browser loads, so the two sides cannot drift apart.
+The decay calculator estimates how much of a dose is still in the body after a given time, from the typical half-life of 27 everyday and prescription substances, and shows the curve, the points in time and the build-up on repeated intake. Beside the calculation it lists what the literature reports for the selected substance: half-life with its range, the main metabolites and the detection ranges in blood and urine. Those ranges are reference data and are not derived from the entered dose; the page states that they depend on dose, duration of use, test method and cut-off and cannot be converted to one person. Substances whose kinetics a single half-life does not describe, such as THC, carry the reference data without a calculation.
+
+All three compute on the server from the query string, so they work without JavaScript and every result has an address that can be shared. A same origin module recomputes while typing and keeps the address in step. The arithmetic lives once in `shared/calc`, which the server imports and the browser loads, so the two sides cannot drift apart.
 
 ## What it collects
 
