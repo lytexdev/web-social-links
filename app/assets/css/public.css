@@ -569,6 +569,48 @@
   border-radius: var(--wsl-radius);
 }
 
+.p-ticket-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--wsl-line);
+  border-radius: calc(var(--wsl-radius) * 0.75);
+  background: var(--wsl-surface);
+  color: var(--wsl-text);
+}
+
+.p-ticket-media[data-shape='image'] {
+  aspect-ratio: 16 / 9;
+}
+
+.p-ticket-media[data-shape='icon'] {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.p-ticket-media picture {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.p-ticket-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.p-ticket-media svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+a.p-ticket-media:hover {
+  border-color: var(--wsl-accent);
+  color: var(--wsl-accent);
+}
+
 .p-code {
   font-size: 1.5625rem;
   font-weight: 800;
@@ -2236,7 +2278,8 @@
 
   .p-tag,
   .p-tile,
-  .p-ticket {
+  .p-ticket,
+  .p-ticket-media {
     border-color: CanvasText;
   }
 }

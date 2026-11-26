@@ -23,6 +23,26 @@ describe('block schemas', () => {
     expect(result.success ? '' : result.error.issues[0]?.message).toBe('url_scheme')
   })
 
+  it('accepts an image or an icon on a discount code', () => {
+    const image = strictBlockData.code.safeParse({
+      label: 'Rabatt',
+      code: 'LYTEX',
+      image: 'mediaAAAAAAA',
+      url: 'https://shop.example.com',
+    })
+    expect(image.success).toBe(true)
+    const icon = strictBlockData.code.safeParse({
+      label: 'Rabatt',
+      code: 'LYTEX',
+      icon: 'tabler:discount',
+    })
+    expect(icon.success).toBe(true)
+    expect(draftBlockData.code.safeParse({}).data).toMatchObject({ image: null, icon: null })
+    expect(strictBlockData.code.safeParse({ label: 'a', code: 'b', image: 'nope' }).success).toBe(
+      false,
+    )
+  })
+
   it('limits field lengths', () => {
     expect(draftBlockData.link.safeParse({ title: 'x'.repeat(81) }).success).toBe(false)
   })

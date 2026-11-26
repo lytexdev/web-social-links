@@ -110,6 +110,10 @@ Design can put a switch for the light and dark theme at the top right of every p
 
 Settings can place up to six buttons at the top of the start page, each with an icon, a label and a target. A target is either a path on this site, such as the references page or a calculator, or a full address, which then opens in a new tab.
 
+## Discount codes
+
+A discount code block shows the code in large type and, where the browser allows it, a copy button. An optional image or icon sits above the code and carries the partner link, so the picture itself is clickable. If the block has a target address, every link in it writes the code to the clipboard before the page opens, so the code is ready to paste in the shop. Without JavaScript the links still work and the code stays selectable.
+
 ## Security
 
 See [SECURITY.md](SECURITY.md) for the threat model, the measures and the known limits. In short: Argon2id with rate limits and lockouts, optional TOTP, `__Host-` session cookies with CSRF tokens, a hash based CSP without `unsafe-inline`, magic byte checks and full re-encoding of uploads, no open redirects, and a supply chain policy in pnpm.

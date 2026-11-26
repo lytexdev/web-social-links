@@ -18,6 +18,7 @@ const SIZES = {
   thumbnail: '40px',
   tile: '(min-width: 960px) 300px, 50vw',
   image: '(min-width: 960px) 620px, 100vw',
+  ticket: '(min-width: 960px) 580px, 100vw',
 } as const
 
 export function isLive(
@@ -279,6 +280,10 @@ export function buildPageModel(
       case 'code': {
         if (data.affiliate) affiliate = true
         const url = String(data.url ?? '')
+        const imageId = typeof data.image === 'string' ? data.image : null
+        const image = imageId
+          ? imageView(snapshot.media[imageId], imageId, '', SIZES.ticket, 580)
+          : null
         blocks.push({
           kind: 'code',
           id: node.id,
@@ -286,6 +291,8 @@ export function buildPageModel(
           code: String(data.code ?? ''),
           partner: String(data.partner ?? ''),
           href: url ? goHref(node.id, options.source) : null,
+          image,
+          icon: image ? null : iconFor(snapshot, data.icon),
           affiliate: Boolean(data.affiliate),
         })
         break

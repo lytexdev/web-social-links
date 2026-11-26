@@ -149,6 +149,8 @@ export const deCms = {
     decorative: 'Rein dekorativ, kein Alternativtext nötig',
     caption: 'Bildunterschrift',
     code: 'Code',
+    codeCopyHint:
+      'Beim Klick auf Bild, Icon oder Button wird der Code in die Zwischenablage kopiert.',
     partner: 'Partner',
     tone: 'Art',
     tones: { info: 'Information', warning: 'Warnung' } as Record<string, string>,

@@ -22,6 +22,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - CBD, HHC, kratom, 4-PrO-MET, 1P-LSD, 1S-LSD, 1-BP-LSD, 1Fe-LSD and alcohol as further substances, alcohol with the Widmark formula and a fixed amount cleared per hour instead of a half-life
 - An illustrated nasal spray bottle with the dose as a share of the bottle and one dot per actuation
 - Detection in blood and in urine are marked in red and in yellow
+- A discount code block can carry an image or an icon that links to the partner, and every link in it copies the code to the clipboard before the shop opens
 
 ### Changed
 

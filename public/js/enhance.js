@@ -17,6 +17,23 @@ document.querySelectorAll('[data-copy]').forEach((button) => {
   })
 })
 
+document.querySelectorAll('[data-code-go]').forEach((link) => {
+  const id = link.getAttribute('data-code-go')
+  const source = document.getElementById(id)
+  if (!source || !navigator.clipboard) return
+  const note = document.querySelector(`[data-code-note="${id}"]`)
+  if (note) note.hidden = false
+  link.addEventListener('click', (event) => {
+    if (event.defaultPrevented || event.button !== 0) return
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    event.preventDefault()
+    const open = () => {
+      window.location.href = link.href
+    }
+    navigator.clipboard.writeText(source.textContent.trim()).then(open, open)
+  })
+})
+
 const toTop = document.querySelector('[data-to-top]')
 if (toTop) {
   const sync = () => {

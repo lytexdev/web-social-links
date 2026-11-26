@@ -435,17 +435,28 @@ const media = computed({
             @input="set('partner', ($event.target as HTMLInputElement).value)"
           />
         </AdminField>
-        <AdminField v-slot="field" :label="t.blockFields.url" :error="error('url')" optional>
+        <AdminField
+          v-slot="field"
+          :label="t.blockFields.url"
+          :hint="text('url') ? t.blockFields.codeCopyHint : undefined"
+          :error="error('url')"
+          optional
+        >
           <input
             :id="field.id"
             class="a-input"
             type="url"
             :value="text('url')"
             maxlength="2048"
+            :aria-describedby="field.describedby"
             :aria-invalid="field.invalid"
             @input="set('url', ($event.target as HTMLInputElement).value)"
           />
         </AdminField>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <MediaField v-model="image" :label="t.blockFields.image" />
+        <IconField v-if="!image" v-model="icon" :label="t.blockFields.icon" />
       </div>
       <label class="flex items-center gap-3 text-sm"
         ><input

@@ -101,6 +101,8 @@ function buildBlockSchemas(strict: boolean) {
       code: text(40, strict, true),
       partner: text(60, strict).default(''),
       url: optionalUrl(strict),
+      image: mediaIdField.nullable().default(null),
+      icon: iconField.nullable().default(null),
       affiliate: z.boolean().default(false),
     }),
     notice: z.object({

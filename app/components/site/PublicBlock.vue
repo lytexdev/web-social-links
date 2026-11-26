@@ -62,6 +62,7 @@ defineProps<{ block: BlockView; chrome: ChromeModel }>()
     <figcaption v-if="block.caption">{{ block.caption }}</figcaption>
   </figure>
   <div v-else-if="block.kind === 'code'" class="p-ticket">
+    <PublicTicketMedia v-if="block.image || block.icon" :code="block" />
     <p class="p-label">
       <span>{{ block.label }}</span>
       <span v-if="block.affiliate" class="p-tag">{{ chrome.text.affiliate }}</span>
@@ -79,11 +80,14 @@ defineProps<{ block: BlockView; chrome: ChromeModel }>()
         <span aria-hidden="true" class="contents" v-html="chrome.icons.copy" />
         <span>{{ chrome.text.copy }}</span>
       </button>
-      <a v-if="block.href" :href="block.href" class="p-button">
+      <a v-if="block.href" :href="block.href" class="p-button" :data-code-go="`c-${block.id}`">
         {{ block.partner || block.label }}
         <span aria-hidden="true" class="contents" v-html="chrome.icons.arrow" />
       </a>
     </div>
+    <p v-if="block.href" class="p-sub" hidden :data-code-note="`c-${block.id}`">
+      {{ chrome.text.copyOnOpen }}
+    </p>
     <p class="sr-only" aria-live="polite" :data-copy-status="`c-${block.id}`" />
   </div>
   <aside v-else-if="block.kind === 'notice'" class="p-notice" :data-tone="block.tone">

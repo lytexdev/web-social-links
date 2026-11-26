@@ -57,6 +57,7 @@ describe('publishing', () => {
   let hiddenLink: Block
   let futureLink: Block
   let textBlock: Block
+  let codeBlock: Block
 
   it('seeds legal pages, platform sources and their short links', async () => {
     const pages = (await admin.send('/api/admin/pages')).json<Array<{ slug: string }>>()
@@ -130,7 +131,13 @@ describe('publishing', () => {
     textBlock = await create('text', {
       markdown: 'Mehr in den [Quellen](https://github.com/example/sources) **jetzt**.',
     })
-    await create('code', { label: 'Rabattcode', code: 'LYTEX', partner: 'Partner' })
+    codeBlock = await create('code', {
+      label: 'Rabattcode',
+      code: 'LYTEX',
+      partner: 'Partner',
+      url: 'https://shop.example.com/rabatt',
+      icon: 'tabler:discount',
+    })
 
     const status = (await admin.send('/api/admin/publish/status')).json<{
       issues: unknown[]
@@ -169,6 +176,21 @@ describe('publishing', () => {
     expect(page.headers['x-robots-tag']).toBe(
       'noindex, nofollow, noarchive, nosnippet, noimageindex',
     )
+  })
+
+  it('links the discount code media and copies the code before the link opens', async () => {
+    const page = await rawRequest(server, '/', {
+      ip: '203.0.113.9',
+      headers: { accept: 'text/html' },
+    })
+    const html = page.text
+    const media = new RegExp(
+      `<a href="/go/${codeBlock.id}" class="p-ticket-media" data-shape="icon" aria-label="Partner" data-code-go="c-${codeBlock.id}">`,
+    )
+    expect(html).toMatch(media)
+    expect(html).toContain(`data-code-note="c-${codeBlock.id}"`)
+    expect(html).toContain('Der Code wird beim Öffnen des Links kopiert')
+    expect(html.match(new RegExp(`data-code-go="c-${codeBlock.id}"`, 'g'))).toHaveLength(2)
   })
 
   it('attributes a source slug to its platform', async () => {

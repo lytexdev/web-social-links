@@ -15,6 +15,13 @@ test('adds a discount code and republishes', async ({ page }) => {
   const editor = page.locator(`#${await toggle.getAttribute('aria-controls')}`)
   await editor.getByRole('textbox', { name: 'Beschriftung' }).fill('Rabattcode bei Partnern')
   await editor.getByRole('textbox', { name: 'Code', exact: true }).fill('LYTEX')
+  await editor.getByRole('textbox', { name: 'Ziel-Adresse' }).fill('https://shop.example.com/code')
+  await expect(editor.getByText(/Zwischenablage kopiert/)).toBeVisible()
+  await editor.getByRole('button', { name: 'Icon wählen' }).click()
+  const picker = page.getByRole('dialog', { name: 'Icon wählen' })
+  await picker.getByRole('searchbox', { name: 'Icons suchen' }).fill('discount')
+  await picker.getByRole('option', { name: 'discount', exact: true }).first().click()
+  await expect(picker).toBeHidden()
   await expect(page.getByRole('status').filter({ hasText: 'Entwurf gespeichert' })).toBeVisible()
   await page.getByRole('button', { name: 'Veröffentlichen' }).click()
   await page.getByRole('button', { name: 'Jetzt veröffentlichen' }).click()
@@ -94,8 +101,27 @@ test.describe('public pages', () => {
     const page = await context.newPage()
     await page.goto('/')
     await expect(page.getByRole('button', { name: 'Kopieren' })).toBeHidden()
+    await expect(page.getByText(/Der Code wird beim Öffnen/)).toBeHidden()
     await expect(page.getByText('LYTEX', { exact: true })).toBeVisible()
+    await expect(page.locator('a.p-ticket-media')).toBeVisible()
     await context.close()
+  })
+
+  test.describe('discount code', () => {
+    test.use({ permissions: ['clipboard-read', 'clipboard-write'] })
+
+    test('copies the code into the clipboard before the link opens', async ({ page }) => {
+      await page.route('**/go/**', (route) =>
+        route.fulfill({ status: 200, contentType: 'text/html', body: '<p>Shop</p>' }),
+      )
+      await page.goto('/')
+      await expect(page.getByText(/Der Code wird beim Öffnen/)).toBeVisible()
+      const media = page.locator('a.p-ticket-media')
+      await expect(media.locator('svg')).toBeVisible()
+      await media.click()
+      await expect(page).toHaveURL(/\/go\//)
+      expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('LYTEX')
+    })
   })
 
   test('renders a designed 404 without stack traces', async ({ page }) => {

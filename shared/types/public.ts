@@ -44,9 +44,22 @@ export interface TileView {
   newTab: boolean
 }
 
+export interface CodeView {
+  kind: 'code'
+  id: string
+  label: string
+  code: string
+  partner: string
+  href: string | null
+  image: ImageView | null
+  icon: string | null
+  affiliate: boolean
+}
+
 export type BlockView =
   | LinkView
   | TileView
+  | CodeView
   | {
       kind: 'group'
       id: string
@@ -67,15 +80,6 @@ export type BlockView =
       href: string | null
       newTab: boolean
     }
-  | {
-      kind: 'code'
-      id: string
-      label: string
-      code: string
-      partner: string
-      href: string | null
-      affiliate: boolean
-    }
   | { kind: 'notice'; id: string; title: string; html: string; tone: 'info' | 'warning' }
   | { kind: 'divider'; id: string }
   | { kind: 'spacer'; id: string; size: 'sm' | 'md' | 'lg' }
@@ -92,6 +96,7 @@ export interface PublicText {
   newTab: string
   copy: string
   copied: string
+  copyOnOpen: string
   channels: string
   imprint: string
   privacy: string

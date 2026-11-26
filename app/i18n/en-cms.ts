@@ -142,6 +142,7 @@ export const enCms: typeof deCms = {
     decorative: 'Purely decorative, no alternative text needed',
     caption: 'Caption',
     code: 'Code',
+    codeCopyHint: 'A click on the image, the icon or the button copies the code to the clipboard.',
     partner: 'Partner',
     tone: 'Kind',
     tones: { info: 'Information', warning: 'Warning' },
