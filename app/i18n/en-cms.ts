@@ -390,7 +390,7 @@ export const enCms: typeof deCms = {
     } as Record<string, string>,
   },
   calculators: {
-    title: 'Calculators',
+    title: 'Tools & Calculators',
     intro:
       'Calculators are their own subpages. They compute on the server, so they work without JavaScript, and update in the browser as you type. The address carries the input and can be shared.',
     base: 'Overview',

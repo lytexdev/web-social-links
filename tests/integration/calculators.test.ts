@@ -122,6 +122,24 @@ describe('calculator pages', () => {
     expect(result.text).toContain('class="c-fill" data-calc-fill')
   })
 
+  it('renders the nasal spray from the address alone', async () => {
+    const result = await page('/rechner/peptide?mode=spray&vial=5&solvent=2&dose=250&spray=100')
+    expect(reading(result.text, 'spraysPerDose')).toBe('1')
+    expect(reading(result.text, 'mcgPerSpray')).toBe('250')
+    expect(result.text).toContain('class="c-spray"')
+    expect(result.text).toContain('data-calc-dose')
+    expect(result.text).toMatch(/<figure class="c-syringe"[^>]*hidden/)
+  })
+
+  it('splits the input into numbered steps and offers a reset', async () => {
+    const result = await page('/rechner/wirkstoff-abbau?substance=caffeine&dose=200&hours=5')
+    expect(result.text).toContain('class="c-step-num"')
+    expect(result.text).toContain('<span class="sr-only">Schritt 1: </span>')
+    expect(result.text).toContain('>Wirkstoff</span>')
+    expect(result.text).toContain('href="/rechner/wirkstoff-abbau" class="p-button" data-reset')
+    expect(result.text).toContain('class="c-detect"')
+  })
+
   it('falls back to defaults for empty or impossible input', async () => {
     const empty = await page('/rechner/kalorien')
     expect(empty.text).toContain('value="30"')

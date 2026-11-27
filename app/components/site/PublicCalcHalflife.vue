@@ -32,181 +32,179 @@ const range = computed(() => {
 <template>
   <div class="c-grid">
     <div class="c-inputs">
-      <fieldset class="c-fieldset">
-        <legend class="p-label">{{ model.labels.common.inputs }}</legend>
-        <div class="c-fields">
-          <p class="c-field c-field-wide" data-picker>
-            <label for="c-substance">{{ t.substance }}</label>
-            <select id="c-substance" name="substance" class="c-input" data-picker-select>
-              <optgroup
-                v-for="group in model.substances"
-                :key="group.category"
-                :label="t.categories[group.category]"
-              >
-                <option
-                  v-for="item in group.items"
-                  :key="item.key"
-                  :value="item.key"
-                  :selected="model.form.substance === item.key"
-                >
-                  {{ item.label }}
-                </option>
-              </optgroup>
-            </select>
-          </p>
-          <p class="c-field" data-field="preparation" :hidden="!model.flags.hasPreparations">
-            <label for="c-preparation">{{ t.preparation }}</label>
-            <select id="c-preparation" name="preparation" class="c-input" data-preparation>
+      <p class="p-label c-inputs-label">{{ model.labels.common.inputs }}</p>
+      <PublicCalcStep :index="1" :title="t.groupSubstance" :step="model.labels.common.step">
+        <p class="c-field c-field-wide" data-picker>
+          <label for="c-substance">{{ t.substance }}</label>
+          <select id="c-substance" name="substance" class="c-input" data-picker-select>
+            <optgroup
+              v-for="group in model.substances"
+              :key="group.category"
+              :label="t.categories[group.category]"
+            >
               <option
-                v-for="item in model.preparations"
+                v-for="item in group.items"
                 :key="item.key"
                 :value="item.key"
-                :selected="model.form.preparation === item.key"
+                :selected="model.form.substance === item.key"
               >
                 {{ item.label }}
               </option>
-            </select>
-          </p>
-          <p class="c-field" data-field="route" :hidden="!model.flags.hasRoutes">
-            <label for="c-route">{{ t.route }}</label>
-            <select
-              id="c-route"
-              name="route"
-              class="c-input"
-              data-route
-              aria-describedby="c-route-hint"
+            </optgroup>
+          </select>
+        </p>
+        <p class="c-field" data-field="preparation" :hidden="!model.flags.hasPreparations">
+          <label for="c-preparation">{{ t.preparation }}</label>
+          <select id="c-preparation" name="preparation" class="c-input" data-preparation>
+            <option
+              v-for="item in model.preparations"
+              :key="item.key"
+              :value="item.key"
+              :selected="model.form.preparation === item.key"
             >
+              {{ item.label }}
+            </option>
+          </select>
+        </p>
+        <p class="c-field" data-field="route" :hidden="!model.flags.hasRoutes">
+          <label for="c-route">{{ t.route }}</label>
+          <select
+            id="c-route"
+            name="route"
+            class="c-input"
+            data-route
+            aria-describedby="c-route-hint"
+          >
+            <option
+              v-for="key in model.routeKeys"
+              :key="key"
+              :value="key"
+              :selected="model.form.route === key"
+            >
+              {{ t.routes[key] }}
+            </option>
+          </select>
+          <span id="c-route-hint" class="c-hint">{{ t.routeHint }}</span>
+        </p>
+      </PublicCalcStep>
+      <PublicCalcStep :index="2" :title="t.groupAmount" :step="model.labels.common.step">
+        <p class="c-field" data-field="amount" :hidden="!model.flags.hasMaterial">
+          <label for="c-amount" data-label="amount">{{ model.material?.amount }}</label>
+          <input
+            id="c-amount"
+            class="c-input"
+            type="number"
+            name="amount"
+            inputmode="decimal"
+            :min="fields.amount.min"
+            :max="fields.amount.max"
+            :step="fields.amount.step"
+            :value="model.form.amount"
+          />
+        </p>
+        <p class="c-field" data-field="potency" :hidden="!model.flags.hasMaterial">
+          <label for="c-potency" data-label="potency">{{ model.material?.potency }}</label>
+          <input
+            id="c-potency"
+            class="c-input"
+            type="number"
+            name="potency"
+            inputmode="decimal"
+            :min="fields.potency.min"
+            :max="fields.potency.max"
+            :step="fields.potency.step"
+            :value="model.form.potency"
+          />
+        </p>
+        <p class="c-field" data-field="dose" :hidden="model.flags.hasMaterial">
+          <label for="c-dose">{{ t.dose }}</label>
+          <span class="c-pair">
+            <input
+              id="c-dose"
+              class="c-input"
+              type="number"
+              name="dose"
+              inputmode="decimal"
+              :min="fields.dose.min"
+              :max="fields.dose.max"
+              :step="fields.dose.step"
+              :value="model.form.dose"
+            />
+            <select name="unit" class="c-input c-unit" :aria-label="t.unit">
               <option
-                v-for="key in model.routeKeys"
-                :key="key"
-                :value="key"
-                :selected="model.form.route === key"
+                v-for="item in doseUnits"
+                :key="item"
+                :value="item"
+                :selected="model.form.unit === item"
               >
-                {{ t.routes[key] }}
+                {{ item }}
               </option>
             </select>
-            <span id="c-route-hint" class="c-hint">{{ t.routeHint }}</span>
-          </p>
-          <p class="c-field" data-field="amount" :hidden="!model.flags.hasMaterial">
-            <label for="c-amount" data-label="amount">{{ model.material?.amount }}</label>
-            <input
-              id="c-amount"
-              class="c-input"
-              type="number"
-              name="amount"
-              inputmode="decimal"
-              :min="fields.amount.min"
-              :max="fields.amount.max"
-              :step="fields.amount.step"
-              :value="model.form.amount"
-            />
-          </p>
-          <p class="c-field" data-field="potency" :hidden="!model.flags.hasMaterial">
-            <label for="c-potency" data-label="potency">{{ model.material?.potency }}</label>
-            <input
-              id="c-potency"
-              class="c-input"
-              type="number"
-              name="potency"
-              inputmode="decimal"
-              :min="fields.potency.min"
-              :max="fields.potency.max"
-              :step="fields.potency.step"
-              :value="model.form.potency"
-            />
-          </p>
-          <p class="c-field" data-field="dose" :hidden="model.flags.hasMaterial">
-            <label for="c-dose">{{ t.dose }}</label>
-            <span class="c-pair">
-              <input
-                id="c-dose"
-                class="c-input"
-                type="number"
-                name="dose"
-                inputmode="decimal"
-                :min="fields.dose.min"
-                :max="fields.dose.max"
-                :step="fields.dose.step"
-                :value="model.form.dose"
-              />
-              <select name="unit" class="c-input c-unit" :aria-label="t.unit">
-                <option
-                  v-for="item in doseUnits"
-                  :key="item"
-                  :value="item"
-                  :selected="model.form.unit === item"
-                >
-                  {{ item }}
-                </option>
-              </select>
-            </span>
-          </p>
-          <p class="c-field" data-field="weight" :hidden="!model.flags.hasBody">
-            <label for="c-weight">{{ t.weight }}</label>
-            <input
-              id="c-weight"
-              class="c-input"
-              type="number"
-              name="weight"
-              inputmode="numeric"
-              aria-describedby="c-weight-hint"
-              :min="fields.weight.min"
-              :max="fields.weight.max"
-              :step="fields.weight.step"
-              :value="model.form.weight"
-            />
-            <span id="c-weight-hint" class="c-hint">{{ t.weightHint }}</span>
-          </p>
-          <p class="c-field" data-field="sex" :hidden="!model.flags.hasBody">
-            <label for="c-sex">{{ t.sex }}</label>
-            <select id="c-sex" name="sex" class="c-input">
-              <option
-                v-for="key in sexes"
-                :key="key"
-                :value="key"
-                :selected="model.form.sex === key"
-              >
-                {{ t.sexes[key] }}
-              </option>
-            </select>
-          </p>
-          <p class="c-field">
-            <label for="c-hours">{{ t.hours }}</label>
-            <input
-              id="c-hours"
-              class="c-input"
-              type="number"
-              name="hours"
-              inputmode="decimal"
-              aria-describedby="c-hours-hint"
-              :min="fields.hours.min"
-              :max="fields.hours.max"
-              :step="fields.hours.step"
-              :value="model.form.hours"
-            />
-            <span id="c-hours-hint" class="c-hint">{{ t.hoursHint }}</span>
-          </p>
-          <p class="c-field c-field-wide" data-field="interval" :hidden="model.flags.zero">
-            <label for="c-interval">{{ t.interval }}</label>
-            <input
-              id="c-interval"
-              class="c-input"
-              type="number"
-              name="interval"
-              inputmode="numeric"
-              aria-describedby="c-interval-hint"
-              :min="0"
-              :max="fields.interval.max"
-              :value="model.form.interval === '0' ? '' : model.form.interval"
-            />
-            <span id="c-interval-hint" class="c-hint">{{ t.intervalHint }}</span>
-          </p>
-        </div>
-      </fieldset>
+          </span>
+        </p>
+        <p class="c-field" data-field="weight" :hidden="!model.flags.hasBody">
+          <label for="c-weight">{{ t.weight }}</label>
+          <input
+            id="c-weight"
+            class="c-input"
+            type="number"
+            name="weight"
+            inputmode="numeric"
+            aria-describedby="c-weight-hint"
+            :min="fields.weight.min"
+            :max="fields.weight.max"
+            :step="fields.weight.step"
+            :value="model.form.weight"
+          />
+          <span id="c-weight-hint" class="c-hint">{{ t.weightHint }}</span>
+        </p>
+        <p class="c-field" data-field="sex" :hidden="!model.flags.hasBody">
+          <label for="c-sex">{{ t.sex }}</label>
+          <select id="c-sex" name="sex" class="c-input">
+            <option v-for="key in sexes" :key="key" :value="key" :selected="model.form.sex === key">
+              {{ t.sexes[key] }}
+            </option>
+          </select>
+        </p>
+      </PublicCalcStep>
+      <PublicCalcStep :index="3" :title="t.groupTime" :step="model.labels.common.step" wide>
+        <p class="c-field">
+          <label for="c-hours">{{ t.hours }}</label>
+          <input
+            id="c-hours"
+            class="c-input"
+            type="number"
+            name="hours"
+            inputmode="decimal"
+            aria-describedby="c-hours-hint"
+            :min="fields.hours.min"
+            :max="fields.hours.max"
+            :step="fields.hours.step"
+            :value="model.form.hours"
+          />
+          <span id="c-hours-hint" class="c-hint">{{ t.hoursHint }}</span>
+        </p>
+        <p class="c-field c-field-wide" data-field="interval" :hidden="model.flags.zero">
+          <label for="c-interval">{{ t.interval }}</label>
+          <input
+            id="c-interval"
+            class="c-input"
+            type="number"
+            name="interval"
+            inputmode="numeric"
+            aria-describedby="c-interval-hint"
+            :min="0"
+            :max="fields.interval.max"
+            :value="model.form.interval === '0' ? '' : model.form.interval"
+          />
+          <span id="c-interval-hint" class="c-hint">{{ t.intervalHint }}</span>
+        </p>
+      </PublicCalcStep>
     </div>
 
     <section class="c-result" aria-live="polite">
       <h2 class="p-label c-result-label">{{ model.labels.common.result }}</h2>
+      <p class="c-short-note">{{ t.shortNote }}</p>
 
       <div data-calc-when="hasEffect" :hidden="!model.flags.hasEffect">
         <h3 class="p-label c-result-label c-first-label">{{ t.effectTitle }}</h3>
@@ -447,7 +445,14 @@ const range = computed(() => {
           </div>
           <div>
             <dt>{{ t.t50 }}</dt>
-            <dd data-calc-duration="t50">{{ model.durations.t50 }}</dd>
+            <dd>
+              <span data-calc-duration="t50">{{ model.durations.t50 }}</span>
+              <span class="c-range" data-calc-when="hasRange" :hidden="!model.flags.hasRange">
+                <span data-calc-duration="t50Low">{{ model.durations.t50Low }}</span>
+                {{ t.rangeTo }}
+                <span data-calc-duration="t50High">{{ model.durations.t50High }}</span>
+              </span>
+            </dd>
           </div>
           <div>
             <dt>{{ t.t25 }}</dt>
@@ -455,11 +460,25 @@ const range = computed(() => {
           </div>
           <div>
             <dt>{{ t.t10 }}</dt>
-            <dd data-calc-duration="t10">{{ model.durations.t10 }}</dd>
+            <dd>
+              <span data-calc-duration="t10">{{ model.durations.t10 }}</span>
+              <span class="c-range" data-calc-when="hasRange" :hidden="!model.flags.hasRange">
+                <span data-calc-duration="t10Low">{{ model.durations.t10Low }}</span>
+                {{ t.rangeTo }}
+                <span data-calc-duration="t10High">{{ model.durations.t10High }}</span>
+              </span>
+            </dd>
           </div>
           <div data-calc-when="!zero" :hidden="model.flags.zero">
             <dt>{{ t.t97 }}</dt>
-            <dd data-calc-duration="t97">{{ model.durations.t97 }}</dd>
+            <dd>
+              <span data-calc-duration="t97">{{ model.durations.t97 }}</span>
+              <span class="c-range" data-calc-when="hasRange" :hidden="!model.flags.hasRange">
+                <span data-calc-duration="t97Low">{{ model.durations.t97Low }}</span>
+                {{ t.rangeTo }}
+                <span data-calc-duration="t97High">{{ model.durations.t97High }}</span>
+              </span>
+            </dd>
           </div>
           <div data-calc-when="zero" :hidden="!model.flags.zero">
             <dt>{{ t.soberIn }}</dt>
@@ -497,6 +516,19 @@ const range = computed(() => {
         </div>
       </div>
 
+      <h3 class="p-label c-result-label">{{ t.detection }}</h3>
+      <dl class="c-detect">
+        <div class="c-marked c-blood">
+          <dt>{{ t.blood }}</dt>
+          <dd data-calc-text="blood">{{ model.reference.blood }}</dd>
+        </div>
+        <div class="c-marked c-urine">
+          <dt>{{ t.urine }}</dt>
+          <dd data-calc-text="urine">{{ model.reference.urine }}</dd>
+        </div>
+      </dl>
+      <p class="c-hint">{{ t.detectionHint }}</p>
+
       <h3 class="p-label c-result-label">{{ t.reference }}</h3>
       <dl class="c-reference">
         <div data-calc-when="firstOrder" :hidden="!model.flags.firstOrder">
@@ -511,14 +543,6 @@ const range = computed(() => {
         <div>
           <dt>{{ t.metabolites }}</dt>
           <dd data-calc-text="metabolites">{{ model.reference.metabolites }}</dd>
-        </div>
-        <div class="c-marked c-blood">
-          <dt>{{ t.blood }}</dt>
-          <dd data-calc-text="blood">{{ model.reference.blood }}</dd>
-        </div>
-        <div class="c-marked c-urine">
-          <dt>{{ t.urine }}</dt>
-          <dd data-calc-text="urine">{{ model.reference.urine }}</dd>
         </div>
         <div data-calc-when="hasNote" :hidden="!model.flags.hasNote">
           <dt>{{ t.substanceNote }}</dt>

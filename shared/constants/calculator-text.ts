@@ -3,6 +3,7 @@ export interface CalculatorText {
   common: {
     home: string
     all: string
+    step: string
     inputs: string
     result: string
     steps: string
@@ -10,12 +11,15 @@ export interface CalculatorText {
     noScript: string
     share: string
     submit: string
+    reset: string
     copyLink: string
     copied: string
     remember: string
     rememberHint: string
   }
   calories: {
+    groupBody: string
+    groupSport: string
     sex: string
     sexes: { male: string; female: string }
     age: string
@@ -56,6 +60,9 @@ export interface CalculatorText {
     disclaimer: string
   }
   halflife: {
+    groupSubstance: string
+    groupAmount: string
+    groupTime: string
     substance: string
     searchSubstance: string
     noMatch: string
@@ -108,6 +115,10 @@ export interface CalculatorText {
     percent: string
     halfLife: string
     halfRange: string
+    rangeTo: string
+    shortNote: string
+    detection: string
+    detectionHint: string
     halfHint: string
     times: string
     t50: string
@@ -139,6 +150,9 @@ export interface CalculatorText {
     disclaimer: string
   }
   peptide: {
+    groupVial: string
+    groupDose: string
+    groupDevice: string
     mode: string
     modes: Record<string, string>
     sprayVolume: string
@@ -195,10 +209,11 @@ export interface CalculatorText {
 
 export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
   de: {
-    index: { title: 'Rechner', open: 'Rechner öffnen' },
+    index: { title: 'Tools & Rechner', open: 'Rechner öffnen' },
     common: {
       home: 'Zur Startseite',
-      all: 'Alle Rechner',
+      all: 'Alle Tools & Rechner',
+      step: 'Schritt',
       inputs: 'Eingaben',
       result: 'Ergebnis',
       steps: 'Rechenweg',
@@ -207,13 +222,16 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'Ohne JavaScript rechnet die Seite beim Absenden des Formulars. Mit JavaScript aktualisiert sich das Ergebnis beim Tippen.',
       share: 'Die Adresse der Seite enthält deine Eingaben und lässt sich so teilen.',
       submit: 'Berechnen',
+      reset: 'Zurücksetzen',
       copyLink: 'Link kopieren',
       copied: 'Kopiert',
-      remember: 'Eingaben auf diesem Gerät merken',
+      remember: 'Eingaben merken',
       rememberHint:
         'Speichert deine Eingaben nur in deinem Browser, damit sie beim nächsten Besuch wieder da sind. Nichts davon wird übertragen oder gespeichert. Nimm den Haken weg, um die Daten zu löschen.',
     },
     calories: {
+      groupBody: 'Körper',
+      groupSport: 'Sport',
       sex: 'Biologisches Geschlecht',
       sexes: { male: 'Männlich', female: 'Weiblich' },
       age: 'Alter',
@@ -270,6 +288,9 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'Die Werte sind statistische Schätzungen aus Formeln für Gruppen. Der tatsächliche Verbrauch weicht individuell ab. Der Rechner ist keine Ernährungs- oder Gesundheitsberatung.',
     },
     halflife: {
+      groupSubstance: 'Wirkstoff',
+      groupAmount: 'Menge',
+      groupTime: 'Zeit',
       substance: 'Wirkstoff',
       searchSubstance: 'Wirkstoff suchen',
       noMatch: 'Kein Wirkstoff gefunden.',
@@ -388,6 +409,12 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       percent: 'Anteil der Dosis',
       halfLife: 'Halbwertszeit',
       halfRange: 'übliche Spanne {low} bis {high} h',
+      rangeTo: 'bis',
+      shortNote:
+        'Modellrechnung, kein Messwert. Keine Grundlage für Fahrtüchtigkeit oder einen Test.',
+      detection: 'Nachweis',
+      detectionHint:
+        'Literaturbereiche, keine Vorhersage für eine Person. Dosis, Dauer des Konsums, Testverfahren und Grenzwert verschieben sie deutlich.',
       halfHint:
         'Die Rechnung nimmt den typischen Wert für Erwachsene. Leber, Nieren, Gene, andere Medikamente und das Alter verschieben ihn.',
       times: 'Zeitpunkte',
@@ -409,7 +436,7 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       steadyTrough: 'Tiefstwert im Gleichgewicht',
       reference: 'Angaben zum Wirkstoff',
       referenceHint:
-        'Typische Werte für Erwachsene aus Fachinformationen und pharmakologischen Übersichtsarbeiten. Nachweiszeiten sind Literaturbereiche und lassen sich nicht auf eine Person umrechnen: Sie hängen von Dosis, Dauer des Konsums, Testverfahren und Grenzwert ab.',
+        'Typische Werte für Erwachsene aus Fachinformationen und pharmakologischen Übersichtsarbeiten.',
       metabolites: 'Metaboliten',
       blood: 'Nachweis im Blut',
       urine: 'Nachweis im Urin',
@@ -427,6 +454,9 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'Keine medizinische Beratung und kein Aufruf zum Konsum. Der Rechner schätzt rechnerisch, wie viel einer Dosis nach einer bestimmten Zeit noch im Körper ist, nach einem vereinfachten Modell mit einer einzigen Halbwertszeit. Er ersetzt keine Messung, sagt keine Wirkung voraus und kann weder Fahrtüchtigkeit noch das Ergebnis eines Tests zu einem bestimmten Zeitpunkt bestimmen.',
     },
     peptide: {
+      groupVial: 'Fläschchen',
+      groupDose: 'Dosis',
+      groupDevice: 'Spritze oder Spray',
       mode: 'Anwendung',
       modes: { syringe: 'Spritze', spray: 'Nasenspray' },
       sprayVolume: 'Sprühstoß in Mikroliter',
@@ -490,10 +520,11 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
     },
   },
   en: {
-    index: { title: 'Calculators', open: 'Open calculator' },
+    index: { title: 'Tools & calculators', open: 'Open calculator' },
     common: {
       home: 'Back to the start page',
-      all: 'All calculators',
+      all: 'All tools & calculators',
+      step: 'Step',
       inputs: 'Input',
       result: 'Result',
       steps: 'Calculation',
@@ -502,13 +533,16 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'Without JavaScript the page calculates when the form is submitted. With JavaScript the result updates as you type.',
       share: 'The address of the page carries your input and can be shared.',
       submit: 'Calculate',
+      reset: 'Reset',
       copyLink: 'Copy link',
       copied: 'Copied',
-      remember: 'Remember the input on this device',
+      remember: 'Remember the input',
       rememberHint:
         'Keeps your input in your browser only, so it is there on your next visit. None of it is sent or stored anywhere else. Clear the box to delete it.',
     },
     calories: {
+      groupBody: 'Body',
+      groupSport: 'Sport',
       sex: 'Biological sex',
       sexes: { male: 'Male', female: 'Female' },
       age: 'Age',
@@ -565,6 +599,9 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'The values are statistical estimates from formulas built for groups. Actual expenditure differs individually. The calculator is not nutritional or health advice.',
     },
     halflife: {
+      groupSubstance: 'Substance',
+      groupAmount: 'Amount',
+      groupTime: 'Time',
       substance: 'Substance',
       searchSubstance: 'Search substance',
       noMatch: 'No substance found.',
@@ -680,6 +717,11 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       percent: 'Share of the dose',
       halfLife: 'Half-life',
       halfRange: 'usual range {low} to {high} h',
+      rangeTo: 'to',
+      shortNote: 'A model, not a measurement. No basis for driving or for a test.',
+      detection: 'Detection',
+      detectionHint:
+        'Ranges from the literature, not a prediction for one person. Dose, how long it was used, the test method and its cut-off shift them considerably.',
       halfHint:
         'The calculation uses the typical adult value. Liver, kidneys, genes, other medicines and age shift it.',
       times: 'Points in time',
@@ -699,8 +741,7 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
       steadyPeak: 'Peak at steady state',
       steadyTrough: 'Trough at steady state',
       reference: 'About the substance',
-      referenceHint:
-        'Typical adult values from product information and pharmacological reviews. Detection times are ranges from the literature and cannot be converted to one person: they depend on dose, how long it was used, the test method and its cut-off.',
+      referenceHint: 'Typical adult values from product information and pharmacological reviews.',
       metabolites: 'Metabolites',
       blood: 'Detection in blood',
       urine: 'Detection in urine',
@@ -719,6 +760,9 @@ export const CALCULATOR_TEXT: Record<'de' | 'en', CalculatorText> = {
         'Not medical advice and not an encouragement to use anything. The calculator estimates arithmetically how much of a dose is still in the body after a given time, using a simplified model with a single half-life. It replaces no measurement, predicts no effect, and can determine neither fitness to drive nor the result of a test at a given moment.',
     },
     peptide: {
+      groupVial: 'Vial',
+      groupDose: 'Dose',
+      groupDevice: 'Syringe or spray',
       mode: 'Application',
       modes: { syringe: 'Syringe', spray: 'Nasal spray' },
       sprayVolume: 'Spray volume in microlitres',

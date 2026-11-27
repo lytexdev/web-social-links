@@ -95,7 +95,7 @@ if (form && page) {
       node.setAttribute('width', String(Math.round((result.fill ?? 0) * 240)))
     }
     for (const node of page.querySelectorAll('[data-calc-dose]')) {
-      node.setAttribute('height', String(Math.max(2, Math.round((result.doseShare ?? 0) * 57))))
+      node.setAttribute('height', String(Math.max(2, Math.round((result.doseShare ?? 0) * 156))))
     }
     if (kind === 'peptide') {
       const levels = sprayDots(result.values.spraysPerDose)
@@ -160,6 +160,10 @@ if (form && page) {
       if (!remember.checked) writeStore(null)
       else writeStore(Object.fromEntries(new FormData(form).entries()))
     })
+  }
+
+  for (const link of page.querySelectorAll('[data-reset]')) {
+    link.addEventListener('click', () => writeStore(null))
   }
 
   if (copyButton && copyLabel && navigator.clipboard) {

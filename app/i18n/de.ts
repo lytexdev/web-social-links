@@ -70,7 +70,7 @@ export const de = {
     stats: 'Statistiken',
     sources: 'Herkunft und Kurzlinks',
     references: 'Quellenangaben',
-    calculators: 'Rechner',
+    calculators: 'Tools & Rechner',
     settings: 'Einstellungen',
     security: 'Sicherheit',
     versions: 'Versionen',

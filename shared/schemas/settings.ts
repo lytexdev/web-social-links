@@ -148,7 +148,7 @@ const calculatorEntry = z.object({
 
 export const calculatorsSchema = z.object({
   path: pathSlug.default('rechner'),
-  indexTitle: text(70).default('Rechner'),
+  indexTitle: text(70).default('Tools & Rechner'),
   indexIntro: text(600).default(''),
   calories: calculatorEntry.default({ enabled: false, title: '', intro: '', content: '' }),
   peptide: calculatorEntry.default({ enabled: false, title: '', intro: '', content: '' }),

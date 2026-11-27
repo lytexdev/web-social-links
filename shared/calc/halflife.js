@@ -29,6 +29,12 @@ export const HALFLIFE_DIGITS = {
   t25: 1,
   t10: 1,
   t97: 1,
+  t50Low: 1,
+  t50High: 1,
+  t10Low: 1,
+  t10High: 1,
+  t97Low: 1,
+  t97High: 1,
   hours: 1,
   interval: 1,
   accumulation: 2,
@@ -192,6 +198,10 @@ export function computeHalflife(raw) {
   const repeated = model && !zero && input.interval > 0
   const accumulation = repeated ? 1 / (1 - 0.5 ** (input.interval / half)) : 1
   const soberIn = zero ? timeTo(0) : 0
+  const low = preparation?.low ?? substance.low
+  const high = preparation?.high ?? substance.high
+  const hasRange = model && !zero && low > 0 && high > low
+  const spanTo = (part, hours) => (hasRange ? hours * (Math.log(1 / part) / Math.LN2) : 0)
   const effect = effectModel(substance, preparation, input.route)
   const span = model
     ? zero
@@ -223,12 +233,18 @@ export function computeHalflife(raw) {
       remaining,
       percent: factor * 100,
       half,
-      low: preparation?.low ?? substance.low,
-      high: preparation?.high ?? substance.high,
+      low,
+      high,
       t50: timeTo(0.5),
       t25: timeTo(0.25),
       t10: timeTo(0.1),
       t97: model ? (zero ? soberIn : half * 5) : 0,
+      t50Low: spanTo(0.5, low),
+      t50High: spanTo(0.5, high),
+      t10Low: spanTo(0.1, low),
+      t10High: spanTo(0.1, high),
+      t97Low: hasRange ? low * 5 : 0,
+      t97High: hasRange ? high * 5 : 0,
       hours: input.hours,
       interval: input.interval,
       activeDose,
@@ -266,6 +282,7 @@ export function computeHalflife(raw) {
       noModel: !model,
       zero,
       firstOrder: model && !zero,
+      hasRange,
       repeated,
       gone: model && factor * 100 < 1,
       hasNote: Boolean(substance.note.de || substance.note.en),

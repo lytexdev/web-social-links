@@ -412,7 +412,7 @@ export const deCms = {
     } as Record<string, string>,
   },
   calculators: {
-    title: 'Rechner',
+    title: 'Tools & Rechner',
     intro:
       'Rechner sind eigenständige Unterseiten. Sie rechnen auf dem Server, funktionieren also auch ohne JavaScript, und aktualisieren sich im Browser beim Tippen. Die Adresse enthält die Eingaben und lässt sich teilen.',
     base: 'Übersicht',

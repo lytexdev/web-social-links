@@ -59,6 +59,7 @@ defineProps<{ model: CalculatorPageModel }>()
         <PublicCalcPeptide v-else :model="model" />
         <p class="c-submit">
           <button type="submit" class="p-button">{{ model.labels.common.submit }}</button>
+          <a :href="model.path" class="p-button" data-reset>{{ model.labels.common.reset }}</a>
           <span class="c-hint">{{ model.labels.common.noScript }}</span>
         </p>
 
@@ -72,14 +73,13 @@ defineProps<{ model: CalculatorPageModel }>()
             <span aria-hidden="true" v-html="model.icons.copy" />
             <span data-copy-label>{{ model.labels.common.copyLink }}</span>
           </button>
+          <a :href="model.path" class="p-button" data-reset>{{ model.labels.common.reset }}</a>
           <span class="sr-only" role="status" data-copy-status />
-          <label class="c-remember">
+          <label class="p-button c-remember">
             <input type="checkbox" data-remember />
-            <span>
-              {{ model.labels.common.remember }}
-              <span class="c-hint">{{ model.labels.common.rememberHint }}</span>
-            </span>
+            <span>{{ model.labels.common.remember }}</span>
           </label>
+          <p class="c-hint c-tools-hint">{{ model.labels.common.rememberHint }}</p>
         </div>
       </form>
 

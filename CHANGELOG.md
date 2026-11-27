@@ -23,10 +23,15 @@ All notable changes to this project are documented here. The format follows [Kee
 - An illustrated nasal spray bottle with the dose as a share of the bottle and one dot per actuation
 - Detection in blood and in urine are marked in red and in yellow
 - A discount code block can carry an image or an icon that links to the partner, and every link in it copies the code to the clipboard before the shop opens
+- The input of every calculator is split into numbered steps, and the syringe and the nasal spray sit beside the result where the screen is wide enough
+- A reset next to the copy button returns a calculator to its empty form and deletes the values kept in the browser
+- The decay calculator states the points in time as a span wherever a half-life range is published, puts a short warning above the result and shows the detection in blood and in urine as its own marked pair
 
 ### Changed
 
 - The topic filter on the references page no longer shows a second arrow next to its own one
+- The calculators are called Tools & Rechner, in the admin and on the public overview
+- The nasal spray bottle is drawn narrower and taller
 
 - The client address comes from `X-Real-IP` set by the reverse proxy; `TRUSTED_PROXIES`, `PROXY_PEER_HEADER`, `APP_PORT`, `PROXY_NETWORK` and `APP_ENCRYPTION_KEY_PREVIOUS` are gone
 - The admin view for traffic origins is now called Origins and short links
@@ -37,6 +42,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- Without JavaScript the peptide calculator ignored the switch to the nasal spray and always computed a syringe
 - Publishing could leave out a setting or block edit typed moments earlier
 - A scrollable table could not be reached with the keyboard
 - The icon picker requested the icon index from a wrong address and listed no icons

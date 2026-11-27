@@ -63,6 +63,12 @@ const DURATION_KEYS = [
   't25',
   't10',
   't97',
+  't50Low',
+  't50High',
+  't10Low',
+  't10High',
+  't97Low',
+  't97High',
   'axis1',
   'axis2',
   'axis3',
@@ -127,6 +133,8 @@ function compute(key: CalculatorKey, query: Record<string, unknown>): Computed {
     unit: read('unit'),
     scale: read('scale'),
     size: read('size'),
+    mode: read('mode'),
+    spray: read('spray'),
   }) as Computed
 }
 
@@ -170,6 +178,7 @@ export function buildCalculator(
     description: entry.intro || base.description,
     heading,
     intro: entry.intro,
+    path: options.path,
     basePath: `/${settings.path}`,
     indexHref: others.length > 0 ? `/${settings.path}` : null,
     labels,

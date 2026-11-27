@@ -267,6 +267,7 @@ export interface CalculatorPageModel extends ChromeModel {
   calculator: 'calories' | 'peptide' | 'halflife'
   heading: string
   intro: string
+  path: string
   basePath: string
   indexHref: string | null
   labels: CalculatorText

@@ -36,6 +36,20 @@ describe('half-life calculator', () => {
     expect(flags.gone).toBe(false)
   })
 
+  it('spans the points in time with the published half-life range', () => {
+    const { values, flags } = computeHalflife({ substance: 'caffeine', dose: '100', hours: '0' })
+    expect(flags.hasRange).toBe(true)
+    expect(values.low).toBeLessThan(values.half)
+    expect(values.high).toBeGreaterThan(values.half)
+    expect(values.t97Low).toBeCloseTo(values.low * 5, 6)
+    expect(values.t97High).toBeCloseTo(values.high * 5, 6)
+    expect(values.t50Low).toBeCloseTo(values.low, 6)
+    expect(values.t10High).toBeGreaterThan(values.t10)
+    const alcohol = computeHalflife({ substance: 'alcohol', amount: '500', potency: '5' })
+    expect(alcohol.flags.hasRange).toBe(false)
+    expect(alcohol.values.t97Low).toBe(0)
+  })
+
   it('adds up repeated intake to a steady state', () => {
     const { values, flags } = computeHalflife({
       substance: 'caffeine',

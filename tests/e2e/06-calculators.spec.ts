@@ -13,8 +13,8 @@ async function pickSubstance(page: Page, term: string, expected: RegExp): Promis
 test('enables both calculators and publishes them', async ({ page }) => {
   await login(page)
   await page.waitForURL(/\/admin$/)
-  await page.getByRole('link', { name: 'Rechner' }).click()
-  await expect(page.getByRole('heading', { level: 1, name: 'Rechner' })).toBeVisible()
+  await page.getByRole('link', { name: 'Tools & Rechner' }).click()
+  await expect(page.getByRole('heading', { level: 1, name: 'Tools & Rechner' })).toBeVisible()
   await expectAccessible(page)
   await page.getByRole('checkbox', { name: 'Rechner unter /rechner/kalorien anzeigen' }).check()
   await page.getByRole('textbox', { name: 'Titel', exact: true }).first().fill('Kalorienrechner')
@@ -143,7 +143,7 @@ test('alcohol falls by a fixed amount per hour', async ({ page }) => {
 
 test('every public page offers a back link and a way to the top', async ({ page }) => {
   await page.goto('/rechner/wirkstoff-abbau')
-  const back = page.getByRole('link', { name: 'Alle Rechner' })
+  const back = page.getByRole('link', { name: 'Alle Tools & Rechner' })
   await expect(back.locator('svg')).toBeVisible()
   const top = page.locator('[data-to-top]')
   await expect(top).toBeHidden()
@@ -167,12 +167,15 @@ test('the calculator copies its link and remembers input only on request', async
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('weight=83')
 
   expect(await page.evaluate(() => localStorage.length)).toBe(0)
-  await page.getByRole('checkbox', { name: /Eingaben auf diesem Gerät merken/ }).check()
+  await page.getByRole('checkbox', { name: 'Eingaben merken' }).check()
   await page.fill('#c-weight', '84')
   await expect(page).toHaveURL(/weight=84/)
   await page.goto('/rechner/kalorien')
   await expect(page.locator('#c-weight')).toHaveValue('84')
-  await page.getByRole('checkbox', { name: /Eingaben auf diesem Gerät merken/ }).uncheck()
+  await page.getByRole('checkbox', { name: 'Eingaben merken' }).check()
+  await page.locator('.c-tools [data-reset]').click()
+  await expect(page.locator('#c-weight')).toHaveValue('75')
+  await expect(page).not.toHaveURL(/weight=84/)
   expect(await page.evaluate(() => localStorage.length)).toBe(0)
 })
 
@@ -246,7 +249,7 @@ test('the peptide calculator switches between syringe and nasal spray', async ({
   await expect(page.locator('.c-spray')).toBeVisible()
   await expect(page.locator('[data-dot="0"]')).toHaveAttribute('data-level', 'full')
   await expect(page.locator('[data-dot="1"]')).toHaveAttribute('data-level', 'empty')
-  await expect(page.locator('[data-calc-dose]')).toHaveAttribute('height', '3')
+  await expect(page.locator('[data-calc-dose]')).toHaveAttribute('height', '8')
   await expect(page.locator('[data-calc="spraysPerDose"]')).toHaveText('1')
   await expect(page.locator('[data-calc="mcgPerSpray"]')).toHaveText('250')
   await expect(page.locator('[data-calc="spraysPerVial"]')).toHaveText('20')

@@ -191,7 +191,10 @@ describe('calculator output', () => {
   })
 
   it('validates the settings and refuses a reserved address', () => {
-    expect(calculatorsSchema.parse({})).toMatchObject({ path: 'rechner', indexTitle: 'Rechner' })
+    expect(calculatorsSchema.parse({})).toMatchObject({
+      path: 'rechner',
+      indexTitle: 'Tools & Rechner',
+    })
     expect(calculatorsSchema.parse({}).calories.enabled).toBe(false)
     expect(calculatorsSchema.safeParse({ path: 'api' }).error?.issues[0]?.message).toBe('reserved')
   })
