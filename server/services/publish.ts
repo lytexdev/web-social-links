@@ -18,7 +18,12 @@ import { listBlocks, replaceAllBlocks } from './blocks'
 import { randomId } from './crypto'
 import { iconExists, iconSvgs } from './icons'
 import { kvSet } from './kv'
-import { hasPlaceholders, renderDocumentMarkdown, renderTextMarkdown } from './markdown'
+import {
+  hasPlaceholders,
+  renderDocumentParts,
+  renderTextMarkdown,
+  type DocumentPart,
+} from './markdown'
 import { listMedia, variantsOf, type MediaVariants } from './media'
 import { listPages, replaceAllPages } from './pages'
 import { getAllSettings, writeSetting } from './settings'
@@ -47,7 +52,7 @@ export interface SnapshotPage {
   title: string
   kind: string
   markdown: string
-  html: string
+  parts: DocumentPart[]
 }
 
 export interface Snapshot {
@@ -194,8 +199,16 @@ export async function buildSnapshot(
     title: row.title,
     kind: row.kind,
     markdown: row.markdown,
-    html: renderDocumentMarkdown(row.markdown),
+    parts: renderDocumentParts(row.markdown),
   }))
+
+  const liveBlocks = new Set(blocks.flatMap((node) => [node.id, ...node.children.map((c) => c.id)]))
+  for (const page of pages) {
+    for (const part of page.parts) {
+      if (part.kind === 'block' && !liveBlocks.has(part.id))
+        issues.push({ scope: 'page', id: page.id, field: 'block', code: 'block_missing' })
+    }
+  }
 
   for (const [target, slug] of [
     ['impressum', 'impressum'],

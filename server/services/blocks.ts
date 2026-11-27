@@ -113,6 +113,19 @@ function renumber(parentId: string | null, ordered: string[]): void {
   })
 }
 
+export function blockLabel(node: BlockNode): string {
+  const data = node.data
+  return String(data.title ?? data.label ?? data.text ?? data.alt ?? '').trim() || node.type
+}
+
+export function flatBlocks(): BlockNode[] {
+  return listBlocks().flatMap((node) => [node, ...node.children])
+}
+
+export function findBlockNode(id: string): BlockNode | undefined {
+  return flatBlocks().find((node) => node.id === id)
+}
+
 export function createBlock(
   input: {
     type: BlockType

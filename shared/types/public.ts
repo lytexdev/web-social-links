@@ -167,7 +167,7 @@ export interface PageModel extends ChromeModel {
 export interface DocumentModel extends ChromeModel {
   kind: 'document'
   heading: string
-  html: string
+  parts: Array<{ kind: 'html'; html: string } | { kind: 'block'; block: BlockView }>
 }
 
 export interface ReferenceText {

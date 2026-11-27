@@ -159,13 +159,11 @@ function navLinks(snapshot: Snapshot): Array<{
     }))
 }
 
-export function buildPageModel(
+function blockViews(
   snapshot: Snapshot,
-  options: { source: string; now: number; origin: string; path: string; preview: boolean },
-): PageModel {
-  const base = chrome(snapshot, options.origin, options.path)
-  const { settings } = snapshot
-  const nav = navLinks(snapshot)
+  nodes: BlockNode[],
+  options: { source: string; now: number },
+): { blocks: BlockView[]; affiliate: boolean } {
   let sectionCounter = 0
   let affiliate = false
   const nextIndex = () => String(++sectionCounter).padStart(2, '0')
@@ -215,7 +213,7 @@ export function buildPageModel(
   }
 
   const blocks: BlockView[] = []
-  for (const node of snapshot.blocks) {
+  for (const node of nodes) {
     if (!isLive(node, options.now)) continue
     const data = node.data
     switch (node.type) {
@@ -314,6 +312,17 @@ export function buildPageModel(
         break
     }
   }
+  return { blocks, affiliate }
+}
+
+export function buildPageModel(
+  snapshot: Snapshot,
+  options: { source: string; now: number; origin: string; path: string; preview: boolean },
+): PageModel {
+  const base = chrome(snapshot, options.origin, options.path)
+  const { settings } = snapshot
+  const nav = navLinks(snapshot)
+  const { blocks, affiliate } = blockViews(snapshot, snapshot.blocks, options)
 
   const avatarId = settings.profile.avatar
   return {
@@ -348,20 +357,50 @@ export function buildPageModel(
   }
 }
 
+function embeddedNodes(snapshot: Snapshot, id: string, now: number): BlockNode | null {
+  for (const node of snapshot.blocks) {
+    if (node.id === id) return isLive(node, now) ? node : null
+    for (const child of node.children) {
+      if (child.id !== id) continue
+      return isLive(node, now) && isLive(child, now) ? child : null
+    }
+  }
+  return null
+}
+
 export function buildDocumentModel(
   snapshot: Snapshot,
   slug: string,
-  options: { origin: string; path: string },
+  options: { origin: string; path: string; source: string; now: number },
 ): DocumentModel | null {
   const page = snapshot.pages.find((item) => item.slug === slug)
   if (!page) return null
   const base = chrome(snapshot, options.origin, options.path)
+  const parts: DocumentModel['parts'] = []
+  let affiliate = false
+  for (const part of page.parts) {
+    if (part.kind === 'html') {
+      parts.push({ kind: 'html', html: part.html })
+      continue
+    }
+    const node = embeddedNodes(snapshot, part.id, options.now)
+    if (!node) continue
+    const rendered = blockViews(snapshot, [node], options)
+    const block = rendered.blocks[0]
+    if (!block) continue
+    affiliate = affiliate || rendered.affiliate
+    parts.push({ kind: 'block', block })
+  }
   return {
     ...base,
     kind: 'document',
     title: `${page.title} · ${base.title}`,
     heading: page.title,
-    html: page.html,
+    footer: {
+      ...base.footer,
+      affiliateNote: affiliate ? snapshot.settings.legal.affiliateNote : null,
+    },
+    parts,
   }
 }
 

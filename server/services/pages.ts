@@ -3,6 +3,8 @@ import { RESERVED_SLUGS } from '../../shared/constants/routing'
 import { useDb } from '../db/client'
 import { pages } from '../db/schema'
 import { apiError } from '../utils/http'
+import { blockLabel, findBlockNode } from './blocks'
+import { renderPagePreview } from './markdown'
 import { recordAudit } from './audit'
 import { randomId } from './crypto'
 import { markDraftChanged } from './kv'
@@ -24,6 +26,13 @@ export function seedLegalPages(): void {
       .onConflictDoNothing()
       .run()
   }
+}
+
+export function pagePreview(markdown: string): string {
+  return renderPagePreview(markdown, (id) => {
+    const node = findBlockNode(id)
+    return node ? blockLabel(node) : null
+  })
 }
 
 export function listPages(): PageRow[] {

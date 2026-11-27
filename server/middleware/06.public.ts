@@ -66,13 +66,23 @@ async function resolvePublic(event: H3Event, path: string): Promise<unknown> {
     const target = snapshot.settings.legal[path === '/impressum' ? 'impressum' : 'privacy']
     if (target.mode === 'url' && target.url) return sendRedirect(event, target.url, 302)
     event.context.publicModel =
-      buildDocumentModel(snapshot, path.slice(1), { origin, path }) ?? undefined
+      buildDocumentModel(snapshot, path.slice(1), {
+        origin,
+        path,
+        source: DIRECT_SOURCE,
+        now: Date.now(),
+      }) ?? undefined
     return
   }
 
   const custom = /^\/p\/([a-z0-9-]{1,32})$/.exec(path)
   if (custom?.[1]) {
-    const model = buildDocumentModel(snapshot, custom[1], { origin, path })
+    const model = buildDocumentModel(snapshot, custom[1], {
+      origin,
+      path,
+      source: DIRECT_SOURCE,
+      now: Date.now(),
+    })
     if (model && !['impressum', 'datenschutz'].includes(custom[1]))
       event.context.publicModel = model
     return

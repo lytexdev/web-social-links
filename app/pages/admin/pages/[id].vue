@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { blockEmbed } from '#shared/utils/embeds'
+
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
 interface PageDetail {
@@ -67,6 +69,10 @@ function wrap(before: string, after = before, placeholder = ''): void {
       selectionStart + before.length + selected.length,
     )
   })
+}
+
+function insertBlock(id: string): void {
+  wrap(`\n\n${blockEmbed(id)}\n\n`, '')
 }
 
 function prefix(marker: string): void {
@@ -138,6 +144,7 @@ async function remove(): Promise<void> {
           <button type="button" class="a-btn a-btn-sm" @click="prefix('- ')">
             {{ t.pages.toolbar.list }}
           </button>
+          <BlockEmbedMenu @insert="insertBlock" />
           <button
             v-if="page.slug === 'datenschutz'"
             type="button"
@@ -147,6 +154,7 @@ async function remove(): Promise<void> {
             {{ t.pages.generator }}
           </button>
         </div>
+        <p class="text-xs text-muted">{{ t.pages.insertBlockHint }}</p>
         <AdminField v-slot="field" :label="t.pages.markdown">
           <textarea
             :id="field.id"

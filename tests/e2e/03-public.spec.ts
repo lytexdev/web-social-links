@@ -28,6 +28,35 @@ test('adds a discount code and republishes', async ({ page }) => {
   await expect(page.getByText(/Revision \d+ ist live/)).toBeVisible()
 })
 
+test('builds a partner page from an element that already exists', async ({ page }) => {
+  await login(page)
+  await page.waitForURL(/\/admin$/)
+  await page.goto('/admin/pages')
+  await page.getByRole('button', { name: 'Seite anlegen' }).first().click()
+  await page.getByRole('textbox', { name: 'Titel' }).fill('Partner')
+  await page.getByRole('textbox', { name: 'Adresse' }).fill('partner')
+  await page.getByRole('button', { name: 'Seite anlegen' }).last().click()
+  await page.waitForURL(/\/admin\/pages\/[A-Za-z0-9_-]{12}$/)
+  await page.getByRole('textbox', { name: 'Inhalt' }).fill('Hier sind meine Partner.')
+  await page.getByRole('button', { name: 'Element einfügen' }).click()
+  await page.getByRole('option', { name: /Rabattcode bei Partnern/ }).click()
+  await expect(page.locator('.p-embed')).toHaveText('Rabattcode bei Partnern')
+  await expect(page.getByRole('textbox', { name: 'Inhalt' })).toHaveValue(/\[\[block:/)
+  await expect(page.getByRole('status').filter({ hasText: 'Entwurf gespeichert' })).toBeVisible()
+  await expectAccessible(page)
+
+  await page.getByRole('button', { name: 'Veröffentlichen' }).click()
+  await page.getByRole('button', { name: 'Jetzt veröffentlichen' }).click()
+  await expect(page.getByText(/Revision \d+ ist live/)).toBeVisible()
+
+  await page.goto('/p/partner')
+  await expect(page.getByRole('heading', { level: 1, name: 'Partner' })).toBeVisible()
+  await expect(page.getByText('Hier sind meine Partner.')).toBeVisible()
+  await expect(page.getByText('LYTEX', { exact: true })).toBeVisible()
+  await expect(page.locator('a.p-ticket-media')).toBeVisible()
+  await expectAccessible(page)
+})
+
 test.describe('public pages', () => {
   for (const route of ROUTES) {
     test(`${route} sets no cookies, uses no storage and loads only from its own origin`, async ({

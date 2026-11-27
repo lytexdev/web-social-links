@@ -25,6 +25,7 @@ export const deCms = {
       url_internal: 'Links auf den Verwaltungsbereich sind nicht erlaubt.',
       media_missing: 'Ein Bild fehlt in der Medienbibliothek.',
       icon_missing: 'Ein Icon existiert nicht mehr.',
+      block_missing: 'Eine Seite bindet ein Element ein, das es nicht mehr gibt.',
       alt_required: 'Ein Bild braucht einen Alternativtext.',
       references_slug_taken:
         'Die Adresse {detail} der Quellenangaben ist schon als Kurzlink vergeben.',
@@ -314,6 +315,12 @@ export const deCms = {
       heading: 'Überschrift',
       list: 'Liste',
     } as Record<string, string>,
+    insertBlock: 'Element einfügen',
+    insertBlockHint:
+      'Fügt einen bereits angelegten Block an dieser Stelle ein, zum Beispiel einen Link oder einen Rabattcode. Der Block bleibt mit dem Original verbunden und zählt seine Klicks wie auf der Startseite.',
+    embedSearch: 'Element suchen',
+    embedEmpty: 'Noch keine Blöcke angelegt.',
+    embedMissing: 'Eingebundenes Element fehlt. Entferne die Zeile oder lege den Block neu an.',
     open: 'Bearbeiten',
     external: 'Extern',
   },

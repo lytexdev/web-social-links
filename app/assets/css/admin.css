@@ -360,3 +360,17 @@
   --viz-clicks: #3987e5;
   --viz-grid: #1f2226;
 }
+
+.p-embed {
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed var(--wsl-line);
+  border-left: 3px solid var(--wsl-accent);
+  border-radius: var(--wsl-radius);
+  color: var(--wsl-muted);
+  font-size: 0.875rem;
+}
+
+.p-embed[data-missing] {
+  border-left-color: var(--wsl-danger);
+  color: var(--wsl-danger);
+}

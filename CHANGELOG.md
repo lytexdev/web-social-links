@@ -23,6 +23,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - An illustrated nasal spray bottle with the dose as a share of the bottle and one dot per actuation
 - Detection in blood and in urine are marked in red and in yellow
 - A discount code block can carry an image or an icon that links to the partner, and every link in it copies the code to the clipboard before the shop opens
+- Own pages can embed blocks that already exist, such as links, tiles or discount codes, so a partner page reuses them instead of repeating them
 - The input of every calculator is split into numbered steps, and the syringe and the nasal spray sit beside the result where the screen is wide enough
 - A reset next to the copy button returns a calculator to its empty form and deletes the values kept in the browser
 - The decay calculator states the points in time as a span wherever a half-life range is published, puts a short warning above the result and shows the detection in blood and in urine as its own marked pair

@@ -561,6 +561,11 @@
   font-size: 0.8125rem;
 }
 
+.p-parts {
+  display: grid;
+  gap: 1.75rem;
+}
+
 .p-ticket {
   display: grid;
   gap: 0.75rem;

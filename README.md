@@ -59,6 +59,10 @@ The app takes the visitor address from the `X-Real-IP` header, which Nginx Proxy
 
 In Cloudflare, keep the DNS records proxied, use SSL mode Full (strict) and do not add a cache rule for HTML.
 
+## Own pages
+
+Admin, Pages holds the legal pages and any number of own pages under `/p/{slug}`, written in Markdown. Insert element places a block that already exists on the start page, such as a link, a tile or a discount code, as its own line `[[block:ID]]` between the paragraphs. The public page then renders that block exactly as the start page does, including the affiliate label and the `/go` address, so a click on a partner page is counted like any other click. A page that embeds a block which no longer exists refuses to publish and names the page. This is how a partner page is built: own text around the links and codes that already exist, with nothing entered twice.
+
 ## References page
 
 Admin, References turns a public GitHub repository of Markdown source lists into an interactive page, by default at `/quellen` with `/quellenangaben` and `/sources` redirecting there. The repository stays the place where entries are written and reviewed, by hand or by AI agents; the app only reads it.

@@ -339,6 +339,47 @@ describe('publishing', () => {
     expect(versions).toEqual([expect.objectContaining({ revision: 1, note: 'Erste Version' })])
   })
 
+  it('embeds existing blocks into a custom page', async () => {
+    const created = await admin.send('/api/admin/pages', {
+      body: {
+        slug: 'partner',
+        title: 'Partner',
+        markdown: `Meine Partner.\n\n[[block:${codeBlock.id}]]\n\n[[block:${affiliateLink.id}]]\n\nDanke.`,
+      },
+    })
+    expect(created.status, created.text).toBe(200)
+    const page = created.json<{ id: string }>()
+    const detail = (await admin.send(`/api/admin/pages/${page.id}`)).json<{ html: string }>()
+    expect(detail.html).toContain('<p class="p-embed">Rabattcode</p>')
+    expect(detail.html).not.toContain('data-missing')
+
+    const published = await admin.send('/api/admin/publish', { body: { note: 'Partner' } })
+    expect(published.json()).toEqual({ revision: 2 })
+    const view = await rawRequest(server, '/p/partner', {
+      ip: '203.0.113.40',
+      headers: { accept: 'text/html' },
+    })
+    expect(view.status).toBe(200)
+    expect(view.text).toContain('Meine Partner.')
+    expect(view.text).toContain('Danke.')
+    expect(view.text).toContain('class="p-ticket"')
+    expect(view.text).toContain(`href="/go/${affiliateLink.id}"`)
+    expect(view.text).toContain('Mit „Anzeige“ markierte Links sind Affiliate-Links')
+
+    await admin.send(`/api/admin/pages/${page.id}`, {
+      method: 'PATCH',
+      body: { markdown: '[[block:aaaaaaaaaaaa]]' },
+    })
+    const stale = (await admin.send(`/api/admin/pages/${page.id}`)).json<{ html: string }>()
+    expect(stale.html).toContain('data-missing="true"')
+    const status = (await admin.send('/api/admin/publish/status')).json<{
+      issues: Array<{ code: string }>
+    }>()
+    expect(status.issues.map((issue) => issue.code)).toContain('block_missing')
+    expect((await admin.send('/api/admin/publish', { body: { note: '' } })).status).toBe(422)
+    await admin.send(`/api/admin/pages/${page.id}`, { method: 'DELETE' })
+  })
+
   it('serves legal pages from the snapshot', async () => {
     const page = await rawRequest(server, '/impressum', {
       ip: '203.0.113.9',

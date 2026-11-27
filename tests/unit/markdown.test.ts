@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { renderDocumentMarkdown } from '../../server/services/markdown'
+import {
+  renderDocumentMarkdown,
+  renderDocumentParts,
+  renderPagePreview,
+} from '../../server/services/markdown'
+import { blockEmbed, embeddedBlockIds, splitEmbeds } from '../../shared/utils/embeds'
 
 describe('document markdown', () => {
   it('turns a linked image with a title into a figure with a caption', () => {
@@ -41,5 +46,42 @@ describe('document markdown', () => {
     expect(html).not.toContain('<img')
     expect(html).not.toContain('src=')
     expect(html).not.toContain('<figure>')
+  })
+})
+
+describe('embedded blocks', () => {
+  const id = 'abcDEF123456'
+
+  it('splits a line that holds only a block reference', () => {
+    const parts = splitEmbeds(`Oben\n\n${blockEmbed(id)}\n\nUnten`)
+    expect(parts).toEqual([
+      { kind: 'markdown', value: 'Oben' },
+      { kind: 'block', value: id },
+      { kind: 'markdown', value: 'Unten' },
+    ])
+    expect(embeddedBlockIds(`${blockEmbed(id)}`)).toEqual([id])
+  })
+
+  it('leaves a reference inside a line as text', () => {
+    const source = `Siehe ${blockEmbed(id)} dort`
+    expect(splitEmbeds(source)).toEqual([{ kind: 'markdown', value: source }])
+    expect(embeddedBlockIds(source)).toEqual([])
+    expect(embeddedBlockIds('[[block:kurz]]')).toEqual([])
+  })
+
+  it('renders the other parts as markdown and keeps their order', () => {
+    const parts = renderDocumentParts(`# Titel\n\n${blockEmbed(id)}\n\nText`)
+    expect(parts).toEqual([
+      { kind: 'html', html: expect.stringContaining('<h2>Titel</h2>') },
+      { kind: 'block', id },
+      { kind: 'html', html: expect.stringContaining('<p>Text</p>') },
+    ])
+  })
+
+  it('marks a missing block in the preview and escapes the label', () => {
+    expect(renderPagePreview(blockEmbed(id), () => '<b>Rabatt</b>')).toContain(
+      '<p class="p-embed">&lt;b&gt;Rabatt&lt;/b&gt;</p>',
+    )
+    expect(renderPagePreview(blockEmbed(id), () => null)).toContain('data-missing="true"')
   })
 })

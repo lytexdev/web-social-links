@@ -3,6 +3,7 @@ import MarkdownIt, {
   type RendererRule,
   type StateCore,
 } from 'markdown-it'
+import { splitEmbeds } from '../../shared/utils/embeds'
 import { checkLinkUrl } from '../../shared/utils/url-policy'
 
 interface LinkEnv {
@@ -163,6 +164,35 @@ export function renderTextMarkdown(
 
 export function renderDocumentMarkdown(source: string): string {
   return document.render(source, {})
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+}
+
+export type DocumentPart = { kind: 'html'; html: string } | { kind: 'block'; id: string }
+
+export function renderDocumentParts(source: string): DocumentPart[] {
+  return splitEmbeds(source).map((part) =>
+    part.kind === 'block'
+      ? { kind: 'block', id: part.value }
+      : { kind: 'html', html: document.render(part.value, {}) },
+  )
+}
+
+export function renderPagePreview(source: string, label: (id: string) => string | null): string {
+  return renderDocumentParts(source)
+    .map((part) => {
+      if (part.kind === 'html') return part.html
+      const name = label(part.id)
+      const missing = name === null ? ' data-missing="true"' : ''
+      return `<p class="p-embed"${missing}>${escapeHtml(name ?? part.id)}</p>\n`
+    })
+    .join('')
 }
 
 export function hasPlaceholders(source: string): boolean {

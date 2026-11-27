@@ -11,7 +11,12 @@ defineProps<{ model: DocumentModel }>()
     >
     <main id="main">
       <h1 class="p-name mt-4">{{ model.heading }}</h1>
-      <div class="p-prose mt-8" v-html="model.html" />
+      <div class="p-parts mt-8">
+        <template v-for="(part, index) in model.parts" :key="index">
+          <div v-if="part.kind === 'html'" class="p-prose" v-html="part.html" />
+          <PublicBlock v-else :block="part.block" :chrome="model" />
+        </template>
+      </div>
     </main>
     <PublicFooter :footer="model.footer" :text="model.text" />
     <PublicThemeToggle :chrome="model" />
